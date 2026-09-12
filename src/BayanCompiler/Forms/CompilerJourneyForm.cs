@@ -80,10 +80,10 @@ public sealed class CompilerJourneyForm : Form
     {
         Text = "بيان  |  Bayan IDE — بيئة التطوير والمترجم الرسمي";
         StartPosition = FormStartPosition.CenterScreen;
-        MinimumSize = new Size(1020, 720);
+        MinimumSize = new Size(1080, 720);
         Size = new Size(1280, 840);
         RightToLeft = RightToLeft.Yes;
-        RightToLeftLayout = true;
+        RightToLeftLayout = false; // Never set to true in WinForms: prevents GDI coordinate mirroring bugs
         Font = IdeTheme.UiFontRegular;
         DoubleBuffered = true;
         KeyPreview = true;
@@ -109,7 +109,15 @@ public sealed class CompilerJourneyForm : Form
         {
             if (workspaceSplitter.Width > 200)
             {
-                workspaceSplitter.SplitterDistance = Math.Max(200, workspaceSplitter.Width / 2);
+                workspaceSplitter.SplitterDistance = workspaceSplitter.Width / 2;
+            }
+        };
+
+        Resize += (_, _) =>
+        {
+            if (isSplitView && WindowState != FormWindowState.Minimized && workspaceSplitter.Width > 200)
+            {
+                workspaceSplitter.SplitterDistance = workspaceSplitter.Width / 2;
             }
         };
 
@@ -118,51 +126,55 @@ public sealed class CompilerJourneyForm : Form
 
     private void InitializeDefaultArtifacts()
     {
-        stageArtifacts[1] = "لم تُشغَّل الترجمة بعد. اضغط «تحليل وترجمة ⚙» لاستخراج Tokens.";
+        stageArtifacts[1] = "لم تُشغَّل الترجمة بعد. اضغط «ترجمة ⚙ (F6)» لاستخراج Tokens.";
         stageArtifacts[2] = "ستظهر هنا شجرة التحليل النحوي (Parse Tree) بعد الترجمة.";
         stageArtifacts[3] = "سيظهر جدول الرموز (Symbol Table) الدلالي بعد الترجمة.";
         stageArtifacts[4] = "ستظهر نتائج التحليل الدلالي (Semantic Analysis) هنا.";
         stageArtifacts[5] = "سيظهر كود Three-Address Code (TAC) هنا.";
         stageArtifacts[6] = "سيظهر كود أسمبلي x86 التوثيقي (output.asm) هنا.";
         stageArtifacts[7] = "لا توجد أخطاء بعد. ستظهر تشخيصات CLI هنا في حال وجود أي خطأ نحوي أو دلالي.";
-        stageArtifacts[8] = "لم يُنفّذ البرنامج بعد. اضغط «تشغيل EXE ▶» لتشغيل output.exe.";
+        stageArtifacts[8] = "لم يُنفّذ البرنامج بعد. اضغط «تشغيل ▶ (F5)» لتشغيل output.exe.";
     }
 
     private void BuildLayout()
     {
-        var rootLayout = new TableLayoutPanel
+        // 1. Top Section Panel (Fixed Height: 54px Toolbar + 46px Stage Bar = 100px)
+        var topContainer = new Panel
         {
-            Dock = DockStyle.Fill,
-            ColumnCount = 1,
-            RowCount = 4,
-            Padding = Padding.Empty,
-            Margin = Padding.Empty,
-            RightToLeft = RightToLeft.Yes
+            Dock = DockStyle.Top,
+            Height = 102,
+            BackColor = IdeTheme.AppBackground
         };
 
-        rootLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 54F));  // Toolbar
-        rootLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 48F));  // 9 Stages Bar
-        rootLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F)); // Workspace Splitter
-        rootLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));  // Footer Status
+        var stageBar = CreateStageBar(); // Dock = DockStyle.Bottom, Height = 46
+        var toolbar = CreateToolbar();   // Dock = DockStyle.Top, Height = 56
 
-        rootLayout.Controls.Add(CreateToolbar(), 0, 0);
-        rootLayout.Controls.Add(CreateStageBar(), 0, 1);
-        rootLayout.Controls.Add(CreateWorkspace(), 0, 2);
-        rootLayout.Controls.Add(CreateFooter(), 0, 3);
+        topContainer.Controls.Add(stageBar);
+        topContainer.Controls.Add(toolbar);
 
-        Controls.Add(rootLayout);
+        // 2. Footer Panel (Fixed Height: 32px at the bottom)
+        var footer = CreateFooter(); // Dock = DockStyle.Bottom, Height = 32
+
+        // 3. Workspace Splitter (Fills remaining 100% space)
+        var workspace = CreateWorkspace(); // Dock = DockStyle.Fill
+
+        // Add in strict Z-order: Fill first, then Bottom, then Top
+        Controls.Add(workspace);
+        Controls.Add(footer);
+        Controls.Add(topContainer);
     }
 
     private Control CreateToolbar()
     {
         var toolbarPanel = new Panel
         {
-            Dock = DockStyle.Fill,
-            Padding = new Padding(12, 6, 12, 6),
-            RightToLeft = RightToLeft.Yes
+            Dock = DockStyle.Top,
+            Height = 56,
+            Padding = new Padding(12, 8, 12, 8),
+            BackColor = IdeTheme.AppBackground
         };
 
-        // Logo and Title
+        // Logo and Title on Right (start of RTL)
         var titleLabel = new Label
         {
             Text = "بيان  |  Bayan IDE",
@@ -170,7 +182,8 @@ public sealed class CompilerJourneyForm : Form
             AutoSize = true,
             Dock = DockStyle.Right,
             TextAlign = ContentAlignment.MiddleCenter,
-            Padding = new Padding(8, 6, 16, 6)
+            Padding = new Padding(6, 4, 16, 4),
+            ForeColor = IdeTheme.TextPrimary
         };
 
         // Toolbar Buttons Container
@@ -179,9 +192,8 @@ public sealed class CompilerJourneyForm : Form
             Dock = DockStyle.Fill,
             FlowDirection = FlowDirection.RightToLeft,
             WrapContents = false,
-            AutoScroll = true,
-            Padding = new Padding(0, 2, 0, 2),
-            RightToLeft = RightToLeft.Yes
+            AutoScroll = false,
+            Padding = new Padding(0, 2, 0, 2)
         };
 
         // File Buttons
@@ -210,8 +222,8 @@ public sealed class CompilerJourneyForm : Form
         cmbOfficialSamples.SelectedIndexChanged += CmbOfficialSamples_SelectedIndexChanged;
 
         // Compile Progress Bar
-        compileProgress.Width = 120;
-        compileProgress.Height = 20;
+        compileProgress.Width = 100;
+        compileProgress.Height = 18;
         compileProgress.Style = ProgressBarStyle.Marquee;
         compileProgress.MarqueeAnimationSpeed = 30;
         compileProgress.Visible = false;
@@ -247,19 +259,31 @@ public sealed class CompilerJourneyForm : Form
 
     private Control CreateStageBar()
     {
-        var barPanel = new TableLayoutPanel
+        var barPanel = new Panel
+        {
+            Dock = DockStyle.Bottom,
+            Height = 46,
+            Padding = new Padding(8, 2, 8, 4),
+            BackColor = IdeTheme.SurfaceElevated
+        };
+
+        var stageTable = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             ColumnCount = StageNames.Length,
             RowCount = 1,
-            Padding = new Padding(8, 4, 8, 4),
             Margin = Padding.Empty,
+            Padding = Padding.Empty,
+            BackColor = Color.Transparent,
             RightToLeft = RightToLeft.Yes
         };
+        stageTable.ColumnStyles.Clear();
+        stageTable.RowStyles.Clear();
+        stageTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 
         for (int i = 0; i < StageNames.Length; i++)
         {
-            barPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F / StageNames.Length));
+            stageTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F / StageNames.Length));
 
             int stageIndex = i;
             var button = new Button
@@ -267,8 +291,8 @@ public sealed class CompilerJourneyForm : Form
                 Text = StageNames[i],
                 Dock = DockStyle.Fill,
                 FlatStyle = FlatStyle.Flat,
-                Font = IdeTheme.BadgeFont,
-                Margin = new Padding(2, 1, 2, 1),
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                Margin = new Padding(2, 0, 2, 0),
                 Cursor = Cursors.Hand,
                 TextAlign = ContentAlignment.MiddleCenter,
                 AccessibleName = StageNames[i]
@@ -277,9 +301,10 @@ public sealed class CompilerJourneyForm : Form
             button.Click += (_, _) => SelectStage(stageIndex);
 
             stageButtons[i] = button;
-            barPanel.Controls.Add(button, i, 0);
+            stageTable.Controls.Add(button, i, 0);
         }
 
+        barPanel.Controls.Add(stageTable);
         return barPanel;
     }
 
@@ -287,31 +312,33 @@ public sealed class CompilerJourneyForm : Form
     {
         workspaceSplitter.Dock = DockStyle.Fill;
         workspaceSplitter.Orientation = Orientation.Vertical;
-        workspaceSplitter.RightToLeft = RightToLeft.Yes;
+        workspaceSplitter.RightToLeft = RightToLeft.No; // Keep SplitContainer LTR to avoid WinForms RTL splitter bugs
         workspaceSplitter.SplitterWidth = 6;
+        workspaceSplitter.BackColor = IdeTheme.Border;
 
-        // Panel 1: Code Editor
-        workspaceSplitter.Panel1.Controls.Add(sourceEditor);
+        // In LTR layout:
+        // Panel 1 is on the LEFT -> Stage Viewer (output, terminal, analysis)
+        // Panel 2 is on the RIGHT -> Code Editor (source code editor)
+        // This gives the exact expected Arabic flow: Editor on the Right, Output on the Left!
 
-        // Panel 2: Stage Viewer Host
         stageViewerHost.Dock = DockStyle.Fill;
-        stageViewerHost.Padding = new Padding(6);
+        stageViewerHost.Padding = new Padding(4);
+        stageViewerHost.RightToLeft = RightToLeft.Yes;
 
-        // Stage Header inside Viewer Host
         var stageHeaderPanel = new Panel
         {
             Dock = DockStyle.Top,
-            Height = 58,
+            Height = 54,
             Padding = new Padding(12, 6, 12, 6)
         };
 
         stageTitleLabel.Font = IdeTheme.HeaderFont;
         stageTitleLabel.Dock = DockStyle.Top;
-        stageTitleLabel.Height = 26;
+        stageTitleLabel.Height = 24;
 
         stageSubtitleLabel.Font = IdeTheme.UiFontRegular;
         stageSubtitleLabel.Dock = DockStyle.Bottom;
-        stageSubtitleLabel.Height = 20;
+        stageSubtitleLabel.Height = 18;
 
         stageHeaderPanel.Controls.Add(stageTitleLabel);
         stageHeaderPanel.Controls.Add(stageSubtitleLabel);
@@ -337,25 +364,43 @@ public sealed class CompilerJourneyForm : Form
         stageViewerHost.Controls.Add(viewerContainer);
         stageViewerHost.Controls.Add(stageHeaderPanel);
 
-        workspaceSplitter.Panel2.Controls.Add(stageViewerHost);
+        workspaceSplitter.Panel1.Controls.Add(stageViewerHost);
+        workspaceSplitter.Panel1MinSize = 250;
+
+        sourceEditor.Dock = DockStyle.Fill;
+        workspaceSplitter.Panel2.Controls.Add(sourceEditor);
+        workspaceSplitter.Panel2MinSize = 250;
 
         return workspaceSplitter;
     }
 
     private Control CreateFooter()
     {
-        var footer = new TableLayoutPanel
+        var footer = new Panel
+        {
+            Dock = DockStyle.Bottom,
+            Height = 32,
+            Padding = new Padding(16, 4, 16, 4),
+            BackColor = IdeTheme.SurfaceElevated
+        };
+
+        var footerTable = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             ColumnCount = 2,
             RowCount = 1,
-            Padding = new Padding(16, 4, 16, 4),
+            Margin = Padding.Empty,
+            Padding = Padding.Empty,
+            BackColor = Color.Transparent,
             RightToLeft = RightToLeft.Yes
         };
-        footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-        footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+        footerTable.ColumnStyles.Clear();
+        footerTable.RowStyles.Clear();
+        footerTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        footerTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+        footerTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
 
-        statusMessageLabel.Text = "جاهز — اكتب الكود المصدري ثم اضغط «تحليل وترجمة ⚙»";
+        statusMessageLabel.Text = "جاهز — اكتب الكود المصدري ثم اضغط «ترجمة ⚙ (F6)»";
         statusMessageLabel.Dock = DockStyle.Fill;
         statusMessageLabel.Font = IdeTheme.UiFontRegular;
         statusMessageLabel.TextAlign = ContentAlignment.MiddleRight;
@@ -365,8 +410,9 @@ public sealed class CompilerJourneyForm : Form
         currentTargetLabel.Font = IdeTheme.UiFontBold;
         currentTargetLabel.TextAlign = ContentAlignment.MiddleLeft;
 
-        footer.Controls.Add(statusMessageLabel, 0, 0);
-        footer.Controls.Add(currentTargetLabel, 1, 0);
+        footerTable.Controls.Add(statusMessageLabel, 0, 0);
+        footerTable.Controls.Add(currentTargetLabel, 1, 0);
+        footer.Controls.Add(footerTable);
         return footer;
     }
 
@@ -412,24 +458,14 @@ public sealed class CompilerJourneyForm : Form
             stageButtons[i].FlatAppearance.BorderColor = isCurrent ? IdeTheme.AccentPrimary : IdeTheme.Border;
         }
 
-        if (stage == 0)
+        if (isSplitView)
         {
-            // Stage 0: Source Editor
-            if (!isSplitView)
-            {
-                workspaceSplitter.Panel1Collapsed = false;
-                workspaceSplitter.Panel2Collapsed = true;
-            }
-            else
-            {
-                workspaceSplitter.Panel1Collapsed = false;
-                workspaceSplitter.Panel2Collapsed = false;
-            }
+            workspaceSplitter.Panel1Collapsed = false;
+            workspaceSplitter.Panel2Collapsed = false;
         }
         else
         {
-            // Stages 1-8: Artifacts or Execution
-            if (!isSplitView)
+            if (stage == 0)
             {
                 workspaceSplitter.Panel1Collapsed = true;
                 workspaceSplitter.Panel2Collapsed = false;
@@ -437,27 +473,53 @@ public sealed class CompilerJourneyForm : Form
             else
             {
                 workspaceSplitter.Panel1Collapsed = false;
-                workspaceSplitter.Panel2Collapsed = false;
-            }
-
-            if (stage == 8) // Terminal for output.exe
-            {
-                artifactViewer.Visible = false;
-                terminalControl.Visible = true;
-            }
-            else
-            {
-                terminalControl.Visible = false;
-                artifactViewer.Visible = true;
-                artifactViewer.Text = stageArtifacts[stage];
-
-                // Right to left vs Left to Right based on artifact
-                bool isCode = stage is 1 or 5 or 6;
-                artifactViewer.RightToLeft = isCode ? RightToLeft.No : RightToLeft.Yes;
+                workspaceSplitter.Panel2Collapsed = true;
             }
         }
 
+        if (stage == 8) // Terminal for output.exe
+        {
+            artifactViewer.Visible = false;
+            terminalControl.Visible = true;
+        }
+        else if (stage == 0) // Source Overview in Left pane, focus Editor on Right pane
+        {
+            terminalControl.Visible = false;
+            artifactViewer.Visible = true;
+            artifactViewer.Text = GetSourceSummary();
+            artifactViewer.RightToLeft = RightToLeft.Yes;
+            sourceEditor.InnerEditor.Focus();
+        }
+        else
+        {
+            terminalControl.Visible = false;
+            artifactViewer.Visible = true;
+            artifactViewer.Text = stageArtifacts[stage];
+
+            // Right to left vs Left to Right based on artifact
+            bool isCode = stage is 1 or 5 or 6;
+            artifactViewer.RightToLeft = isCode ? RightToLeft.No : RightToLeft.Yes;
+        }
+
         statusMessageLabel.Text = $"المرحلة الحالية: {StageNames[stage]}";
+    }
+
+    private string GetSourceSummary()
+    {
+        int lines = sourceEditor.InnerEditor.Lines.Length;
+        int chars = sourceEditor.InnerEditor.TextLength;
+        string file = string.IsNullOrEmpty(currentSourcePath) ? "ملف بيان جديد (غير محفوظ)" : Path.GetFileName(currentSourcePath);
+
+        return $"=== نظرة عامة على الكود المصدر (المرحلة 01) ===\n\n" +
+               $"• الملف الحالي: {file}\n" +
+               $"• عدد الأسطر: {lines}\n" +
+               $"• إجمالي الأحرف: {chars}\n\n" +
+               $"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+               $"دليل سير عمل المترجم:\n" +
+               $"1. اكتب أو عدّل كود بيان في المحرر المقابل (جهة اليمين).\n" +
+               $"2. اضغط «ترجمة ⚙ (F6)» لتشغيل مراحل المترجم بالترتيب واستخراج المخرجات.\n" +
+               $"3. اضغط «تشغيل ▶ (F5)» لتشغيل output.exe فورياً عبر الطرفية التفاعلية.\n" +
+               $"4. يمكنك النقر على أي مرحلة من المراحل التسع أعلاه لفحص نتائجها مباشرة دون إخفاء الكود المصدري.";
     }
 
     private async void CompileSource()
@@ -574,19 +636,22 @@ public sealed class CompilerJourneyForm : Form
         {
             workspaceSplitter.Panel1Collapsed = false;
             workspaceSplitter.Panel2Collapsed = false;
-            workspaceSplitter.SplitterDistance = Width / 2;
+            if (workspaceSplitter.Width > 200)
+            {
+                workspaceSplitter.SplitterDistance = workspaceSplitter.Width / 2;
+            }
         }
         else
         {
             if (activeStage == 0)
             {
-                workspaceSplitter.Panel1Collapsed = false;
-                workspaceSplitter.Panel2Collapsed = true;
+                workspaceSplitter.Panel1Collapsed = true;
+                workspaceSplitter.Panel2Collapsed = false;
             }
             else
             {
-                workspaceSplitter.Panel1Collapsed = true;
-                workspaceSplitter.Panel2Collapsed = false;
+                workspaceSplitter.Panel1Collapsed = false;
+                workspaceSplitter.Panel2Collapsed = true;
             }
         }
     }

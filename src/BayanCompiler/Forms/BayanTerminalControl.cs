@@ -36,8 +36,8 @@ public sealed class BayanTerminalControl : UserControl
     {
         // 1. Header
         headerPanel.Dock = DockStyle.Top;
-        headerPanel.Height = 38;
-        headerPanel.Padding = new Padding(12, 4, 12, 4);
+        headerPanel.Height = 42;
+        headerPanel.Padding = new Padding(12, 6, 12, 6);
 
         titleLabel.Text = "طرفية بيان  |  output.exe";
         titleLabel.Font = IdeTheme.SubHeaderFont;
@@ -49,14 +49,15 @@ public sealed class BayanTerminalControl : UserControl
         statusBadge.Font = IdeTheme.BadgeFont;
         statusBadge.AutoSize = true;
         statusBadge.Dock = DockStyle.Right;
-        statusBadge.Padding = new Padding(8, 2, 8, 2);
-        statusBadge.Margin = new Padding(8, 4, 8, 4);
+        statusBadge.Padding = new Padding(10, 4, 10, 4);
+        statusBadge.Margin = new Padding(8, 2, 8, 2);
         statusBadge.TextAlign = ContentAlignment.MiddleCenter;
 
         metricsLabel.Text = "";
         metricsLabel.Font = IdeTheme.UiFontRegular;
         metricsLabel.AutoSize = true;
         metricsLabel.Dock = DockStyle.Right;
+        metricsLabel.Padding = new Padding(8, 4, 8, 4);
         metricsLabel.TextAlign = ContentAlignment.MiddleCenter;
 
         clearButton.Text = "مسح";
@@ -85,8 +86,8 @@ public sealed class BayanTerminalControl : UserControl
 
         // 2. Input Panel (for interactive stdin)
         inputPanel.Dock = DockStyle.Bottom;
-        inputPanel.Height = 38;
-        inputPanel.Padding = new Padding(8, 4, 8, 4);
+        inputPanel.Height = 44;
+        inputPanel.Padding = new Padding(10, 6, 10, 6);
 
         promptLabel.Text = "مدخلات اقرأ :";
         promptLabel.Font = IdeTheme.UiFontBold;
@@ -184,7 +185,7 @@ public sealed class BayanTerminalControl : UserControl
         statusBadge.BackColor = success ? IdeTheme.AccentSuccess : IdeTheme.AccentError;
         statusBadge.ForeColor = Color.White;
 
-        metricsLabel.Text = $"الزمن: {elapsed.TotalMilliseconds:F1} ms";
+        metricsLabel.Text = $"الزمن: {elapsed.TotalMilliseconds:F1} مللي ثانية";
     }
 
     public void SetWaiting()
