@@ -107,18 +107,26 @@ public sealed class CompilerJourneyForm : Form
 
         Shown += (_, _) =>
         {
-            if (workspaceSplitter.Width > 200)
+            try
             {
-                workspaceSplitter.SplitterDistance = workspaceSplitter.Width / 2;
+                if (workspaceSplitter.Width > 200)
+                {
+                    workspaceSplitter.SplitterDistance = workspaceSplitter.Width / 2;
+                }
             }
+            catch { }
         };
 
         Resize += (_, _) =>
         {
-            if (isSplitView && WindowState != FormWindowState.Minimized && workspaceSplitter.Width > 200)
+            try
             {
-                workspaceSplitter.SplitterDistance = workspaceSplitter.Width / 2;
+                if (isSplitView && WindowState != FormWindowState.Minimized && workspaceSplitter.Width > 200)
+                {
+                    workspaceSplitter.SplitterDistance = workspaceSplitter.Width / 2;
+                }
             }
+            catch { }
         };
 
         SelectStage(0);
@@ -365,11 +373,9 @@ public sealed class CompilerJourneyForm : Form
         stageViewerHost.Controls.Add(stageHeaderPanel);
 
         workspaceSplitter.Panel1.Controls.Add(stageViewerHost);
-        workspaceSplitter.Panel1MinSize = 250;
 
         sourceEditor.Dock = DockStyle.Fill;
         workspaceSplitter.Panel2.Controls.Add(sourceEditor);
-        workspaceSplitter.Panel2MinSize = 250;
 
         return workspaceSplitter;
     }
