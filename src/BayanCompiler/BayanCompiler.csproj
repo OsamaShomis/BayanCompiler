@@ -5,15 +5,14 @@
     <!-- يعطي المحرر اسماً تنفيذياً مستقلاً عن برنامج المترجم CLI. -->
     <AssemblyName>Bayan.Editor.WinForms</AssemblyName>
     <!-- يستهدف .NET 6 على Windows، وهو الإصدار المتوافق مع بيئة Visual Studio الحالية. -->
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <!-- يربط المشروع بمكتبة Windows Forms لتشغيل النماذج وعناصر التحكم. -->
     <UseWindowsForms>true</UseWindowsForms>
     <!-- يفعّل الاستيرادات الضمنية الشائعة في C#. -->
     <ImplicitUsings>enable</ImplicitUsings>
     <!-- يفعّل التحقق من القيم القابلة لأن تكون فارغة. -->
     <Nullable>enable</Nullable>
-    <!-- Enables seamless execution on any modern .NET runtime (6.0, 7.0, 8.0, 9.0). -->
-    <RollForward>Major</RollForward>
+    <NoWarn>$(NoWarn);WFO1000</NoWarn>
     <!-- Keeps the editor limited to its own source files. -->
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
@@ -26,8 +25,8 @@
   </ItemGroup>
   <Target Name="CopyCompilerCliArtifacts" AfterTargets="Build">
     <ItemGroup>
-      <CompilerCliArtifacts Include="$(MSBuildProjectDirectory)\..\Bayan.Compiler.Cli\bin\$(Configuration)\net6.0\Bayan.Compiler.Cli.*" />
-      <CompilerCoreArtifact Include="$(MSBuildProjectDirectory)\..\Bayan.Compiler.Core\bin\$(Configuration)\net6.0\Bayan.Compiler.Core.dll" />
+      <CompilerCliArtifacts Include="$(MSBuildProjectDirectory)\..\Bayan.Compiler.Cli\bin\$(Configuration)\net9.0\Bayan.Compiler.Cli.*" />
+      <CompilerCoreArtifact Include="$(MSBuildProjectDirectory)\..\Bayan.Compiler.Core\bin\$(Configuration)\net9.0\Bayan.Compiler.Core.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(CompilerCliArtifacts);@(CompilerCoreArtifact)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
   </Target>

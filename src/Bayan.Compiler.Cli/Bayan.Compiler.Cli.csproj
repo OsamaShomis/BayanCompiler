@@ -2,11 +2,10 @@
   <PropertyGroup>
     <!-- This executable is the standalone compiler required by the project brief. -->
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <AssemblyName>Bayan.Compiler.Cli</AssemblyName>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RollForward>Major</RollForward>
   </PropertyGroup>
   <ItemGroup>
     <!-- The CLI depends only on the reusable compiler core, never on Windows Forms. -->

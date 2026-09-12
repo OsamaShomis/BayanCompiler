@@ -9,6 +9,7 @@ public sealed class WelcomeForm : Form
     /// <summary>
     /// Gets the optional source path selected by the user before entering the editor.
     /// </summary>
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     public string? SelectedSourcePath { get; private set; }
 
     public WelcomeForm()

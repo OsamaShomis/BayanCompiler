@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!-- The core is platform-neutral so it can serve the CLI, tests, and Windows editor. -->
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <!-- The assembly name makes the compiler boundary explicit in the final solution. -->
     <AssemblyName>Bayan.Compiler.Core</AssemblyName>
     <!-- Source files are linked from the existing implementation during the safe first split. -->

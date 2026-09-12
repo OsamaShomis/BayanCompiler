@@ -146,30 +146,19 @@ public sealed class CompilerJourneyForm : Form
 
     private void BuildLayout()
     {
-        // 1. Top Section Panel (Fixed Height: 54px Toolbar + 46px Stage Bar = 100px)
-        var topContainer = new Panel
-        {
-            Dock = DockStyle.Top,
-            Height = 102,
-            BackColor = IdeTheme.AppBackground
-        };
-
-        var stageBar = CreateStageBar(); // Dock = DockStyle.Bottom, Height = 46
-        var toolbar = CreateToolbar();   // Dock = DockStyle.Top, Height = 56
-
-        topContainer.Controls.Add(stageBar);
-        topContainer.Controls.Add(toolbar);
-
-        // 2. Footer Panel (Fixed Height: 32px at the bottom)
-        var footer = CreateFooter(); // Dock = DockStyle.Bottom, Height = 32
-
-        // 3. Workspace Splitter (Fills remaining 100% space)
+        var toolbar = CreateToolbar();     // Dock = DockStyle.Top, Height = 60
+        var stageBar = CreateStageBar();   // Dock = DockStyle.Top, Height = 52
+        var footer = CreateFooter();       // Dock = DockStyle.Bottom, Height = 36
         var workspace = CreateWorkspace(); // Dock = DockStyle.Fill
 
-        // Add in strict Z-order: Fill first, then Bottom, then Top
+        // In Windows Forms docking:
+        // Fill control is added first.
+        // Then Bottom controls.
+        // Then Top controls in reverse order (bottom-most Top first, then top-most Top).
         Controls.Add(workspace);
         Controls.Add(footer);
-        Controls.Add(topContainer);
+        Controls.Add(stageBar);
+        Controls.Add(toolbar);
     }
 
     private Control CreateToolbar()
@@ -177,8 +166,8 @@ public sealed class CompilerJourneyForm : Form
         var toolbarPanel = new Panel
         {
             Dock = DockStyle.Top,
-            Height = 56,
-            Padding = new Padding(12, 8, 12, 8),
+            Height = 60,
+            Padding = new Padding(12, 10, 12, 10),
             BackColor = IdeTheme.AppBackground
         };
 
@@ -269,9 +258,9 @@ public sealed class CompilerJourneyForm : Form
     {
         var barPanel = new Panel
         {
-            Dock = DockStyle.Bottom,
-            Height = 46,
-            Padding = new Padding(8, 2, 8, 4),
+            Dock = DockStyle.Top,
+            Height = 52,
+            Padding = new Padding(8, 4, 8, 4),
             BackColor = IdeTheme.SurfaceElevated
         };
 
@@ -385,8 +374,8 @@ public sealed class CompilerJourneyForm : Form
         var footer = new Panel
         {
             Dock = DockStyle.Bottom,
-            Height = 32,
-            Padding = new Padding(16, 4, 16, 4),
+            Height = 36,
+            Padding = new Padding(16, 6, 16, 6),
             BackColor = IdeTheme.SurfaceElevated
         };
 

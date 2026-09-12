@@ -18,6 +18,7 @@ public sealed class BayanCodeEditor : UserControl
 
     public event EventHandler? ContentModified;
 
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     public string SourceCode
     {
         get => editor.Text;
@@ -30,6 +31,7 @@ public sealed class BayanCodeEditor : UserControl
         }
     }
 
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     public RichTextBox InnerEditor => editor;
 
     public BayanCodeEditor()
