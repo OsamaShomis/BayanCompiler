@@ -263,8 +263,6 @@ public sealed class CompilerJourneyForm : Form
         mainSplitter.Orientation = Orientation.Horizontal;
         mainSplitter.SplitterWidth = 6;
         mainSplitter.BackColor = IdeTheme.Border;
-        mainSplitter.Panel1MinSize = 200;
-        mainSplitter.Panel2MinSize = 140;
 
         // 2. Upper Splitter: Editor (60%) vs Inspector Tabs (40%)
         upperSplitter.Dock = DockStyle.Fill;
@@ -272,8 +270,6 @@ public sealed class CompilerJourneyForm : Form
         upperSplitter.RightToLeft = RightToLeft.No; // Stable LTR docking for internal split
         upperSplitter.SplitterWidth = 6;
         upperSplitter.BackColor = IdeTheme.Border;
-        upperSplitter.Panel1MinSize = 300;
-        upperSplitter.Panel2MinSize = 250;
 
         // Place Editor in Panel 1 (Left), Inspector Tabs in Panel 2 (Right)
         sourceEditor.Dock = DockStyle.Fill;
@@ -390,11 +386,12 @@ public sealed class CompilerJourneyForm : Form
     {
         try
         {
-            if (mainSplitter.Height > 350)
+            if (mainSplitter.Height > 300)
             {
                 int targetHeight = (int)(mainSplitter.Height * 0.65);
-                if (targetHeight >= mainSplitter.Panel1MinSize &&
-                    (mainSplitter.Height - targetHeight) >= mainSplitter.Panel2MinSize)
+                int min1 = Math.Max(25, mainSplitter.Panel1MinSize);
+                int min2 = Math.Max(25, mainSplitter.Panel2MinSize);
+                if (targetHeight >= min1 && targetHeight <= (mainSplitter.Height - min2))
                 {
                     mainSplitter.SplitterDistance = targetHeight;
                 }
@@ -403,8 +400,9 @@ public sealed class CompilerJourneyForm : Form
             if (upperSplitter.Width > 400 && isSplitView)
             {
                 int targetWidth = (int)(upperSplitter.Width * 0.58);
-                if (targetWidth >= upperSplitter.Panel1MinSize &&
-                    (upperSplitter.Width - targetWidth) >= upperSplitter.Panel2MinSize)
+                int min1 = Math.Max(25, upperSplitter.Panel1MinSize);
+                int min2 = Math.Max(25, upperSplitter.Panel2MinSize);
+                if (targetWidth >= min1 && targetWidth <= (upperSplitter.Width - min2))
                 {
                     upperSplitter.SplitterDistance = targetWidth;
                 }
