@@ -105,6 +105,14 @@ public sealed class CompilerJourneyForm : Form
             sourceEditor.SourceCode = "برنامج تجربة;\nمتغير س : صحيح;\n{\n    س = 15;\n    اطبع(س);\n}.";
         }
 
+        Shown += (_, _) =>
+        {
+            if (workspaceSplitter.Width > 200)
+            {
+                workspaceSplitter.SplitterDistance = Math.Max(200, workspaceSplitter.Width / 2);
+            }
+        };
+
         SelectStage(0);
     }
 
@@ -177,13 +185,13 @@ public sealed class CompilerJourneyForm : Form
         };
 
         // File Buttons
-        ConfigureToolButton(btnNew, "جديد (Ctrl+N)", "إنشاء ملف بيان جديد", (_, _) => NewFile());
-        ConfigureToolButton(btnOpen, "فتح (Ctrl+O)", "فتح ملف .bayan محفوظ", (_, _) => OpenFileDialog());
-        ConfigureToolButton(btnSave, "حفظ (Ctrl+S)", "حفظ ملف البيان الحالي", (_, _) => SaveFileDialog());
+        ConfigureToolButton(btnNew, "جديد", "إنشاء ملف جديد (Ctrl+N)", (_, _) => NewFile());
+        ConfigureToolButton(btnOpen, "فتح", "فتح ملف .bayan محفوظ (Ctrl+O)", (_, _) => OpenFileDialog());
+        ConfigureToolButton(btnSave, "حفظ", "حفظ الكود الحالي (Ctrl+S)", (_, _) => SaveFileDialog());
 
         // Compiler & Execution Buttons (Prominent)
-        ConfigureToolButton(btnCompile, "تحليل وترجمة ⚙", "تشغيل مترجم CLI حتى TAC وx86 Assembly وEXE (F6)", (_, _) => CompileSource(), true, IdeTheme.Dark.AccentPrimary);
-        ConfigureToolButton(btnRunExe, "تشغيل EXE ▶", "تشغيل output.exe المترجم عبر ilasm (F5)", (_, _) => RunExecutable(), true, IdeTheme.Dark.AccentSuccess);
+        ConfigureToolButton(btnCompile, "ترجمة ⚙ (F6)", "تشغيل مترجم CLI حتى TAC وx86 Assembly وEXE (F6)", (_, _) => CompileSource(), true, IdeTheme.Dark.AccentPrimary);
+        ConfigureToolButton(btnRunExe, "تشغيل ▶ (F5)", "تشغيل output.exe المترجم عبر ilasm (F5)", (_, _) => RunExecutable(), true, IdeTheme.Dark.AccentSuccess);
         btnRunExe.Enabled = false;
 
         // Split View Toggle
@@ -194,10 +202,10 @@ public sealed class CompilerJourneyForm : Form
 
         // Samples Dropdown
         cmbOfficialSamples.DropDownStyle = ComboBoxStyle.DropDownList;
-        cmbOfficialSamples.Width = 190;
+        cmbOfficialSamples.Width = 175;
         cmbOfficialSamples.Height = 32;
         cmbOfficialSamples.Font = IdeTheme.UiFontRegular;
-        cmbOfficialSamples.Margin = new Padding(8, 4, 8, 4);
+        cmbOfficialSamples.Margin = new Padding(6, 4, 6, 4);
         toolTips.SetToolTip(cmbOfficialSamples, "اختر من العينات الرسمية للتجربة السريعة");
         cmbOfficialSamples.SelectedIndexChanged += CmbOfficialSamples_SelectedIndexChanged;
 
@@ -293,17 +301,17 @@ public sealed class CompilerJourneyForm : Form
         var stageHeaderPanel = new Panel
         {
             Dock = DockStyle.Top,
-            Height = 44,
-            Padding = new Padding(12, 4, 12, 4)
+            Height = 58,
+            Padding = new Padding(12, 6, 12, 6)
         };
 
         stageTitleLabel.Font = IdeTheme.HeaderFont;
         stageTitleLabel.Dock = DockStyle.Top;
-        stageTitleLabel.Height = 24;
+        stageTitleLabel.Height = 26;
 
         stageSubtitleLabel.Font = IdeTheme.UiFontRegular;
         stageSubtitleLabel.Dock = DockStyle.Bottom;
-        stageSubtitleLabel.Height = 18;
+        stageSubtitleLabel.Height = 20;
 
         stageHeaderPanel.Controls.Add(stageTitleLabel);
         stageHeaderPanel.Controls.Add(stageSubtitleLabel);
@@ -366,13 +374,13 @@ public sealed class CompilerJourneyForm : Form
     {
         btn.Text = text;
         btn.AutoSize = true;
-        btn.MinimumSize = new Size(88, 34);
+        btn.MinimumSize = new Size(64, 34);
         btn.Height = 34;
         btn.FlatStyle = FlatStyle.Flat;
         btn.Font = isPrimary ? IdeTheme.UiFontBold : IdeTheme.UiFontRegular;
         btn.Cursor = Cursors.Hand;
-        btn.Margin = new Padding(4, 3, 4, 3);
-        btn.Padding = new Padding(10, 4, 10, 4);
+        btn.Margin = new Padding(3, 3, 3, 3);
+        btn.Padding = new Padding(8, 4, 8, 4);
         toolTips.SetToolTip(btn, tooltip);
         btn.Click += onClick;
 

@@ -153,6 +153,17 @@ public sealed class BayanCodeEditor : UserControl
 
         if (string.IsNullOrEmpty(editor.Text))
         {
+            using var emptyFont = new Font("Cascadia Mono", 9F, FontStyle.Regular);
+            using var emptyBrush = new SolidBrush(IdeTheme.GutterText);
+            using var emptyFormat = new StringFormat
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+            var emptyRect = new Rectangle(0, 4, gutter.Width, 20);
+            e.Graphics.DrawString("1", emptyFont, emptyBrush, emptyRect, emptyFormat);
+            using var emptyBorderPen = new Pen(IdeTheme.Border, 1);
+            e.Graphics.DrawLine(emptyBorderPen, 0, 0, 0, gutter.Height);
             return;
         }
 
