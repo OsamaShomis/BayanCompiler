@@ -14,6 +14,36 @@ internal static class Program
     private static void Main()
     {
         ApplicationConfiguration.Initialize();
-        Application.Run(new CompilerJourneyForm());
+
+        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+        AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+        {
+            LogCrash(e.ExceptionObject as Exception);
+        };
+        Application.ThreadException += (_, e) =>
+        {
+            LogCrash(e.Exception);
+        };
+
+        try
+        {
+            Application.Run(new CompilerJourneyForm());
+        }
+        catch (Exception ex)
+        {
+            LogCrash(ex);
+            MessageBox.Show("حدث خطأ أثناء تشغيل المحرر:\n" + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private static void LogCrash(Exception? ex)
+    {
+        if (ex == null) return;
+        try
+        {
+            string logPath = Path.Combine(AppContext.BaseDirectory, "crash.log");
+            File.AppendAllText(logPath, $"[{DateTime.Now}] {ex}\n\n");
+        }
+        catch { }
     }
 }

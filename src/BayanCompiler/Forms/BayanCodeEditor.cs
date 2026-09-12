@@ -17,6 +17,7 @@ public sealed class BayanCodeEditor : UserControl
     private readonly System.Windows.Forms.Timer highlightDebounceTimer = new();
 
     public event EventHandler? ContentModified;
+    public event Action<int, int>? CursorPositionChanged;
 
     [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     public string SourceCode
@@ -38,7 +39,7 @@ public sealed class BayanCodeEditor : UserControl
     {
         DoubleBuffered = true;
         Dock = DockStyle.Fill;
-        RightToLeft = RightToLeft.Yes;
+        RightToLeft = RightToLeft.No; // LTR for programming code to avoid inverted operators and braces
         Font = IdeTheme.UiFontRegular;
 
         // Debounce timer for syntax highlighting
@@ -57,7 +58,7 @@ public sealed class BayanCodeEditor : UserControl
     {
         // Gutter for line numbers
         gutter.Width = 48;
-        gutter.Dock = DockStyle.Right; // In RTL, right is the starting edge
+        gutter.Dock = DockStyle.Left; // Left side line numbers
         gutter.Paint += Gutter_Paint;
 
         // Code editor RichTextBox
@@ -65,7 +66,7 @@ public sealed class BayanCodeEditor : UserControl
         editor.Font = IdeTheme.EditorFont;
         editor.AcceptsTab = true;
         editor.WordWrap = false;
-        editor.RightToLeft = RightToLeft.Yes;
+        editor.RightToLeft = RightToLeft.No; // Ensure LTR for code
         editor.BorderStyle = BorderStyle.None;
         editor.ScrollBars = RichTextBoxScrollBars.Both;
         editor.DetectUrls = false;
@@ -83,27 +84,6 @@ public sealed class BayanCodeEditor : UserControl
         editor.VScroll += (_, _) => gutter.Invalidate();
         editor.Resize += (_, _) => gutter.Invalidate();
 
-        // Status bar at the bottom
-        statusBar.Dock = DockStyle.Bottom;
-        statusBar.SizingGrip = false;
-        statusBar.RightToLeft = RightToLeft.Yes;
-
-        cursorStatusLabel.Text = "السطر 1 ، العمود 1";
-        cursorStatusLabel.Spring = true;
-        cursorStatusLabel.TextAlign = ContentAlignment.MiddleRight;
-
-        statsLabel.Text = "1 سطر | 0 حرف";
-        statsLabel.TextAlign = ContentAlignment.MiddleCenter;
-
-        langLabel.Text = "لغة بيان (UTF-8)";
-        langLabel.TextAlign = ContentAlignment.MiddleLeft;
-
-        statusBar.Items.Add(cursorStatusLabel);
-        statusBar.Items.Add(new ToolStripSeparator());
-        statusBar.Items.Add(statsLabel);
-        statusBar.Items.Add(new ToolStripSeparator());
-        statusBar.Items.Add(langLabel);
-
         // Editor layout panel
         var editorPanel = new Panel
         {
@@ -113,7 +93,6 @@ public sealed class BayanCodeEditor : UserControl
         editorPanel.Controls.Add(gutter);
 
         Controls.Add(editorPanel);
-        Controls.Add(statusBar);
     }
 
     public void ApplyTheme()
@@ -123,13 +102,6 @@ public sealed class BayanCodeEditor : UserControl
         editor.ForeColor = IdeTheme.TextPrimary;
 
         gutter.BackColor = IdeTheme.GutterBackground;
-
-        statusBar.BackColor = IdeTheme.SurfaceElevated;
-        statusBar.ForeColor = IdeTheme.TextSecondary;
-        cursorStatusLabel.ForeColor = IdeTheme.TextSecondary;
-        statsLabel.ForeColor = IdeTheme.TextSecondary;
-        langLabel.ForeColor = IdeTheme.AccentPrimary;
-
         ApplyHighlighting();
         gutter.Invalidate();
     }
@@ -145,8 +117,7 @@ public sealed class BayanCodeEditor : UserControl
         int line = editor.GetLineFromCharIndex(charIndex);
         int col = charIndex - editor.GetFirstCharIndexFromLine(line);
 
-        cursorStatusLabel.Text = $"السطر {line + 1} ، العمود {col + 1}";
-        statsLabel.Text = $"{editor.Lines.Length} أسطر | {editor.TextLength} حرف";
+        CursorPositionChanged?.Invoke(line + 1, col + 1);
     }
 
     private void Gutter_Paint(object? sender, PaintEventArgs e)
@@ -165,7 +136,7 @@ public sealed class BayanCodeEditor : UserControl
             var emptyRect = new Rectangle(0, 4, gutter.Width, 20);
             e.Graphics.DrawString("1", emptyFont, emptyBrush, emptyRect, emptyFormat);
             using var emptyBorderPen = new Pen(IdeTheme.Border, 1);
-            e.Graphics.DrawLine(emptyBorderPen, 0, 0, 0, gutter.Height);
+            e.Graphics.DrawLine(emptyBorderPen, gutter.Width - 1, 0, gutter.Width - 1, gutter.Height);
             return;
         }
 
@@ -193,8 +164,8 @@ public sealed class BayanCodeEditor : UserControl
             e.Graphics.DrawString((i + 1).ToString(), font, brush, rect, format);
         }
 
-        // Draw dividing border line
+        // Draw dividing border line on the right edge of the gutter
         using var borderPen = new Pen(IdeTheme.Border, 1);
-        e.Graphics.DrawLine(borderPen, 0, 0, 0, gutter.Height);
+        e.Graphics.DrawLine(borderPen, gutter.Width - 1, 0, gutter.Width - 1, gutter.Height);
     }
 }

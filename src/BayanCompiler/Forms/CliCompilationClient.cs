@@ -31,15 +31,12 @@ internal sealed class CliCompilationClient
         string outputPath = Path.Combine(runDirectory, "artifacts");
         await File.WriteAllTextAsync(sourcePath, sourceText, new UTF8Encoding(false));
 
-        string cliPath = Path.Combine(AppContext.BaseDirectory, "Bayan.Compiler.Cli.dll");
-        if (!File.Exists(cliPath))
-        {
-            throw new FileNotFoundException("لم يتم العثور على ملف المترجم المستقل بجانب المحرر.", cliPath);
-        }
+        string cliBinary = ResolveCliBinary();
+        bool isDirectExe = cliBinary.EndsWith(".exe", StringComparison.OrdinalIgnoreCase);
 
         var startInfo = new ProcessStartInfo
         {
-            FileName = "dotnet",
+            FileName = isDirectExe ? cliBinary : "dotnet",
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -47,7 +44,12 @@ internal sealed class CliCompilationClient
             StandardOutputEncoding = Encoding.UTF8,
             StandardErrorEncoding = Encoding.UTF8
         };
-        startInfo.ArgumentList.Add(cliPath);
+
+        if (!isDirectExe)
+        {
+            startInfo.ArgumentList.Add(cliBinary);
+        }
+
         startInfo.ArgumentList.Add(sourcePath);
         startInfo.ArgumentList.Add("--out");
         startInfo.ArgumentList.Add(outputPath);
@@ -78,6 +80,38 @@ internal sealed class CliCompilationClient
         }
 
         return new CliCompilationRun(process.ExitCode, await stdoutTask, await stderrTask, artifacts, manifest, outputPath);
+    }
+
+    private static string ResolveCliBinary()
+    {
+        string[] candidates =
+        {
+            Path.Combine(AppContext.BaseDirectory, "Bayan.Compiler.Cli.exe"),
+            Path.Combine(AppContext.BaseDirectory, "Bayan.Compiler.Cli.dll"),
+            Path.Combine(AppContext.BaseDirectory, "..", "Bayan.Compiler.Cli", "Bayan.Compiler.Cli.exe"),
+            Path.Combine(AppContext.BaseDirectory, "..", "Bayan.Compiler.Cli", "Bayan.Compiler.Cli.dll"),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "publish", "Bayan.Compiler.Cli", "Bayan.Compiler.Cli.exe"),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "src", "Bayan.Compiler.Cli", "bin", "Debug", "net9.0", "Bayan.Compiler.Cli.dll"),
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "src", "Bayan.Compiler.Cli", "bin", "Release", "net9.0", "Bayan.Compiler.Cli.dll"),
+            Path.Combine(Environment.CurrentDirectory, "publish", "Bayan.Compiler.Cli", "Bayan.Compiler.Cli.exe"),
+            Path.Combine(Environment.CurrentDirectory, "src", "Bayan.Compiler.Cli", "bin", "Debug", "net9.0", "Bayan.Compiler.Cli.dll")
+        };
+
+        foreach (string candidate in candidates)
+        {
+            try
+            {
+                string fullPath = Path.GetFullPath(candidate);
+                if (File.Exists(fullPath))
+                {
+                    return fullPath;
+                }
+            }
+            catch { }
+        }
+
+        throw new FileNotFoundException(
+            "لم يتم العثور على ملف المترجم المستقل (Bayan.Compiler.Cli.exe أو Bayan.Compiler.Cli.dll) في مسار التشغيل الحالي.");
     }
 }
 
