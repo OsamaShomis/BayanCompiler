@@ -1,0 +1,8 @@
+# Symbol Table
+Name | Kind | Type | Read-only | Line | Column
+--- | --- | --- | --- | --- | ---
+أحمد | Variable | Record | False | 9 | 1
+احسب_المجموع | Procedure | Procedure | True | 13 | 1
+المعدل | Variable | Real | False | 11 | 1
+طالب | Type | Record | True | 3 | 1
+مجموع_الدرجات | Variable | Int | False | 10 | 1

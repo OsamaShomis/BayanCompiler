@@ -1,0 +1,39 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bayan.Editor.WinForms", "src\BayanCompiler\BayanCompiler.csproj", "{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bayan.Compiler.Core", "src\Bayan.Compiler.Core\Bayan.Compiler.Core.csproj", "{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1002}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bayan.Compiler.Cli", "src\Bayan.Compiler.Cli\Bayan.Compiler.Cli.csproj", "{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1003}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BayanCompiler.Ll1Tests", "tests\BayanCompiler.Ll1Tests\BayanCompiler.Ll1Tests.csproj", "{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1004}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7B010E0-7AA0-4E8D-8F81-5C7B5A0F1004}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

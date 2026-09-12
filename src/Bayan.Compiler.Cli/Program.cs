@@ -1,0 +1,124 @@
+using System.Text;
+using System.Text.Json;
+using BayanCompiler.Diagnostics;
+using BayanCompiler.Intermediate;
+using BayanCompiler.Services;
+
+namespace Bayan.Compiler.Cli;
+
+/// <summary>
+/// Provides a standalone command-line compiler that persists genuine compiler outputs.
+/// </summary>
+internal static class Program
+{
+    /// <summary>
+    /// Compiles a Bayan source file and writes every available stage output to an output directory.
+    /// </summary>
+    private static int Main(string[] args)
+    {
+        // Validate the minimal command shape before accessing the file system.
+        if (args.Length == 0)
+        {
+            Console.Error.WriteLine("الاستخدام: Bayan.Compiler.Cli <program.bayan> [--out <directory>]");
+            return 64;
+        }
+
+        // The first argument is intentionally a source path to keep editor integration deterministic.
+        string sourcePath = Path.GetFullPath(args[0]);
+        if (!File.Exists(sourcePath))
+        {
+            Console.Error.WriteLine("لم يتم العثور على ملف المصدر: " + sourcePath);
+            return 66;
+        }
+
+        // Allow the editor or caller to choose a stable result directory through --out.
+        string outputDirectory = ResolveOutputDirectory(args, sourcePath);
+        Directory.CreateDirectory(outputDirectory);
+
+        // Read UTF-8 source and run the common compiler service used by every executable.
+        string sourceText = File.ReadAllText(sourcePath, Encoding.UTF8);
+        BayanCompilationResult result = new OfficialBayanCompilationService().Compile(sourceText, outputDirectory);
+
+        // Persist true outputs even when compilation stops early, which preserves evidence for the editor.
+        WriteOutputs(outputDirectory, sourcePath, result);
+
+        // Print one machine-readable summary line that the future editor can surface in its status bar.
+        Console.WriteLine("BAYAN_RESULT success=" + result.Succeeded.ToString().ToLowerInvariant() + " stage=" + result.CompletedStage + " diagnostics=" + result.Diagnostics.Count);
+        return result.Succeeded ? 0 : 1;
+    }
+
+    /// <summary>
+    /// Resolves an output directory while rejecting a missing value after --out.
+    /// </summary>
+    private static string ResolveOutputDirectory(string[] args, string sourcePath)
+    {
+        // Search only for the documented option to avoid accepting ambiguous command lines.
+        int optionIndex = Array.IndexOf(args, "--out");
+        if (optionIndex >= 0)
+        {
+            if (optionIndex == args.Length - 1)
+            {
+                throw new ArgumentException("الخيار --out يحتاج مسار مجلد بعده.");
+            }
+
+            return Path.GetFullPath(args[optionIndex + 1]);
+        }
+
+        // Place default results beside the source document so manual CLI use remains discoverable.
+        string sourceDirectory = Path.GetDirectoryName(sourcePath) ?? System.Environment.CurrentDirectory;
+        return Path.Combine(sourceDirectory, "bayan-results");
+    }
+
+    /// <summary>
+    /// Writes text artifacts and a JSON manifest that are all derived from the same compilation result.
+    /// </summary>
+    private static void WriteOutputs(string outputDirectory, string sourcePath, BayanCompilationResult result)
+    {
+        // Use UTF-8 without a BOM so output is safe for text tools and MIPS simulators.
+        var utf8 = new UTF8Encoding(false);
+        File.WriteAllText(Path.Combine(outputDirectory, "tokens.txt"), TokenPrinter.Format(result.Tokens), utf8);
+        File.WriteAllText(Path.Combine(outputDirectory, "ast.txt"), AstPrinter.Format(result.Program), utf8);
+        // Do not write ll1 trace/table to avoid showing them in GUI if not requested, but keeping them for logs is okay.
+        File.WriteAllText(Path.Combine(outputDirectory, "ll1-trace.txt"), result.Ll1Trace, utf8);
+        File.WriteAllText(Path.Combine(outputDirectory, "ll1-table.txt"), result.Ll1AnalysisTable, utf8);
+        File.WriteAllText(Path.Combine(outputDirectory, "parse-tree.txt"), result.ParseTree, utf8);
+        File.WriteAllText(Path.Combine(outputDirectory, "symbol-table.txt"), result.SymbolTable, utf8);
+        File.WriteAllText(Path.Combine(outputDirectory, "diagnostics.txt"), string.Join(System.Environment.NewLine, result.Diagnostics.Select(item => item.ToString())), utf8);
+
+        // Write optional stages only after they are genuinely produced by the compiler service.
+        if (result.IrProgram is not null)
+        {
+            File.WriteAllText(Path.Combine(outputDirectory, "three-address-code.txt"), IrPrinter.Format(result.IrProgram), utf8);
+        }
+
+        // Output.asm already written by generator but can also write it if returned
+        if (!string.IsNullOrWhiteSpace(result.AssemblyDisplayCode))
+        {
+            File.WriteAllText(Path.Combine(outputDirectory, "output.asm"), result.AssemblyDisplayCode, utf8);
+        }
+
+        // Output.exe already generated by generator
+
+        // The manifest gives the editor structured access without parsing display-oriented text files.
+        var manifest = new
+        {
+            SourcePath = sourcePath,
+            Success = result.Succeeded,
+            CompletedStage = result.CompletedStage,
+            DiagnosticCount = result.Diagnostics.Count,
+            ParseTreeAvailable = !string.IsNullOrWhiteSpace(result.ParseTree),
+            SymbolTableAvailable = !string.IsNullOrWhiteSpace(result.SymbolTable),
+            WindowsExecutableAvailable = !string.IsNullOrWhiteSpace(result.ExecutablePath),
+            WindowsExecutablePath = result.ExecutablePath,
+            Diagnostics = result.Diagnostics.Select(item => new
+            {
+                item.Code,
+                item.Message,
+                item.Span.Line,
+                item.Span.Column
+            })
+        };
+        string manifestJson = JsonSerializer.Serialize(manifest, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(Path.Combine(outputDirectory, "manifest.json"), manifestJson, utf8);
+    }
+}

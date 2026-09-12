@@ -1,0 +1,45 @@
+ProgramNode: حساب_معدل_طالب
+    Declarations:
+        TypeDeclarationNode: طالب = RecordTypeSyntaxNode
+        VariableDeclarationGroupNode: أحمد : NamedTypeSyntaxNode
+        VariableDeclarationGroupNode: مجموع_الدرجات : NamedTypeSyntaxNode
+        VariableDeclarationGroupNode: المعدل : NamedTypeSyntaxNode
+        ProcedureDeclarationNode: احسب_المجموع
+            ParameterNode: ByValue د1
+            ParameterNode: ByValue د2
+            ParameterNode: ByReference ناتج
+            BlockNode:
+                AssignmentNode: ناتج
+                    BinaryExpressionNode: Plus
+                        IdentifierNode: د1
+                        IdentifierNode: د2
+    ComplexAssignmentNode
+    ComplexAssignmentNode
+    ExpressionStatementNode
+    AssignmentNode: المعدل
+        BinaryExpressionNode: Slash
+            IdentifierNode: مجموع_الدرجات
+            LiteralNode: 2
+    IfNode:
+        Condition:
+            BinaryExpressionNode: GreaterEqual
+                IdentifierNode: المعدل
+                LiteralNode: 60
+        Then:
+            BlockNode:
+                ComplexAssignmentNode
+                PrintNode:
+                    LiteralNode: مجموع درجات الطالب:
+                PrintNode:
+                    IdentifierNode: مجموع_الدرجات
+                PrintNode:
+                    LiteralNode: المعدل النهائي:
+                PrintNode:
+                    IdentifierNode: المعدل
+                PrintNode:
+                    LiteralNode: حالة الطالب: ناجح ومبروك!
+        Else:
+            BlockNode:
+                ComplexAssignmentNode
+                PrintNode:
+                    LiteralNode: حالة الطالب: راسب

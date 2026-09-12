@@ -1,0 +1,464 @@
+Start
+  ProgramUnit
+    Program → برنامج
+    Identifier → حساب_معدل_طالب
+    Semicolon → ;
+    DefinitionList
+      Definition
+        TypeDeclaration
+          TypeDeclaration → نوع
+          Identifier → طالب
+          Assign → =
+          CompositeType
+            RecordType
+              Record → سجل
+              LeftBrace → {
+              FieldList
+                FieldDeclaration
+                  Identifier → درجة_أولى
+                  Colon → :
+                  DataType
+                    TypeInt → صحيح
+                FieldListTail
+                  Semicolon → ;
+                  FieldList
+                    FieldDeclaration
+                      Identifier → درجة_ثانية
+                      Colon → :
+                      DataType
+                        TypeInt → صحيح
+                    FieldListTail
+                      Semicolon → ;
+                      FieldList
+                        FieldDeclaration
+                          Identifier → ناجح
+                          Colon → :
+                          DataType
+                            TypeBool → منطقي
+                        FieldListTail
+              RightBrace → }
+          Semicolon → ;
+      DefinitionList
+        Definition
+          VariableDeclaration
+            Variable → متغير
+            NameList
+              Identifier → أحمد
+              NameListTail
+            Colon → :
+            DataType
+              Identifier → طالب
+            Semicolon → ;
+        DefinitionList
+          Definition
+            VariableDeclaration
+              Variable → متغير
+              NameList
+                Identifier → مجموع_الدرجات
+                NameListTail
+              Colon → :
+              DataType
+                TypeInt → صحيح
+              Semicolon → ;
+          DefinitionList
+            Definition
+              VariableDeclaration
+                Variable → متغير
+                NameList
+                  Identifier → المعدل
+                  NameListTail
+                Colon → :
+                DataType
+                  TypeReal → حقيقي
+                Semicolon → ;
+            DefinitionList
+              Definition
+                ProcedureDeclaration
+                  Procedure → إجراء
+                  Identifier → احسب_المجموع
+                  LeftParen → (
+                  FormalParametersOpt
+                    FormalParameter
+                      PassingMode
+                        ByValue → بالقيمة
+                      NameList
+                        Identifier → د1
+                        NameListTail
+                      Colon → :
+                      DataType
+                        TypeInt → صحيح
+                    FormalParametersTail
+                      Semicolon → ;
+                      FormalParameter
+                        PassingMode
+                          ByValue → بالقيمة
+                        NameList
+                          Identifier → د2
+                          NameListTail
+                        Colon → :
+                        DataType
+                          TypeInt → صحيح
+                      FormalParametersTail
+                        Semicolon → ;
+                        FormalParameter
+                          PassingMode
+                            ByReference → بالمرجع
+                          NameList
+                            Identifier → ناتج
+                            NameListTail
+                          Colon → :
+                          DataType
+                            TypeInt → صحيح
+                        FormalParametersTail
+                  RightParen → )
+                  Semicolon → ;
+                  DefinitionList
+                  Block
+                    LeftBrace → {
+                    StatementList
+                      Statement
+                        IdentifierStatement
+                          Identifier → ناتج
+                          IdentifierStatementTail
+                            AccessTail
+                            Assign → =
+                            Expression
+                              SimpleExpression
+                                SignOpt
+                                Term
+                                  Factor
+                                    Access
+                                      Identifier → د1
+                                      AccessTail
+                                  MultiplicationTail
+                                AdditionTail
+                                  AdditionOperator
+                                    Plus → +
+                                  Term
+                                    Factor
+                                      Access
+                                        Identifier → د2
+                                        AccessTail
+                                    MultiplicationTail
+                                  AdditionTail
+                              RelationTail
+                            Semicolon → ;
+                      StatementList
+                    RightBrace → }
+                  Semicolon → ;
+              DefinitionList
+    Block
+      LeftBrace → {
+      StatementList
+        Statement
+          IdentifierStatement
+            Identifier → أحمد
+            IdentifierStatementTail
+              AccessTail
+                Dot → .
+                Identifier → درجة_أولى
+                AccessTail
+              Assign → =
+              Expression
+                SimpleExpression
+                  SignOpt
+                  Term
+                    Factor
+                      Integer → 85
+                    MultiplicationTail
+                  AdditionTail
+                RelationTail
+              Semicolon → ;
+        StatementList
+          Statement
+            IdentifierStatement
+              Identifier → أحمد
+              IdentifierStatementTail
+                AccessTail
+                  Dot → .
+                  Identifier → درجة_ثانية
+                  AccessTail
+                Assign → =
+                Expression
+                  SimpleExpression
+                    SignOpt
+                    Term
+                      Factor
+                        Integer → 95
+                      MultiplicationTail
+                    AdditionTail
+                  RelationTail
+                Semicolon → ;
+          StatementList
+            Statement
+              IdentifierStatement
+                Identifier → احسب_المجموع
+                IdentifierStatementTail
+                  LeftParen → (
+                  ActualArgumentsOpt
+                    ActualArguments
+                      Expression
+                        SimpleExpression
+                          SignOpt
+                          Term
+                            Factor
+                              Access
+                                Identifier → أحمد
+                                AccessTail
+                                  Dot → .
+                                  Identifier → درجة_أولى
+                                  AccessTail
+                            MultiplicationTail
+                          AdditionTail
+                        RelationTail
+                      ActualArgumentsTail
+                        Comma → ,
+                        Expression
+                          SimpleExpression
+                            SignOpt
+                            Term
+                              Factor
+                                Access
+                                  Identifier → أحمد
+                                  AccessTail
+                                    Dot → .
+                                    Identifier → درجة_ثانية
+                                    AccessTail
+                              MultiplicationTail
+                            AdditionTail
+                          RelationTail
+                        ActualArgumentsTail
+                          Comma → ,
+                          Expression
+                            SimpleExpression
+                              SignOpt
+                              Term
+                                Factor
+                                  Access
+                                    Identifier → مجموع_الدرجات
+                                    AccessTail
+                                MultiplicationTail
+                              AdditionTail
+                            RelationTail
+                          ActualArgumentsTail
+                  RightParen → )
+                  Semicolon → ;
+            StatementList
+              Statement
+                IdentifierStatement
+                  Identifier → المعدل
+                  IdentifierStatementTail
+                    AccessTail
+                    Assign → =
+                    Expression
+                      SimpleExpression
+                        SignOpt
+                        Term
+                          Factor
+                            Access
+                              Identifier → مجموع_الدرجات
+                              AccessTail
+                          MultiplicationTail
+                            MultiplicationOperator
+                              Slash → /
+                            Factor
+                              Integer → 2
+                            MultiplicationTail
+                        AdditionTail
+                      RelationTail
+                    Semicolon → ;
+              StatementList
+                Statement
+                  IfStatement
+                    If → إذا
+                    LeftParen → (
+                    Expression
+                      SimpleExpression
+                        SignOpt
+                        Term
+                          Factor
+                            Access
+                              Identifier → المعدل
+                              AccessTail
+                          MultiplicationTail
+                        AdditionTail
+                      RelationTail
+                        RelationOperator
+                          GreaterEqual → =<
+                        SimpleExpression
+                          SignOpt
+                          Term
+                            Factor
+                              Integer → 60
+                            MultiplicationTail
+                          AdditionTail
+                    RightParen → )
+                    Then → فإن
+                    Statement
+                      Block
+                        LeftBrace → {
+                        StatementList
+                          Statement
+                            IdentifierStatement
+                              Identifier → أحمد
+                              IdentifierStatementTail
+                                AccessTail
+                                  Dot → .
+                                  Identifier → ناجح
+                                  AccessTail
+                                Assign → =
+                                Expression
+                                  SimpleExpression
+                                    SignOpt
+                                    Term
+                                      Factor
+                                        True → صح
+                                      MultiplicationTail
+                                    AdditionTail
+                                  RelationTail
+                                Semicolon → ;
+                          StatementList
+                            Statement
+                              PrintStatement
+                                Print → اطبع
+                                LeftParen → (
+                                PrintItems
+                                  Expression
+                                    SimpleExpression
+                                      SignOpt
+                                      Term
+                                        Factor
+                                          String → مجموع درجات الطالب:
+                                        MultiplicationTail
+                                      AdditionTail
+                                    RelationTail
+                                  PrintItemsTail
+                                RightParen → )
+                                Semicolon → ;
+                            StatementList
+                              Statement
+                                PrintStatement
+                                  Print → اطبع
+                                  LeftParen → (
+                                  PrintItems
+                                    Expression
+                                      SimpleExpression
+                                        SignOpt
+                                        Term
+                                          Factor
+                                            Access
+                                              Identifier → مجموع_الدرجات
+                                              AccessTail
+                                          MultiplicationTail
+                                        AdditionTail
+                                      RelationTail
+                                    PrintItemsTail
+                                  RightParen → )
+                                  Semicolon → ;
+                              StatementList
+                                Statement
+                                  PrintStatement
+                                    Print → اطبع
+                                    LeftParen → (
+                                    PrintItems
+                                      Expression
+                                        SimpleExpression
+                                          SignOpt
+                                          Term
+                                            Factor
+                                              String → المعدل النهائي:
+                                            MultiplicationTail
+                                          AdditionTail
+                                        RelationTail
+                                      PrintItemsTail
+                                    RightParen → )
+                                    Semicolon → ;
+                                StatementList
+                                  Statement
+                                    PrintStatement
+                                      Print → اطبع
+                                      LeftParen → (
+                                      PrintItems
+                                        Expression
+                                          SimpleExpression
+                                            SignOpt
+                                            Term
+                                              Factor
+                                                Access
+                                                  Identifier → المعدل
+                                                  AccessTail
+                                              MultiplicationTail
+                                            AdditionTail
+                                          RelationTail
+                                        PrintItemsTail
+                                      RightParen → )
+                                      Semicolon → ;
+                                  StatementList
+                                    Statement
+                                      PrintStatement
+                                        Print → اطبع
+                                        LeftParen → (
+                                        PrintItems
+                                          Expression
+                                            SimpleExpression
+                                              SignOpt
+                                              Term
+                                                Factor
+                                                  String → حالة الطالب: ناجح ومبروك!
+                                                MultiplicationTail
+                                              AdditionTail
+                                            RelationTail
+                                          PrintItemsTail
+                                        RightParen → )
+                                        Semicolon → ;
+                                    StatementList
+                        RightBrace → }
+                    ElsePart
+                      Else → وإلا
+                      Statement
+                        Block
+                          LeftBrace → {
+                          StatementList
+                            Statement
+                              IdentifierStatement
+                                Identifier → أحمد
+                                IdentifierStatementTail
+                                  AccessTail
+                                    Dot → .
+                                    Identifier → ناجح
+                                    AccessTail
+                                  Assign → =
+                                  Expression
+                                    SimpleExpression
+                                      SignOpt
+                                      Term
+                                        Factor
+                                          False → خطأ
+                                        MultiplicationTail
+                                      AdditionTail
+                                    RelationTail
+                                  Semicolon → ;
+                            StatementList
+                              Statement
+                                PrintStatement
+                                  Print → اطبع
+                                  LeftParen → (
+                                  PrintItems
+                                    Expression
+                                      SimpleExpression
+                                        SignOpt
+                                        Term
+                                          Factor
+                                            String → حالة الطالب: راسب
+                                          MultiplicationTail
+                                        AdditionTail
+                                      RelationTail
+                                    PrintItemsTail
+                                  RightParen → )
+                                  Semicolon → ;
+                              StatementList
+                          RightBrace → }
+                StatementList
+      RightBrace → }
+    Dot → .
+  Eof → 

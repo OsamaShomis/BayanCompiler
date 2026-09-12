@@ -1,0 +1,11 @@
+{
+  "SourcePath": "E:\\BayanCompiler\\samples\\test_dynamic_custom.bayan",
+  "Success": true,
+  "CompletedStage": "Assembly",
+  "DiagnosticCount": 0,
+  "ParseTreeAvailable": true,
+  "SymbolTableAvailable": true,
+  "WindowsExecutableAvailable": true,
+  "WindowsExecutablePath": "E:\\BayanCompiler\\samples\\bayan-results\\output.exe",
+  "Diagnostics": []
+}
