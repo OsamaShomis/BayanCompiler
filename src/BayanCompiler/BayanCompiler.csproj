@@ -1,32 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!-- يحدد أن المشروع تطبيق Windows Forms بدلاً من تطبيق سطر أوامر. -->
     <OutputType>WinExe</OutputType>
-    <!-- يعطي المحرر اسماً تنفيذياً مستقلاً عن برنامج المترجم CLI. -->
     <AssemblyName>Bayan.Editor.WinForms</AssemblyName>
-    <!-- يستهدف .NET 6 على Windows، وهو الإصدار المتوافق مع بيئة Visual Studio الحالية. -->
-    <TargetFramework>net9.0-windows</TargetFramework>
-    <!-- يربط المشروع بمكتبة Windows Forms لتشغيل النماذج وعناصر التحكم. -->
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <!-- يفعّل الاستيرادات الضمنية الشائعة في C#. -->
     <ImplicitUsings>enable</ImplicitUsings>
-    <!-- يفعّل التحقق من القيم القابلة لأن تكون فارغة. -->
     <Nullable>enable</Nullable>
     <NoWarn>$(NoWarn);WFO1000</NoWarn>
-    <!-- Keeps the editor limited to its own source files. -->
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
+
   <ItemGroup>
-    <!-- يبقى Program وواجهة Forms داخل المحرر فقط. -->
-    <Compile Include="Program.cs" />
-    <Compile Include="Forms/**/*.cs" />
-    <!-- Builds the standalone CLI before the editor without linking the editor to compiler types. -->
+    <ProjectReference Include="../Bayan.Compiler.Core/Bayan.Compiler.Core.csproj" />
     <ProjectReference Include="../Bayan.Compiler.Cli/Bayan.Compiler.Cli.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
+
   <Target Name="CopyCompilerCliArtifacts" AfterTargets="Build">
     <ItemGroup>
-      <CompilerCliArtifacts Include="$(MSBuildProjectDirectory)\..\Bayan.Compiler.Cli\bin\$(Configuration)\net9.0\Bayan.Compiler.Cli.*" />
-      <CompilerCoreArtifact Include="$(MSBuildProjectDirectory)\..\Bayan.Compiler.Core\bin\$(Configuration)\net9.0\Bayan.Compiler.Core.dll" />
+      <CompilerCliArtifacts Include="$(MSBuildProjectDirectory)\..\Bayan.Compiler.Cli\bin\$(Configuration)\net6.0\Bayan.Compiler.Cli.*" />
+      <CompilerCoreArtifact Include="$(MSBuildProjectDirectory)\..\Bayan.Compiler.Core\bin\$(Configuration)\net6.0\Bayan.Compiler.Core.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(CompilerCliArtifacts);@(CompilerCoreArtifact)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
   </Target>

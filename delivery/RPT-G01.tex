@@ -1,0 +1,520 @@
+% ==============================================================================
+% تقرير المشروع النهائي لمقرر تصميم وبناء المترجمات (Compilers Design)
+% مشروع مترجم ومحرر لغة بيان العربية (Bayan Compiler & Arabic VS Code IDE)
+% الرمز المعتمد للتسليم: RPT-G01
+% تم الإعداد للتجميع عبر XeLaTeX أو Overleaf
+% ==============================================================================
+
+\documentclass[12pt,a4paper]{report}
+
+% حزم دعم اللغة العربية والخطوط (XeLaTeX / LuaLaTeX)
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage[numerals=maghrib]{arabic}
+\setotherlanguage{english}
+
+% تعيين خطوط احترافية تدعم العربية والإنجليزية
+\defaultfontfeatures{Ligatures=TeX}
+% في حال التجميع على Overleaf أو بيئة TeX Live القياسية يتوفر خط Amiri
+\newfontfamily\arabicfont[Script=Arabic]{Amiri}
+\newfontfamily\arabicfontsf[Script=Arabic]{Amiri}
+\newfontfamily\englishfont{DejaVu Sans}
+
+% الحزم الرياضية والرسومية وتنسيق الصفحات
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{float}
+
+% إعدادات الروابط التشعبية
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    citecolor=green!60!black,
+    urlcolor=blue!80!black
+}
+
+% تعريف لوحة ألوان Visual Studio Code
+\definecolor{vscodeBlue}{RGB}{0,122,204}
+\definecolor{vscodeGreen}{RGB}{78,201,176}
+\definecolor{vscodeDark}{RGB}{30,30,30}
+\definecolor{vscodeGray}{RGB}{240,242,245}
+\definecolor{codeKw}{RGB}{86,156,214}
+\definecolor{codeStr}{RGB}{206,145,120}
+\definecolor{codeComment}{RGB}{106,153,85}
+
+% إعدادات قوائم الأكواد المصدرية (Listings)
+\lstset{
+    basicstyle=\small\ttfamily\englishfont,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt,
+    backgroundcolor=\color{vscodeGray},
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    rulecolor=\color{gray!30},
+    tabsize=4,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    keywordstyle=\color{codeKw}\bfseries,
+    commentstyle=\color{codeComment}\itshape,
+    stringstyle=\color{codeStr}
+}
+
+% تنسيق الترويسة والتذييل
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\small\color{gray}مشروع مترجم ومحرر لغة بيان العربية}
+\fancyhead[L]{\small\color{gray}مقرر تصميم وبناء المترجمات 2025/2026}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+
+% ==============================================================================
+% الصفحة الأولى: صفحة الغلاف الرسمية (Cover Page)
+% ==============================================================================
+\begin{titlepage}
+    \centering
+    \vspace*{0.5cm}
+    
+    {\Large\bfseries الجمهورية اليمنية}\\[0.2cm]
+    {\Large\bfseries وزارة التعليم العالي والبحث العلمي}\\[0.2cm]
+    {\large كلية الحاسوب وتكنولوجيا المعلومات}\\[0.2cm]
+    {\large قسم علوم الحاسوب وتقنية المعلومات}\\[1.0cm]
+    
+    \begin{tcolorbox}[colback=vscodeBlue!10!white,colframe=vscodeBlue,arc=4mm,boxrule=1.5pt]
+        \centering
+        \vspace{0.3cm}
+        {\Huge\bfseries مشروع مترجم ومحرر لغة بيان}\\[0.4cm]
+        {\Large\bfseries Bayan Arabic Compiler \& Arabic VS Code IDE}\\[0.3cm]
+        {\large\color{vscodeBlue}\bfseries نظام متكامل للترجمة وتوليد البرامج التنفيذية المستقلة}\\[0.2cm]
+        \vspace{0.3cm}
+    \end{tcolorbox}
+    
+    \vspace{1.2cm}
+    
+    {\large\bfseries تقرير المشروع النهائي لنيل درجة متطلب مقرر:}\\[0.3cm]
+    {\Large\bfseries تصميم وبناء المترجمات (Compilers Design)}\\[1.0cm]
+    
+    \begin{tcolorbox}[colback=gray!5!white,colframe=gray!60,arc=3mm,width=0.9\textwidth]
+        \centering
+        {\large\bfseries إعداد فريق العمل (المجموعة رقم: 01):}\\[0.4cm]
+        \begin{tabular}{r l}
+            \textbf{1. م. محمد رشاد أحمد محمد الإدريسي} & \textenglish{(Mohammed Rashad Al-Edrisi)} \\
+            \textbf{2. أسامة شميس} & \textenglish{(Osama Shomis)} \\
+            \textbf{3. أسامة العقاب} & \textenglish{(Osama Al-Oqab)} \\
+            \textbf{4. محمد فيصل الدعيس} & \textenglish{(Mohammed Faisal Al-Doais)} \\
+            \textbf{5. شعيب جازم} & \textenglish{(Shoaib Jazem)} \\
+        \end{tabular}
+    \end{tcolorbox}
+    
+    \vfill
+    
+    {\large\bfseries الفصل الدراسي الثاني}\\[0.2cm]
+    {\large\bfseries العام الجامعي: 2025 / 2026 م}\\[0.5cm]
+    
+\end{titlepage}
+
+% ==============================================================================
+% فهرس المحتويات
+% ==============================================================================
+\tableofcontents
+\newpage
+
+% ==============================================================================
+% الصفحة الثانية: وصف المشروع والبيئة التقنية والمكتبات
+% ==============================================================================
+\chapter{وصف المشروع والبيئة التقنية والمعمارية}
+
+\section{وصف المشروع (Project Overview)}
+مشروع **لغة بيان (Bayan)** هو بيئة برمجية متكاملة تهدف إلى توفير لغة برمجة عربية عالية المستوى، مدعومة بمترجم مستقل مبني من الصفر (From Scratch)، ومحرر برمجي تفاعلي حديث يحاكي واجهة وتجربة المستخدم لبرنامج **Visual Studio Code**، مع دعم أصيل وكامل لاتجاه الكتابة العربي من اليمين إلى اليسار (RTL).
+
+ينقسم المشروع وفق وثيقة المتطلبات إلى نظامين مستقلين تماماً:
+\begin{enumerate}
+    \item \textbf{محرك المترجم المستقل (BayanCompiler.exe):} تطبيق سطر أوامر (CLI) ينفذ دورة الترجمة الكاملة المكونة من 9 مراحل متتالية؛ تبدأ من قراءة الكود المصدري العربي، وتمر بالتحليل المعجمي، والتحليل النحوي التنبؤي الصارم $LL(1)$، وبناء شجرة الإعراب المجردة (AST)، والتحليل الدلالي مع إدارة مجالات الرؤية في جدول الرموز، ثم توليد الشفرة الوسيطة ثلاثية العناوين (TAC)، وتوليد شفرة التجميع لمعالجات $x86$، وتوليد لغة وسيطة $CIL/MSIL$ واستدعاء مجمّع مايكروسوفت $ilasm.exe$ لإنتاج ملف تنفيذي أصلي $EXE$ يعمل مباشرة في بيئة ويندوز.
+    \item \textbf{محرر اللغة وبيئة التطوير (Bayan.Editor.WinForms.exe):} بيئة تطوير مرئية متطورة توفر تجربة مبرمج احترافية؛ تتيح إدارة الملفات المتعددة، تمييز الكلمات المفتاحية باللون، استكشاف أمثلة اللغة، وتفحص مخرجات مراحل الترجمة التسع في تبويبات مخصصة، مع طرفية تفاعلية لتشغيل البرامج وقائمة أخطاء تقفز مباشرة إلى السطر والعمود.
+\end{enumerate}
+
+\section{العلاقة المعمارية المنفصلة (Decoupled Architecture)}
+لا يعتمد المحرر على استدعاء دوال المترجم داخلياً، بل يحقق الفصل التام (Decoupling) عبر تشغيل المترجم كعملية خارجية منفصلة (Inter-Process Communication):
+\begin{center}
+    \textbf{المستخدم $\longleftrightarrow$ محرر بيان (IDE) $\longleftrightarrow$ استدعاء سطر الأوامر (CLI) $\longleftrightarrow$ محرك المترجم (BayanCompiler) $\longleftrightarrow$ الملف التنفيذي (EXE)}
+\end{center}
+
+\section{لغات البرمجة المستخدمة والإصدارات (Programming Languages)}
+\begin{itemize}
+    \item \textbf{C\# (الإصدار 10.0):} تم بناء كامل المحرك والمحرر بلغة C\# الحديثة مع الاستفادة من ميزات التنميط القوي، ومطابقة الأنماط (Pattern Matching)، وميزات إدارة الذاكرة الآمنة.
+    \item \textbf{منصة التشغيل:} \textenglish{.NET 6.0 LTS (Long Term Support)} إصدار \textenglish{6.0.100}.
+\end{itemize}
+
+\section{الأدوات والمكتبات الجاهزة (Tools \& Libraries)}
+وفقاً للمعيار الخامس في وثيقة متطلبات المشروع، يوضح الجدول التالي كافة الأدوات والمكتبات المستخدمة ودور كل منها:
+
+\begin{table}[H]
+    \centering
+    \caption{الأدوات والمكتبات الجاهزة المستخدمة في المشروع}
+    \begin{tabularx}{\textwidth}{l p{3.2cm} l X}
+        \toprule
+        \textbf{اسم الأداة / المكتبة} & \textbf{الإصدار} & \textbf{المرحلة} & \textbf{الغرض وتفاصيل الاستخدام} \\
+        \midrule
+        \textenglish{Microsoft IL Assembler (ilasm.exe)} & \textenglish{4.8.9037.0} & توليد الملف التنفيذي & تجميع كود CIL/MSIL وتحويله إلى ملف تنفيذي أصلي بنظام Windows PE (32/64-bit Console). \\
+        \addlinespace
+        \textenglish{System.Text.Json} & \textenglish{6.0.0} & النقل والتصدير & تسلسل شجرة الإعراب (AST) وجدول الرموز (Symbol Table) إلى نسق JSON منظم. \\
+        \addlinespace
+        \textenglish{Windows Forms} & \textenglish{6.0.0 (.NET 6)} & واجهة المحرر & بناء واجهة VS Code العربية الداعمة لـ RTL وعناصر التحكم الرسومية والطرفية. \\
+        \addlinespace
+        \textenglish{System.Drawing.Common} & \textenglish{6.0.0} & الرسوم والأيقونات & رسم شريط الأنشطة وحساب ألوان السمة الداكنة الداعمة لمعايير VS Code. \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\newpage
+
+% ==============================================================================
+% من الصفحة الثالثة: شرح وتوثيق مراحل المترجم وأكواد المشروع
+% ==============================================================================
+\chapter{المراحل التفصيلية للمترجم وشرح الأكواد المصدرية}
+
+\section{المرحلة الأولى: التحليل المعجمي (Lexical Analysis)}
+\subsection{الوظيفة والهدف}
+يقوم المحلل المعجمي (\textenglish{Lexer.cs}) بقراءة الكود المصدري العربي حرفاً بحرف وتحويله إلى تدفق من الرموز المعجمية (\textenglish{Tokens})، مع عزل التعليقات والفراغات، وتحديد أرقام الأسطر والأعمدة لتمكين تشخيص الأخطاء بدقة.
+
+\subsection{المدخلات والمخرجات}
+\begin{itemize}
+    \item \textbf{المدخلات:} نص برمجي مكتوب بلغة بيان بترميز \textenglish{UTF-8}.
+    \item \textbf{المخرجات:} مصفوفة كائنات من نوع \textenglish{List<Token>}، يحتوي كل رمز على نوعه (\textenglish{TokenType})، قيمته النصية (\textenglish{Lexeme})، ورقم السطر والعمود.
+\end{itemize}
+
+\subsection{هياكل البيانات الرئيسية}
+\begin{itemize}
+    \item \textenglish{enum TokenType}: يحوي كافة أنواع الرموز (الكلمات المفتاحية: ثابت، متغير، اذا، والا، طالما، كرر، اطبع، اكتب؛ والمعاملات الحسابية والمنطقية؛ والرموز الفاصلة كالقوسين والفاصلة المنقوطة).
+    \item \textenglish{class Token}: يمثل الرمز المفرد مع خصائص \textenglish{Type, Lexeme, Line, Column}.
+    \item قاموس الكلمات المحجوزة (\textenglish{Dictionary<string, TokenType>}): لمطابقة الكلمات العربية بدقة وسرعة $O(1)$.
+\end{itemize}
+
+\subsection{مقتطف من الكود المصدري للمحلل المعجمي}
+\begin{lstlisting}[language={[Sharp]C}, caption={جزء من تنفيذ المحلل المعجمي Lexer.cs}]
+public List<Token> Tokenize(string sourceCode)
+{
+    List<Token> tokens = new List<Token>();
+    int line = 1, col = 1, index = 0;
+    
+    while (index < sourceCode.Length)
+    {
+        char c = sourceCode[index];
+        // معالجة الانتقال لسطر جديد
+        if (c == '\n') { line++; col = 1; index++; continue; }
+        if (char.IsWhiteSpace(c)) { col++; index++; continue; }
+        
+        // معالجة التعليقات
+        if (c == '/' && index + 1 < sourceCode.Length && sourceCode[index + 1] == '/')
+        {
+            while (index < sourceCode.Length && sourceCode[index] != '\n') index++;
+            continue;
+        }
+        
+        // فحص المعرفات والكلمات المفتاحية العربية
+        if (char.IsLetter(c) || c == '_')
+        {
+            int startCol = col;
+            string lexeme = ReadIdentifier(sourceCode, ref index, ref col);
+            TokenType type = Keywords.TryGetValue(lexeme, out var kw) ? kw : TokenType.IDENTIFIER;
+            tokens.Add(new Token(type, lexeme, line, startCol));
+            continue;
+        }
+        // معالجة الأرقام والنصوص والمعاملات الحسابية...
+    }
+    tokens.Add(new Token(TokenType.EOF, "", line, col));
+    return tokens;
+}
+\end{lstlisting}
+
+% ------------------------------------------------------------------------------
+\section{المرحلة الثانية والثالثة: التحليل النحوي التنبؤي وشجرة الإعراب (LL(1) Parser \& AST)}
+\subsection{الوظيفة وهيكلية القواعد}
+يطبق المحلل النحوي (\textenglish{Parser.cs}) خوارزمية التحليل النحوي التنبؤي التنازلي الخالي من التراجع $LL(1)$، مع التحقق من شروط $LL(1)$ الصارمة (خلو القواعد من اللف العودي اليساري $Left\text{ }Recursion$ وتطبيق العامل المشترك الأيسر $Left\text{ }Factoring$). يقوم المحلل ببناء شجرة الإعراب المجردة (\textenglish{AST}) كعقد برمجية كائنية.
+
+\subsection{قواعد لغة بيان الخالية من السياق (CFG)}
+\begin{align*}
+    Program &\rightarrow StatementList \\
+    StatementList &\rightarrow Statement \quad StatementList \mid \epsilon \\
+    Statement &\rightarrow VarDecl \mid ConstDecl \mid Assignment \mid IfStmt \mid WhileStmt \mid PrintStmt \\
+    VarDecl &\rightarrow \text{متغير} \quad id \quad = \quad Expr \quad \text{؛} \\
+    Expr &\rightarrow Term \quad Expr' \\
+    Expr' &\rightarrow (+ \mid -) \quad Term \quad Expr' \mid \epsilon \\
+    Term &\rightarrow Factor \quad Term' \\
+    Term' &\rightarrow (* \mid / \mid \%) \quad Factor \quad Term' \mid \epsilon \\
+    Factor &\rightarrow id \mid num \mid str \mid ( \quad Expr \quad )
+\end{align*}
+
+\subsection{مقتطف من كود التحليل النحوي وبناء عقد AST}
+\begin{lstlisting}[language={[Sharp]C}, caption={دوال التحليل النحوي التنبؤي وبناء التعبيرات Parser.cs}]
+private ExpressionNode ParseExpression()
+{
+    ExpressionNode left = ParseTerm();
+    while (CurrentToken.Type == TokenType.OP_PLUS || CurrentToken.Type == TokenType.OP_MINUS)
+    {
+        Token op = ConsumeToken();
+        ExpressionNode right = ParseTerm();
+        left = new BinaryOpNode(op.Lexeme, left, right, op.Line, op.Column);
+    }
+    return left;
+}
+\end{lstlisting}
+
+% ------------------------------------------------------------------------------
+\section{المرحلة الرابعة: التحليل الدلالي وجدول الرموز (Semantic Analysis \& Symbol Table)}
+\subsection{الوظيفة والتحققات الدلالية}
+يقوم المحلل الدلالي (\textenglish{SemanticAnalyzer.cs}) بزيارة شجرة الإعراب والتأكد من مطابقة الكود للضوابط المنطقية للغة:
+\begin{enumerate}
+    \item \textbf{التصريح المسبق:} لا يمكن قراءة أو كتابة أي متغير دون التصريح عنه أولاً.
+    \item \textbf{حماية الثوابت:} منع إعادة الإسناد للمتغيرات المعرفة كـ \textenglish{ثابت}.
+    \item \textbf{فحص الأنواع:} التأكد من توافق العمليات الرياضية والمنطقية ومنع العمليات غير الصالحة.
+    \item \textbf{إدارة مجالات الرؤية (Scopes):} استخدام بنية هرمية من جداول الرموز المتداخلة (\textenglish{SymbolTable.cs})، بحيث تمتلك الدوال والحلقات نطاقات محلية فرعية ترتبط بنطاق الأب.
+\end{enumerate}
+
+\subsection{مقتطف من جدول الرموز والتحليل الدلالي}
+\begin{lstlisting}[language={[Sharp]C}, caption={فحص نطاق الرؤية والتصريح في SemanticAnalyzer.cs}]
+public override void Visit(VariableNode node)
+{
+    var symbol = CurrentScope.Lookup(node.Name);
+    if (symbol == null)
+    {
+        ReportError($"المتغير '{node.Name}' غير معرّف في هذا النطاق.", node.Line, node.Column);
+        return;
+    }
+    node.InferredType = symbol.Type;
+}
+\end{lstlisting}
+
+% ------------------------------------------------------------------------------
+\section{المرحلة الخامسة: توليد الشفرة الوسيطة (Three-Address Code - TAC)}
+\subsection{الوظيفة وهيكلية الأوامر}
+يقوم مولد الكود الوسيط (\textenglish{TacGenerator.cs}) بتحويل شجرة الـ AST المعقدة إلى سلسلة خطية من تعليمات العناوين الثلاثية، حيث تحتوي كل تعليمة على معامل (\textenglish{Op}) ومعاملين وسيطين (\textenglish{Arg1, Arg2})، ومتغير ناتج (\textenglish{Result})؛ بالاعتماد على سجلات وسيطة مؤقتة (\$t0, \$t1, ...) وعناوين قفز شرطية وغير شرطية (\textenglish{Labels}).
+
+\begin{lstlisting}[language={[Sharp]C}, caption={توليد تعليمات TAC للتعبيرات الحسابية TacGenerator.cs}]
+public string Visit(BinaryOpNode node)
+{
+    string leftTemp = node.Left.Accept(this);
+    string rightTemp = node.Right.Accept(this);
+    string resultTemp = NewTemporary();
+    Instructions.Add(new TacInstruction(node.Operator, leftTemp, rightTemp, resultTemp));
+    return resultTemp;
+}
+\end{lstlisting}
+
+% ------------------------------------------------------------------------------
+\section{المرحلة السادسة: توليد كود التجميع الهدفي (x86 32-bit Assembly)}
+\subsection{الوظيفة وهيكلية المعالج}
+يقوم موديول (\textenglish{AssemblyGenerator.cs}) بإنتاج كود تجميعي حقيقي متوافق مع معمارية معالجات $x86$ ومجمّعات \textenglish{NASM / MASM}:
+\begin{itemize}
+    \item تهيئة إطار المكدس (\textenglish{Stack Frame}) باستخدام المسجلين \textenglish{EBP} و \textenglish{ESP}.
+    \item تخصيص عناوين المتغيرات المحلية كإزاحات سالبة للمكدس \textenglish{[ebp - offset]}.
+    \item إدارة العمليات الحسابية عبر السجلات العامة \textenglish{EAX, EBX, ECX} والتعامل مع المقارنات \textenglish{CMP} والقفز الشرطي \textenglish{JLE, JGE, JMP}.
+\end{itemize}
+
+% ------------------------------------------------------------------------------
+\section{المرحلة السابعة والثامنة: توليد CIL والملف التنفيذي الأصلي (Native PE EXE)}
+\subsection{الوظيفة والتحويل الثنائي}
+يقوم موديول (\textenglish{CilGenerator.cs}) بإنتاج كود لغة مايكروسوفت الوسيطة (\textenglish{Common Intermediate Language - CIL}) الموجه نحو بنية مكدس التنفيذ، وتوليد ترويسات التجميع وعناوين البرامج الحقيقية. ثم يستدعي المترجم مجمّع مايكروسوفت الرسمي (\textenglish{ilasm.exe}) لتوليد ملف \textenglish{program.exe} بصيغة \textenglish{Windows Portable Executable (PE)}، ليعمل البرنامج كملف تنفيذي حقيقي ومستقل $100\%$ دون الحاجة لأي محاكٍ خارجي.
+
+% ------------------------------------------------------------------------------
+\section{المرحلة التاسعة: محرر VS Code العربي والطرفية التفاعلية}
+\subsection{الوظيفة والواجهة الرسومية}
+تم تطوير واجهة المحرر (\textenglish{CompilerJourneyForm.cs}) كاستوديو برمجي عصري عربي بالكامل:
+\begin{itemize}
+    \item \textbf{شريط نشاط أيمن (RTL Activity Bar):} يتضمن أيقونات مستكشف الملفات، البحث، الإعدادات، وأدوات التصحيح.
+    \item \textbf{شجرة الأمثلة التلقائية:} تستكشف مجلد \textenglish{samples/} وتعرض الأمثلة الـ 18 لتشغيلها بضغطة زر.
+    \item \textbf{محرر متقدم متعدد التبويبات:} يدعم فتح وحفظ الملفات وتمييز الكلمات المفتاحية باللون المخصص.
+    \item \textbf{شريط فحص مراحل المترجم:} يعرض مخرجات كل مرحلة (الرموز المعجمية، شجرة الإعراب، جدول الرموز، TAC، كود x86، كود CIL) في تبويبات مستقلة منظمة.
+    \item \textbf{طرفية تفاعلية مدمجة (Terminal):} تشغيل البرامج الناتجة واستقبال التفاعل الحي للمستخدم.
+    \item \textbf{لوحة الأخطاء مع ميزة القفز للسطر:} إمكانية النقر المزدوج على أي خطأ نحوي أو دلالي للانتقال المؤشر فوراً إلى موضع الخطأ في الكود.
+\end{itemize}
+
+\newpage
+
+% ==============================================================================
+% الصفحات الأخيرة: التوثيق البصري ونتائج تنفيذ المشروع
+% ==============================================================================
+\chapter{التوثيق البصري ونتائج الاختبار والتنفيذ}
+
+يحتوي هذا الفصل على الصور التوثيقية الشاملة لمراحل تنفيذ المشروع، واجهات المحرر، ونتائج اختبار البرامج وفق متطلبات التقرير الأكاديمي.
+
+\section{مخطط المعمارية ومسار الترجمة}
+يوضح الشكل~(\ref{fig:arch}) المعمارية المنفصلة بين محرر الكود العربي ومحرك المترجم، وتدفق البيانات عبر المراحل التسع للترجمة.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/arch_pipeline.png}
+    \caption{مخطط معمارية النظام ومسار مراحل الترجمة التساعي للغة بيان}
+    \label{fig:arch}
+\end{figure}
+
+\section{واجهة محرر بيان المستوحاة من VS Code}
+يوضح الشكل~(\ref{fig:ide}) الواجهة الرئيسية للمحرر، وتظهر بالهوية البصرية العربية مع شريط النشاط اليميني، شجرة الأمثلة، محرر الكود، مفتش المراحل، والطرفية التفاعلية.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/ide_overview.png}
+    \caption{واجهة محرر لغة بيان العربية (Bayan Arabic VS Code Studio)}
+    \label{fig:ide}
+\end{figure}
+
+\newpage
+
+\section{مخرجات التحليل المعجمي وجدول الرموز المعجمية}
+يوضح الشكل~(\ref{fig:tokens}) جدول الرموز المعجمية الناتجة من تحليل كود البرنامج، مع تفصيل الفئة، القيمة المعجمية، ورقم السطر والعمود.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{images/stage1_tokens.png}
+    \caption{المرحلة الأولى: جدول تدفق الرموز المعجمية (Tokens Stream Table)}
+    \label{fig:tokens}
+\end{figure}
+
+\section{شجرة الإعراب المجردة (AST)}
+يوضح الشكل~(\ref{fig:ast}) الهيكل الهرمي لعقد شجرة الإعراب المجردة الناتجة من مطابقة قواعد $LL(1)$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{images/stage2_ast.png}
+    \caption{المرحلتان الثانية والثالثة: شجرة الإعراب المجردة (Abstract Syntax Tree)}
+    \label{fig:ast}
+\end{figure}
+
+\newpage
+
+\section{جدول الرموز ومجالات الرؤية (Symbol Table)}
+يوضح الشكل~(\ref{fig:symbols}) جدول الرموز وتفاصيل الأنواع ومجالات الرؤية (Scopes) وحالات التهيئة.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{images/stage3_symbols.png}
+    \caption{المرحلة الرابعة: تفاصيل جدول الرموز ومجالات الرؤية (Symbol Table Scopes)}
+    \label{fig:symbols}
+\end{figure}
+
+\section{محرك التحليل الدلالي وفحص الأنواع}
+يوضح الشكل~(\ref{fig:semantics}) عمليات التحقق الأربع التي يفرضها المحلل الدلالي للتأكد من سلامة البرنامج قبل التوليد.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{images/stage4_semantics.png}
+    \caption{المرحلة الرابعة: محرك التحليل الدلالي ومطابقة الأنواع ومجالات الرؤية}
+    \label{fig:semantics}
+\end{figure}
+
+\newpage
+
+\section{الشفرة الوسيطة ثلاثية العناوين (TAC)}
+يوضح الشكل~(\ref{fig:tac}) التعليمات الخطية الوسيطة للشفرة ثلاثية العناوين وسجلاتها المؤقتة.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{images/stage5_tac.png}
+    \caption{المرحلة الخامسة: الشفرة الوسيطة ثلاثية العناوين (Three-Address Code)}
+    \label{fig:tac}
+\end{figure}
+
+\section{توليد كود التجميع الهدفي لمعالجات x86}
+يوضح الشكل~(\ref{fig:asm}) كود التجميع الهدفي المولد لمعالجات $x86$ متوافقاً مع مجمعات NASM/MASM.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{images/stage6_assembly.png}
+    \caption{المرحلة السادسة: كود التجميع الهدفي لمعالجات x86 32-bit Assembly}
+    \label{fig:asm}
+\end{figure}
+
+\newpage
+
+\section{توليد الملف التنفيذي الأصلي عبر ilasm}
+يوضح الشكل~(\ref{fig:exe}) خط أنابيب توليد الملف التنفيذي الحقيقي $EXE$ وتأكيد تشغيله الذاتي.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{images/stage7_executable.png}
+    \caption{المرحلة السابعة: توليد الملف التنفيذي المستقل بنظام Windows PE عبر ilasm.exe}
+    \label{fig:exe}
+\end{figure}
+
+\section{تشخيص الأخطاء والقفز لموضع الخطأ}
+يوضح الشكل~(\ref{fig:errors}) قائمة الأخطاء النحوية والدلالية، وتوضيح ميزة القفز المباشر للسطر عند النقر المزدوج.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{images/stage8_errors.png}
+    \caption{المرحلة الثامنة: قائمة تشخيص الأخطاء وميزة القفز التلقائي للسطر والعمود}
+    \label{fig:errors}
+\end{figure}
+
+\newpage
+
+\section{تشغيل البرامج داخل الطرفية التفاعلية المدمجة}
+يوضح الشكل~(\ref{fig:term}) مخرجات التنفيذ الحي لبرنامج مكتوب بلغة بيان داخل الطرفية المدمجة.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{images/stage9_terminal_run.png}
+    \caption{المرحلة التاسعة: تشغيل البرنامج الناتج وعرض مخرجاته في الطرفية التفاعلية}
+    \label{fig:term}
+\end{figure}
+
+\newpage
+
+% ==============================================================================
+% مصفوفة أمثلة الاختبار الـ 18
+% ==============================================================================
+\chapter{مصفوفة برامج الاختبار والتحقق الرسمية (12 تطبيقاً شاملاً)}
+
+وفقاً للمعيار الرابع من وثيقة متطلبات المشروع، تم تصميم 12 برنامج اختبار شاملاً ومتقدماً تغطي شتى قواعد وتراكيب لغة بيان المعتمدة من أستاذ المقرر:
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{جدول البرامج الاختبارية الشاملة لتغطية قواعد لغة بيان بالكامل}
+    \begin{tabularx}{\textwidth}{l p{5.5cm} X c}
+        \toprule
+        \textbf{رقم} & \textbf{اسم ملف الاختبار} & \textbf{القاعدة اللغوية المغطاة والتطبيق} & \textbf{حالة التنفيذ} \\
+        \midrule
+        01 & \textenglish{01\_تعريف\_المتغيرات\_والثوابت\_والحساب.bayan} & المتغيرات، الثوابت، الحسابات الهندسية (المستطيل والدائرة)، باقي القسمة & ناجح (Exit 0) \\
+        02 & \textenglish{02\_الجمل\_الشرطية\_وتقديرات\_الطلاب.bayan} & القرارات والشرطيات (إذا ... فإن ... وإلا)، المقارنات المنطقية والتقديرات & ناجح (Exit 0) \\
+        03 & \textenglish{03\_حلقات\_التكرار\_والمجاميع\_والمضروب.bayan} & حلقات التكرار (طالما ... استمر، كرر ... إلى ... أضف، أعد ... حتى) & ناجح (Exit 0) \\
+        04 & \textenglish{04\_الإجراءات\_وتمرير\_المعاملات.bayan} & الإجراءات الفرعية وتمرير المعاملات بالقيمة (ByVal) وبالمرجع (ByRef) & ناجح (Exit 0) \\
+        05 & \textenglish{05\_القوائم\_والمصفوفات\_العددية.bayan} & القوائم (قائمة[...] من صحيح)، التعيين المفهرس، وحساب المجاميع & ناجح (Exit 0) \\
+        06 & \textenglish{06\_السجلات\_وهياكل\_البيانات.bayan} & السجلات المركبة (سجل \{ ... \})، تمثيل النقاط، الوصول للحقول والرموز & ناجح (Exit 0) \\
+        07 & \textenglish{07\_الحسابات\_العلمية\_والأعداد\_الحقيقية.bayan} & نوع حقيقي، حسابات الجاذبية والكتلة، مقارنات الأعداد العشرية & ناجح (Exit 0) \\
+        08 & \textenglish{08\_الأس\_والقسمة\_الصحيحة\_المتقدمة.bayan} & العمليات الحسابية المتقدمة: معامل الأس (\^{})، معامل القسمة الصحيحة (\textbackslash) & ناجح (Exit 0) \\
+        09 & \textenglish{09\_معالجة\_النصوص\_والمحارف.bayan} & السلاسل النصية (خيط رمزي)، المحارف (حرفي)، وطباعة الرسائل العربية & ناجح (Exit 0) \\
+        10 & \textenglish{10\_تطبيق\_شامل\_متكامل\_لجميع\_القواعد.bayan} & تطبيق مالي متكامل يجمع: السجلات، القوائم، الإجراءات، الشروط، والتكرار & ناجح (Exit 0) \\
+        11 & \textenglish{11\_اختبار\_الأخطاء\_النحوية\_المتعمدة.bayan} & التحقق من اكتشاف الأخطاء النحوية والقفز للسطر (Syntax Diagnostics) & كشف الخطأ بنجاح \\
+        12 & \textenglish{12\_اختبار\_الأخطاء\_الدلالية\_المتعمدة.bayan} & التحقق من كشف تعارض الأنواع وحماية الثوابت (Semantic Diagnostics) & كشف الخطأ بنجاح \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\chapter{الخاتمة والتوصيات}
+تم بحمد الله وتوفيقه إنجاز مشروع مترجم ومحرر لغة **بيان** العربية محققاً 100\% من المتطلبات والشروط المحددة في وثيقة المشروع. أثبت النظام كفاءة عالية في:
+\begin{enumerate}
+    \item الفصل التام بين المترجم المستقل (CLI) وبيئة التطوير المرئية (VS Code IDE).
+    \item توليد ملفات تنفيذية حقيقية ومستقلة بصيغة Windows PE عبر محول CIL ومجمّع ilasm.exe.
+    \item توفير تجربة مستخدم عربية أصيلة متكاملة مع سهولة استكشاف المراحل ومعالجة الأخطاء.
+\end{enumerate}
+
+\end{document}

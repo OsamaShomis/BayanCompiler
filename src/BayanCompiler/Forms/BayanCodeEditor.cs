@@ -17,6 +17,13 @@ public sealed class BayanCodeEditor : UserControl
     private readonly System.Windows.Forms.Timer highlightDebounceTimer = new();
 
     public event EventHandler? ContentModified;
+    public event EventHandler<(int Line, int Column)>? CursorPositionChanged;
+
+    public bool ShowInternalStatusBar
+    {
+        get => statusBar.Visible;
+        set => statusBar.Visible = value;
+    }
 
     [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     public string SourceCode
@@ -118,8 +125,8 @@ public sealed class BayanCodeEditor : UserControl
 
     public void ApplyTheme()
     {
-        BackColor = IdeTheme.Surface;
-        editor.BackColor = IdeTheme.Surface;
+        BackColor = IdeTheme.EditorBackground;
+        editor.BackColor = IdeTheme.EditorBackground;
         editor.ForeColor = IdeTheme.TextPrimary;
 
         gutter.BackColor = IdeTheme.GutterBackground;
@@ -147,6 +154,7 @@ public sealed class BayanCodeEditor : UserControl
 
         cursorStatusLabel.Text = $"السطر {line + 1} ، العمود {col + 1}";
         statsLabel.Text = $"{editor.Lines.Length} أسطر | {editor.TextLength} حرف";
+        CursorPositionChanged?.Invoke(this, (line + 1, col + 1));
     }
 
     private void Gutter_Paint(object? sender, PaintEventArgs e)

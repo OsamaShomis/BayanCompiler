@@ -1,19 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!-- يبني مشغل اختبارات بسيطاً يمكن تشغيله مباشرة من Visual Studio أو dotnet run. -->
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
-    <!-- يتيح الإشارات الضمنية مثل List وConsole في ملف الاختبارات. -->
+    <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <!-- يفعّل التحقق من القيم القابلة لأن تكون فارغة داخل الاختبارات. -->
     <Nullable>enable</Nullable>
-    <!-- يمنع تضمين Program.cs تلقائياً لأننا نحدد ملفات الاختبار وملفات القلب صراحة. -->
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
-    <!-- يضم مشغل الاختبارات الحالي. -->
-    <Compile Include="Program.cs" />
-    <!-- يستخدم الاختبار نفس Bayan.Compiler.Core التي يستعملها CLI والمحرر. -->
     <ProjectReference Include="../../src/Bayan.Compiler.Core/Bayan.Compiler.Core.csproj" />
   </ItemGroup>
 </Project>

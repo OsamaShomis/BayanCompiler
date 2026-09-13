@@ -1,14 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!-- This executable is the standalone compiler required by the project brief. -->
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Bayan.Compiler.Cli</AssemblyName>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <!-- The CLI depends only on the reusable compiler core, never on Windows Forms. -->
     <ProjectReference Include="../Bayan.Compiler.Core/Bayan.Compiler.Core.csproj" />
   </ItemGroup>
 </Project>

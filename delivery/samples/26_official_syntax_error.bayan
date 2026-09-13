@@ -1,0 +1,5 @@
+برنامج
+    // Syntax error: missing type before variable
+    متغير س ;
+    اقرأ س ;
+    اطبع س ;

@@ -29,6 +29,7 @@ publish/
 output.exe
 output.asm
 output.il
+test_out/
 
 # Windows thumbnail cache & temporary files
 Thumbs.db

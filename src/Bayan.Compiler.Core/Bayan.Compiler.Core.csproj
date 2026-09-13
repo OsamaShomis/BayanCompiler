@@ -1,17 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!-- The core is platform-neutral so it can serve the CLI, tests, and Windows editor. -->
-    <TargetFramework>net9.0</TargetFramework>
-    <!-- The assembly name makes the compiler boundary explicit in the final solution. -->
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Bayan.Compiler.Core</AssemblyName>
-    <!-- Source files are linked from the existing implementation during the safe first split. -->
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-  <ItemGroup>
-    <!-- Link compiler-only source and keep all Windows Forms files inside the editor project. -->
-    <!-- Explicitly exclude generated build folders: the recursive source glob must never compile editor GlobalUsings or assembly attributes. -->
-    <Compile Include="../BayanCompiler/**/*.cs" Exclude="../BayanCompiler/Forms/**/*.cs;../BayanCompiler/Program.cs;../BayanCompiler/bin/**/*.cs;../BayanCompiler/obj/**/*.cs" LinkBase="CompilerCore" />
-  </ItemGroup>
 </Project>

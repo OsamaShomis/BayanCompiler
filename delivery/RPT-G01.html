@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقرير مشروع مترجم ومحرر لغة بيان العربية (RPT-G01)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #007ACC;
+            --primary-dark: #005A9E;
+            --secondary: #4EC9B0;
+            --accent: #CE9178;
+            --bg-page: #F8F9FA;
+            --bg-card: #FFFFFF;
+            --text-main: #2D3748;
+            --text-muted: #718096;
+            --border: #E2E8F0;
+            --code-bg: #1E1E1E;
+            --code-text: #D4D4D4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 50px 70px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            border-radius: 8px;
+        }
+
+        /* -------------------------------------------------------------
+           Print Settings (Page Breaks & Clean PDF Export)
+        ------------------------------------------------------------- */
+        @media print {
+            body {
+                background: #FFF;
+                font-size: 13pt;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+            .page-break {
+                page-break-before: always;
+                break-before: page;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .card, .table-container, .figure-box {
+                break-inside: avoid;
+            }
+        }
+
+        /* Floating action buttons */
+        .action-bar {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            display: flex;
+            gap: 12px;
+            z-index: 1000;
+        }
+        .btn-print {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,122,204,0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        .btn-print:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* -------------------------------------------------------------
+           Cover Page Styling
+        ------------------------------------------------------------- */
+        .cover-page {
+            text-align: center;
+            padding: 40px 20px;
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            position: relative;
+            background: linear-gradient(180deg, #FAFAFA 0%, #FFFFFF 100%);
+        }
+
+        .cover-header h3 {
+            font-size: 18px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .project-title-box {
+            background: linear-gradient(135deg, #007ACC 0%, #005A9E 100%);
+            color: white;
+            padding: 35px 25px;
+            border-radius: 12px;
+            margin: 40px auto;
+            max-width: 850px;
+            box-shadow: 0 10px 25px rgba(0,122,204,0.25);
+        }
+        .project-title-box h1 {
+            font-size: 34px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+        .project-title-box h2 {
+            font-size: 20px;
+            font-weight: 600;
+            opacity: 0.95;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            direction: ltr;
+        }
+        .project-title-box p {
+            margin-top: 12px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.15);
+            display: inline-block;
+            padding: 4px 18px;
+            border-radius: 20px;
+        }
+
+        .course-info {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 15px 0;
+        }
+
+        .team-box {
+            background: #F1F5F9;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 25px;
+            max-width: 650px;
+            margin: 20px auto;
+            text-align: right;
+        }
+        .team-box h4 {
+            color: var(--primary);
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+        }
+        .team-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            font-size: 15px;
+        }
+        .team-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 12px;
+            background: white;
+            border-radius: 6px;
+            border-right: 4px solid var(--primary);
+        }
+        .team-list .en-name {
+            color: var(--text-muted);
+            direction: ltr;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-size: 14px;
+        }
+
+        .cover-footer {
+            margin-top: 30px;
+            font-size: 15px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* -------------------------------------------------------------
+           Content Section Styles
+        ------------------------------------------------------------- */
+        h2.section-title {
+            font-size: 24px;
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 8px;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3.sub-title {
+            font-size: 19px;
+            color: var(--text-main);
+            margin-top: 30px;
+            margin-bottom: 12px;
+            border-right: 4px solid var(--secondary);
+            padding-right: 12px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #4A5568;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-right: 25px;
+            margin-bottom: 20px;
+            color: #4A5568;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* -------------------------------------------------------------
+           Tables Styling
+        ------------------------------------------------------------- */
+        .table-container {
+            margin: 25px 0;
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid var(--border);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+            font-size: 14px;
+        }
+        th {
+            background-color: #0E639C;
+            color: white;
+            padding: 12px 16px;
+            font-weight: 700;
+        }
+        td {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+        tr:hover {
+            background-color: #EDF2F7;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .badge-success { background: #DEF7EC; color: #03543F; }
+        .badge-info { background: #E1EFFE; color: #1E429F; }
+        .badge-warning { background: #FEF08A; color: #854D0E; }
+
+        /* -------------------------------------------------------------
+           Code Blocks
+        ------------------------------------------------------------- */
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 18px 22px;
+            border-radius: 8px;
+            font-family: 'Fira Code', Consolas, monospace;
+            font-size: 13.5px;
+            direction: ltr;
+            text-align: left;
+            overflow-x: auto;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        /* -------------------------------------------------------------
+           Figure Containers
+        ------------------------------------------------------------- */
+        .figure-box {
+            margin: 35px 0;
+            text-align: center;
+            background: #FAFAFA;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .figure-box img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid #E2E8F0;
+        }
+        .figure-caption {
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #4A5568;
+        }
+
+        .highlight-card {
+            background: #F0F9FF;
+            border-right: 4px solid var(--primary);
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- زر الطباعة وتصدير PDF -->
+    <div class="action-bar no-print">
+        <button class="btn-print" onclick="window.print()">
+            <span>🖨️</span> طباعة وحفظ التقرير بصيغة PDF
+        </button>
+    </div>
+
+    <div class="container">
+
+        <!-- =======================================================
+             الصفحة الأولى: صفحة الغلاف الرسمية
+        ======================================================= -->
+        <div class="cover-page">
+            <div class="cover-header">
+                <h3>الجمهورية اليمنية</h3>
+                <h3>وزارة التعليم العالي والبحث العلمي</h3>
+                <h3>كلية الحاسوب وتكنولوجيا المعلومات</h3>
+                <h3>قسم علوم الحاسوب وتقنية المعلومات</h3>
+            </div>
+
+            <div class="project-title-box">
+                <h1>مشروع مترجم ومحرر لغة بيان</h1>
+                <h2>Bayan Arabic Compiler & Arabic VS Code Studio</h2>
+                <p>نظام متكامل لتصميم المترجمات وتوليد البرامج التنفيذية الأصلية (PE EXE)</p>
+            </div>
+
+            <div class="course-info">
+                تقرير المشروع النهائي لمقرر: تصميم وبناء المترجمات (Compilers Design)
+            </div>
+
+            <div class="team-box">
+                <h4>إعداد فريق العمل (المجموعة رقم: 01)</h4>
+                <ul class="team-list">
+                    <li>
+                        <span><strong>1. م. محمد رشاد أحمد محمد الإدريسي</strong></span>
+                        <span class="en-name">Mohammed Rashad Al-Edrisi</span>
+                    </li>
+                    <li>
+                        <span><strong>2. أسامة شميس</strong></span>
+                        <span class="en-name">Osama Shomis</span>
+                    </li>
+                    <li>
+                        <span><strong>3. أسامة العقاب</strong></span>
+                        <span class="en-name">Osama Al-Oqab</span>
+                    </li>
+                    <li>
+                        <span><strong>4. محمد فيصل الدعيس</strong></span>
+                        <span class="en-name">Mohammed Faisal Al-Doais</span>
+                    </li>
+                    <li>
+                        <span><strong>5. شعيب جازم</strong></span>
+                        <span class="en-name">Shoaib Jazem</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="cover-footer">
+                <div>الفصل الدراسي الثاني — العام الجامعي 2025 / 2026 م</div>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- =======================================================
+             الصفحة الثانية: وصف المشروع والبيئة التقنية والمكتبات
+        ======================================================= -->
+        <h2 class="section-title">1. وصف المشروع والمعمارية والبيئة التقنية</h2>
+
+        <h3 class="sub-title">1.1 فكرة المشروع ونظرة عامة</h3>
+        <p>
+            مشروع <strong>لغة بيان (Bayan)</strong> هو نظام حاسوبي متكامل صُمم لتقديم لغة برمجة عربية عالية المستوى، مدعومة بمترجم مستقل مبني بالكامل من الصفر (From Scratch) ومحرر تفاعلي حديث يحاكي واجهة وتجربة المستخدم لبرنامج <strong>Visual Studio Code</strong>، مع دعم كامل وأصيل لاتجاه الكتابة والواجهة من اليمين إلى اليسار (RTL).
+        </p>
+
+        <div class="highlight-card">
+            <strong>المعمارية المستقلة المنفصلة (Decoupled Architecture):</strong><br>
+            المحرر المرئي والمترجم هما برنامجان تنفيذيان منفصلان تماماً. عند النقر على تشغيل أو ترجمة، يقوم المحرر باستدعاء المترجم المستقل (BayanCompiler.exe) عبر سطر الأوامر (CLI Inter-process Communication) وتمرير مسار الملف، ثم قراءة وتحليل النتائج وعرضها في تبويبات مخصصة.
+        </div>
+
+        <h3 class="sub-title">1.2 لغات البرمجة ومنصة التشغيل</h3>
+        <ul>
+            <li><strong>لغة البرمجة الأساسية:</strong> C# (الإصدار C# 10.0 الحديث).</li>
+            <li><strong>بيئة ومنصة التشغيل:</strong> Microsoft .NET 6.0 LTS (الإصدار 6.0.100).</li>
+        </ul>
+
+        <h3 class="sub-title">1.3 الأدوات والمكتبات الجاهزة المستخدمة</h3>
+        <p>وفقاً للبند الخامس من وثيقة تعليمات المشروع، يوضح الجدول التالي تفاصيل الأدوات والمكتبات المستخدمة:</p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>الأداة / المكتبة</th>
+                        <th>الإصدار</th>
+                        <th>مرحلة الاستخدام</th>
+                        <th>الغرض والدور في المشروع</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Microsoft IL Assembler (ilasm.exe)</strong></td>
+                        <td>4.8.9037.0</td>
+                        <td>توليد الملف التنفيذي</td>
+                        <td>تجميع كود CIL/MSIL المولد وتحويله إلى ملف تنفيذي أصلي PE Console EXE يعمل مباشرة في ويندوز.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>System.Text.Json</strong></td>
+                        <td>6.0.0</td>
+                        <td>التسلسل وتبادل البيانات</td>
+                        <td>تصدير شجرة الإعراب (AST) وجدول الرموز (Symbol Table) بصيغة JSON واضحة ومقروءة للربط.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Windows Forms</strong></td>
+                        <td>6.0.0 (.NET 6)</td>
+                        <td>واجهة محرر الكود (IDE)</td>
+                        <td>بناء واجهة المستخدم VS Code العربية، وشريط النشاط اليميني، ومستكشف الملفات، والطرفية التفاعلية.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>System.Drawing.Common</strong></td>
+                        <td>6.0.0</td>
+                        <td>الرسوم والتنسيق البصري</td>
+                        <td>إدارة ألوان السمة الداكنة الداعمة لمعايير VS Code ورسم الأيقونات وحسابات الأبعاد.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- =======================================================
+             مراحل المترجم التسع وشرح الأكواد
+        ======================================================= -->
+        <h2 class="section-title">2. الشرح التخصصي لمراحل المترجم وهياكل البيانات</h2>
+
+        <h3 class="sub-title">2.1 التحليل المعجمي (Lexer.cs)</h3>
+        <p>
+            يقوم المحلل المعجمي بقراءة الملف المصدري حرفاً بحرف وتحويله إلى قائمة متتابعة من الرموز (Tokens). يتعرف المحلل على الكلمات المفتاحية العربية (ثابت، متغير، اذا، والا، طالما، كرر، اطبع)، المعرفات، الأرقام الصحيحة والعشرية، النصوص، والمعاملات الحسابية والمنطقية.
+        </p>
+        <ul>
+            <li><strong>المدخلات:</strong> النص المصدري بترميز UTF-8.</li>
+            <li><strong>المخرجات:</strong> قائمة كائنات <code>List&lt;Token&gt;</code> مع توثيق السطر والعمود.</li>
+            <li><strong>هياكل البيانات:</strong> <code>TokenType Enum</code>, <code>Token Class</code>, وقاموس الكلمات المحجوزة <code>Dictionary&lt;string, TokenType&gt;</code>.</li>
+        </ul>
+        <pre><code>// جزء من كود التحليل المعجمي ومطابقة الرموز
+if (char.IsLetter(c) || c == '_')
+{
+    int startCol = col;
+    string lexeme = ReadIdentifier(sourceCode, ref index, ref col);
+    TokenType type = Keywords.TryGetValue(lexeme, out var kw) ? kw : TokenType.IDENTIFIER;
+    tokens.Add(new Token(type, lexeme, line, startCol));
+    continue;
+}</code></pre>
+
+        <h3 class="sub-title">2.2 التحليل النحوي التنبؤي وشجرة الإعراب (Parser.cs & AstNodes.cs)</h3>
+        <p>
+            يطبق المحلل النحوي خوارزمية التحليل التنبؤي الصارم $LL(1)$ الخالي من التراجع، مع ضمان خلو القواعد من اللف العودي اليساري، ويقوم ببناء شجرة الإعراب المجردة كشجرة كائنية متدرجة (ProgramNode -> StatementNode -> ExpressionNode).
+        </p>
+        <pre><code>// التحليل النحوي للتعبيرات وبناء عقد العمليات الحسابية
+private ExpressionNode ParseExpression()
+{
+    ExpressionNode left = ParseTerm();
+    while (CurrentToken.Type == TokenType.OP_PLUS || CurrentToken.Type == TokenType.OP_MINUS)
+    {
+        Token op = ConsumeToken();
+        ExpressionNode right = ParseTerm();
+        left = new BinaryOpNode(op.Lexeme, left, right, op.Line, op.Column);
+    }
+    return left;
+}</code></pre>
+
+        <h3 class="sub-title">2.3 التحليل الدلالي وجدول الرموز (SemanticAnalyzer.cs & SymbolTable.cs)</h3>
+        <p>
+            يقوم المحلل الدلالي بزيارة شجرة الإعراب، وتطبيق القواعد المنطقية للغة: التأكد من التصريح المسبق عن المتغيرات، منع التعديل على الثوابت، التحقق من توافق أنواع البيانات، وعزل مجالات الرؤية (Scopes) في هيكل هرمي متعدد المستويات.
+        </p>
+
+        <h3 class="sub-title">2.4 الشفرة الوسيطة ثلاثية العناوين (TacGenerator.cs)</h3>
+        <p>
+            توليد تعليمات TAC الخطية المكونة من معاملات رباعية (Operator, Arg1, Arg2, Result) باستخدام سجلات وسيطة مؤقتة ($t0, $t1, ...) وعناوين قفز شرطية وغير شرطية (Labels).
+        </p>
+
+        <h3 class="sub-title">2.5 توليد كود التجميع الهدفي x86 ومولد PE EXE (AssemblyGenerator.cs & CilGenerator.cs)</h3>
+        <p>
+            يقوم المترجم بتوليد شفرة أسمبلي x86 متوافقة مع NASM/MASM لإثبات الفهم النظري لمعمارية المعالجات وسجلات EAX وEBX وإطار المكدس، وفي الوقت ذاته يولد كود CIL ليتم تجميعه عبر <code>ilasm.exe</code> إلى ملف تنفيذي حقيقي ومستقل <code>program.exe</code>.
+        </p>
+
+        <div class="page-break"></div>
+
+        <!-- =======================================================
+             التوثيق البصري للصور الـ 11
+        ======================================================= -->
+        <h2 class="section-title">3. التوثيق البصري لمراحل المترجم ومحرر الكود</h2>
+        <p>يتضمن هذا القسم الصور والرسومات التوضيحية التفصيلية لكافة مراحل وواجهات النظام وفق متطلبات التقرير الأكاديمي:</p>
+
+        <div class="figure-box">
+            <img src="images/arch_pipeline.png" alt="مخطط معمارية النظام">
+            <div class="figure-caption">الشكل (1): مخطط معمارية النظام ومسار مراحل الترجمة التساعي للغة بيان</div>
+        </div>
+
+        <div class="figure-box">
+            <img src="images/ide_overview.png" alt="واجهة محرر بيان VS Code">
+            <div class="figure-caption">الشكل (2): واجهة محرر لغة بيان العربية (Bayan Arabic VS Code Studio)</div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <div class="figure-box">
+            <img src="images/stage1_tokens.png" alt="جدول الرموز المعجمية">
+            <div class="figure-caption">الشكل (3): المرحلة الأولى — جدول تدفق الرموز المعجمية (Tokens Stream Table)</div>
+        </div>
+
+        <div class="figure-box">
+            <img src="images/stage2_ast.png" alt="شجرة الإعراب المجردة AST">
+            <div class="figure-caption">الشكل (4): المرحلتان الثانية والثالثة — شجرة الإعراب المجردة (Abstract Syntax Tree)</div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <div class="figure-box">
+            <img src="images/stage3_symbols.png" alt="جدول الرموز ومجالات الرؤية">
+            <div class="figure-caption">الشكل (5): المرحلة الرابعة — تفاصيل جدول الرموز ومجالات الرؤية (Symbol Table Scopes)</div>
+        </div>
+
+        <div class="figure-box">
+            <img src="images/stage4_semantics.png" alt="التحليل الدلالي ومطابقة الأنواع">
+            <div class="figure-caption">الشكل (6): المرحلة الرابعة — محرك التحليل الدلالي وفحص الأنواع ومجالات الرؤية</div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <div class="figure-box">
+            <img src="images/stage5_tac.png" alt="الشفرة الوسيطة ثلاثية العناوين">
+            <div class="figure-caption">الشكل (7): المرحلة الخامسة — الشفرة الوسيطة ثلاثية العناوين (Three-Address Code TAC)</div>
+        </div>
+
+        <div class="figure-box">
+            <img src="images/stage6_assembly.png" alt="كود التجميع x86">
+            <div class="figure-caption">الشكل (8): المرحلة السادسة — كود التجميع الهدفي لمعالجات x86 32-bit Assembly</div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <div class="figure-box">
+            <img src="images/stage7_executable.png" alt="توليد الملف التنفيذي EXE">
+            <div class="figure-caption">الشكل (9): المرحلة السابعة — توليد الملف التنفيذي المستقل بنظام Windows PE عبر ilasm.exe</div>
+        </div>
+
+        <div class="figure-box">
+            <img src="images/stage8_errors.png" alt="تشخيص الأخطاء والقفز التلقائي">
+            <div class="figure-caption">الشكل (10): المرحلة الثامنة — قائمة تشخيص الأخطاء وميزة القفز التلقائي للسطر والعمود</div>
+        </div>
+
+        <div class="figure-box">
+            <img src="images/stage9_terminal_run.png" alt="تشغيل البرامج في الطرفية">
+            <div class="figure-caption">الشكل (11): المرحلة التاسعة — تشغيل البرنامج الناتج وعرض مخرجاته في الطرفية التفاعلية المدمجة</div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- =======================================================
+             مصفوفة أمثلة الاختبار الـ 12 الشاملة
+        ======================================================= -->
+        <h2 class="section-title">4. مصفوفة برامج الاختبار والتحقق الرسمية (12 تطبيقاً شاملاً)</h2>
+        <p>
+            تأكيداً على كفاءة المترجم والمحرر ومطابقته التامة لقواعد الدكتور، تم بناء واختبار 12 نموذجاً برمجياً شاملاً ومتقدماً يغطي شتى جوانب وقواعد لغة بيان:
+        </p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>ملف البرنامج الاختباري</th>
+                        <th>القاعدة النحوية / الدلالية المغطاة والتطبيق</th>
+                        <th>حالة التنفيذ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>01</td><td>01_تعريف_المتغيرات_والثوابت_والحساب.bayan</td><td>المتغيرات، الثوابت، الحسابات الهندسية (المستطيل والدائرة)، وباقي القسمة</td><td><span class="badge badge-success">ناجح (Exit 0)</span></td></tr>
+                    <tr><td>02</td><td>02_الجمل_الشرطية_وتقديرات_الطلاب.bayan</td><td>القرارات والشرطيات (إذا ... فإن ... وإلا)، المقارنات المنطقية والتقديرات</td><td><span class="badge badge-success">ناجح (Exit 0)</span></td></tr>
+                    <tr><td>03</td><td>03_حلقات_التكرار_والمجاميع_والمضروب.bayan</td><td>حلقات التكرار (طالما ... استمر، كرر ... إلى ... أضف، أعد ... حتى)</td><td><span class="badge badge-success">ناجح (Exit 0)</span></td></tr>
+                    <tr><td>04</td><td>04_الإجراءات_وتمرير_المعاملات.bayan</td><td>الإجراءات الفرعية وتمرير المعاملات بالقيمة (ByVal) وبالمرجع (ByRef)</td><td><span class="badge badge-success">ناجح (Exit 0)</span></td></tr>
+                    <tr><td>05</td><td>05_القوائم_والمصفوفات_العددية.bayan</td><td>القوائم (قائمة[...] من صحيح)، التعيين المفهرس، وحساب المجاميع</td><td><span class="badge badge-success">ناجح (Exit 0)</span></td></tr>
+                    <tr><td>06</td><td>06_السجلات_وهياكل_البيانات.bayan</td><td>السجلات المركبة (سجل { ... })، تمثيل النقاط، الوصول للحقول والرموز</td><td><span class="badge badge-success">ناجح (Exit 0)</span></td></tr>
+                    <tr><td>07</td><td>07_الحسابات_العلمية_والأعداد_الحقيقية.bayan</td><td>نوع حقيقي، حسابات الجاذبية والكتلة، ومقارنات الأعداد العشرية</td><td><span class="badge badge-success">ناجح (Exit 0)</span></td></tr>
+                    <tr><td>08</td><td>08_الأس_والقسمة_الصحيحة_المتقدمة.bayan</td><td>العمليات الحسابية المتقدمة: معامل الأس (^) ومعامل القسمة الصحيحة (\)</td><td><span class="badge badge-success">ناجح (Exit 0)</span></td></tr>
+                    <tr><td>09</td><td>09_معالجة_النصوص_والمحارف.bayan</td><td>السلاسل النصية (خيط رمزي)، المحارف (حرفي)، وطباعة الرسائل العربية</td><td><span class="badge badge-success">ناجح (Exit 0)</span></td></tr>
+                    <tr><td>10</td><td>10_تطبيق_شامل_متكامل_لجميع_القواعد.bayan</td><td>تطبيق مالي متكامل يجمع: السجلات، القوائم، الإجراءات، الشروط، والتكرار</td><td><span class="badge badge-success">ناجح (Exit 0)</span></td></tr>
+                    <tr><td>11</td><td>11_اختبار_الأخطاء_النحوية_المتعمدة.bayan</td><td>التحقق من اكتشاف الأخطاء النحوية والقفز للسطر (Syntax Diagnostics)</td><td><span class="badge badge-warning">كشف الخطأ بدقة</span></td></tr>
+                    <tr><td>12</td><td>12_اختبار_الأخطاء_الدلالية_المتعمدة.bayan</td><td>التحقق من كشف تعارض الأنواع وحماية الثوابت (Semantic Diagnostics)</td><td><span class="badge badge-warning">كشف الخطأ بدقة</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 class="section-title">5. الخلاصة والتسليم النهائي</h2>
+        <p>
+            تم بحمد الله وتوفيقه استكمال كافة متطلبات مشروع مترجم ومحرر لغة بيان العربية بنسبة 100%، وتوفير كافة مخرجات المراحل بصورة حقيقية وملموسة تفي بكافة المعايير الأكاديمية المطلوبة.
+        </p>
+    </div>
+
+</body>
+</html>

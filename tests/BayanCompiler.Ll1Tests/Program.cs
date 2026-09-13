@@ -86,8 +86,9 @@ internal static class Program
             Run("تنفيذ مقارنة الحقيقي الرسمية", TestOfficialRealComparisonBackend);
             // Verifies real value/reference parameters work through the supported procedure backend.
             Run("تنفيذ إجراء الحقيقي الرسمي", TestOfficialRealProcedureBackend);
-            // Verifies bounded string input is stored through an allocated MIPS buffer.
             Run("تنفيذ اقرأ الخيط الرمزي الرسمي", TestOfficialStringInputBackend);
+            Run("التعليقات الكتلوية ومحارف الهروب المعجمية", TestEscapesAndComments);
+            Run("سلامة إطار المكدس في MIPS", TestMipsStackFrameIntegrity);
 
             Console.WriteLine("نجحت جميع اختبارات LL(1): " + _passed + " اختبار/اختبارات.");
             return 0;
@@ -556,7 +557,27 @@ internal static class Program
         Assert(result.Succeeded && result.IrProgram is not null && result.AssemblyDisplayCode is not null, "يجب أن يولد اقرأ الخيط الرمزي TAC وMIPS.");
         AssertContains(IrPrinter.Format(result.IrProgram!), "اقرأ_خيط", "يجب أن تحتوي TAC على تعليمة إدخال خيط حقيقية.");
         Assert(result.IrProgram!.Buffers.Count == 1, "يجب أن يحجز IR buffer واحداً لإدخال الخيط.");
-        
+    }
+
+    private static void TestEscapesAndComments()
+    {
+        const string source = "/* تعليق متعدد\nأسطر */\nبرنامج تجربة;\nمتغير ن : خيط رمزي;\nمتغير ح : حرفي;\n{\n    ن = \"سطر\\nجديد\";\n    ح = '\\n';\n    اطبع(ن);\n}.";
+        var lexResult = new Lexer(source).Lex();
+        Assert(lexResult.Diagnostics.Count == 0, "يجب ألا ينتج عن التعليق الكتلي ومحارف الهروب أي خطأ معجمي.");
+        var strToken = lexResult.Tokens.First(t => t.Type == TokenType.String);
+        Assert(strToken.Lexeme == "سطر\nجديد", "يجب أن تفك محارف الهروب في السلسلة النصية.");
+        var charToken = lexResult.Tokens.First(t => t.Type == TokenType.Character);
+        Assert(charToken.Lexeme == "\n", "يجب أن يفك محرف الهروب في الحرف.");
+    }
+
+    private static void TestMipsStackFrameIntegrity()
+    {
+        const string source = "برنامج فحص_المكدس; إجراء اختبار(بالقيمة س : صحيح); { اطبع(س); }; متغير ص : صحيح; { ص = 10; اختبار(ص); }.";
+        BayanCompilationResult result = new OfficialBayanCompilationService().Compile(source, ".");
+        Assert(result.Succeeded && result.AssemblyDisplayCode != null, "يجب أن تنجح الترجمة.");
+        AssertContains(result.AssemblyDisplayCode!, "addi $sp, $sp, -8", "يجب أن يحتوي كود MIPS على حجز إطار المكدس.");
+        AssertContains(result.AssemblyDisplayCode!, "sw $ra, 4($sp)", "يجب أن يحفظ كود MIPS سجل عنوان العودة في المكدس.");
+        AssertContains(result.AssemblyDisplayCode!, "lw $ra, 4($sp)", "يجب أن يستعيد كود MIPS سجل عنوان العودة من المكدس.");
     }
 
     /// <summary>

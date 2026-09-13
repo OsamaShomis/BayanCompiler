@@ -1,0 +1,5 @@
+برنامج
+    // Semantic error: adding int to boolean
+    متغير س : صحيح ؛
+    متغير ص : منطقي ؛
+    س = س + ص ؛
