@@ -1,33 +1,16 @@
-ProgramNode: السجلات_وهياكل_البيانات
+ProgramNode: اختبار_الخطأ_الدلالي
     Declarations:
-        TypeDeclarationNode: نقطة_هندسية = RecordTypeSyntaxNode
-        VariableDeclarationGroupNode: نقطة_أ : NamedTypeSyntaxNode
-        VariableDeclarationGroupNode: نقطة_ب : NamedTypeSyntaxNode
-        VariableDeclarationGroupNode: مجموع_الإحداثيات : NamedTypeSyntaxNode
-    ComplexAssignmentNode
-    ComplexAssignmentNode
-    ComplexAssignmentNode
-    ComplexAssignmentNode
-    ComplexAssignmentNode
-    ComplexAssignmentNode
-    AssignmentNode: مجموع_الإحداثيات
+        ConstantDeclarationNode: النسبة_الرسمية
+            LiteralNode: 10
+        VariableDeclarationGroupNode: عدد : NamedTypeSyntaxNode
+        VariableDeclarationGroupNode: حالة : NamedTypeSyntaxNode
+    AssignmentNode: عدد
+        LiteralNode: 20
+    AssignmentNode: حالة
+        LiteralNode: صح
+    AssignmentNode: عدد
         BinaryExpressionNode: Plus
-            BinaryExpressionNode: Plus
-                BinaryExpressionNode: Plus
-                    FieldAccessNode
-                    FieldAccessNode
-                FieldAccessNode
-            FieldAccessNode
+            IdentifierNode: عدد
+            IdentifierNode: حالة
     PrintNode:
-        LiteralNode: === بيانات النقطة [أ] ===
-    PrintListNode
-    PrintListNode
-    PrintListNode
-    PrintNode:
-        LiteralNode: === بيانات النقطة [ب] ===
-    PrintListNode
-    PrintListNode
-    PrintListNode
-    PrintNode:
-        LiteralNode: === إجمالي الإحداثيات ===
-    PrintListNode
+        IdentifierNode: عدد

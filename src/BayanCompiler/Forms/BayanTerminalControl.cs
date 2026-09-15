@@ -260,6 +260,26 @@ public sealed class BayanTerminalControl : UserControl
         AppendColoredText(text, IdeTheme.TerminalText);
     }
 
+    public void AppendError(string text)
+    {
+        AppendColoredText(text, IdeTheme.AccentError);
+    }
+
+    public void SetCompleted(int exitCode, TimeSpan elapsed)
+    {
+        if (consoleBox.TextLength == 0)
+        {
+            AppendColoredText("[اكتمل تنفيذ البرنامج دون مخرجات نصية]" + Environment.NewLine, IdeTheme.TextMuted);
+        }
+
+        bool success = exitCode == 0;
+        statusBadge.Text = success ? "نجاح (0)" : $"خطأ ({exitCode})";
+        statusBadge.BackColor = success ? IdeTheme.AccentSuccess : IdeTheme.AccentError;
+        statusBadge.ForeColor = Color.White;
+
+        metricsLabel.Text = $"زمن التنفيذ: {elapsed.TotalMilliseconds:F1} م.ث";
+    }
+
     private void AppendColoredText(string text, Color color)
     {
         string formatted = isRtl ? FormatArabicBidiLine(text) : text;

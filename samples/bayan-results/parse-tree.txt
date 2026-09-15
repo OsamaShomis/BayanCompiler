@@ -1,95 +1,55 @@
 Start
   ProgramUnit
     Program → برنامج
-    Identifier → السجلات_وهياكل_البيانات
+    Identifier → اختبار_الخطأ_الدلالي
     Semicolon → ;
     DefinitionList
       Definition
-        TypeDeclaration
-          TypeDeclaration → نوع
-          Identifier → نقطة_هندسية
+        ConstantDeclaration
+          Const → ثابت
+          Identifier → النسبة_الرسمية
           Assign → =
-          CompositeType
-            RecordType
-              Record → سجل
-              LeftBrace → {
-              FieldList
-                FieldDeclaration
-                  Identifier → س
-                  Colon → :
-                  DataType
-                    TypeInt → صحيح
-                FieldListTail
-                  Semicolon → ;
-                  FieldList
-                    FieldDeclaration
-                      Identifier → ص
-                      Colon → :
-                      DataType
-                        TypeInt → صحيح
-                    FieldListTail
-                      Semicolon → ;
-                      FieldList
-                        FieldDeclaration
-                          Identifier → رمز
-                          Colon → :
-                          DataType
-                            TypeChar → حرفي
-                        FieldListTail
-              RightBrace → }
+          ConstantValue
+            Integer → 10
           Semicolon → ;
       DefinitionList
         Definition
           VariableDeclaration
             Variable → متغير
             NameList
-              Identifier → نقطة_أ
+              Identifier → عدد
               NameListTail
             Colon → :
             DataType
-              Identifier → نقطة_هندسية
+              TypeInt → صحيح
             Semicolon → ;
         DefinitionList
           Definition
             VariableDeclaration
               Variable → متغير
               NameList
-                Identifier → نقطة_ب
+                Identifier → حالة
                 NameListTail
               Colon → :
               DataType
-                Identifier → نقطة_هندسية
+                TypeBool → منطقي
               Semicolon → ;
           DefinitionList
-            Definition
-              VariableDeclaration
-                Variable → متغير
-                NameList
-                  Identifier → مجموع_الإحداثيات
-                  NameListTail
-                Colon → :
-                DataType
-                  TypeInt → صحيح
-                Semicolon → ;
-            DefinitionList
     Block
       LeftBrace → {
       StatementList
         Statement
           IdentifierStatement
-            Identifier → نقطة_أ
+            Identifier → عدد
             IdentifierStatementTail
               AccessTail
-                Dot → .
-                Identifier → س
-                AccessTail
               Assign → =
               Expression
                 SimpleExpression
                   SignOpt
                   Term
                     Factor
-                      Integer → 10
+                      Integer → 20
                     MultiplicationTail
                   AdditionTail
                 RelationTail
@@ -97,19 +57,16 @@ Start
         StatementList
           Statement
             IdentifierStatement
-              Identifier → نقطة_أ
+              Identifier → حالة
               IdentifierStatementTail
                 AccessTail
-                  Dot → .
-                  Identifier → ص
-                  AccessTail
                 Assign → =
                 Expression
                   SimpleExpression
                     SignOpt
                     Term
                       Factor
-                        Integer → 20
+                        True → صح
                       MultiplicationTail
                     AdditionTail
                   RelationTail
@@ -117,431 +74,52 @@ Start
           StatementList
             Statement
               IdentifierStatement
-                Identifier → نقطة_أ
+                Identifier → عدد
                 IdentifierStatementTail
                   AccessTail
-                    Dot → .
-                    Identifier → رمز
-                    AccessTail
                   Assign → =
                   Expression
                     SimpleExpression
                       SignOpt
                       Term
                         Factor
-                          Character → A
+                          Access
+                            Identifier → عدد
+                            AccessTail
                         MultiplicationTail
                       AdditionTail
+                        AdditionOperator
+                          Plus → +
+                        Term
+                          Factor
+                            Access
+                              Identifier → حالة
+                              AccessTail
+                          MultiplicationTail
+                        AdditionTail
                     RelationTail
                   Semicolon → ;
             StatementList
               Statement
-                IdentifierStatement
-                  Identifier → نقطة_ب
-                  IdentifierStatementTail
-                    AccessTail
-                      Dot → .
-                      Identifier → س
-                      AccessTail
-                    Assign → =
+                PrintStatement
+                  Print → اطبع
+                  LeftParen → (
+                  PrintItems
                     Expression
                       SimpleExpression
                         SignOpt
                         Term
                           Factor
-                            Integer → 30
+                            Access
+                              Identifier → عدد
+                              AccessTail
                           MultiplicationTail
                         AdditionTail
                       RelationTail
-                    Semicolon → ;
+                    PrintItemsTail
+                  RightParen → )
+                  Semicolon → ;
               StatementList
-                Statement
-                  IdentifierStatement
-                    Identifier → نقطة_ب
-                    IdentifierStatementTail
-                      AccessTail
-                        Dot → .
-                        Identifier → ص
-                        AccessTail
-                      Assign → =
-                      Expression
-                        SimpleExpression
-                          SignOpt
-                          Term
-                            Factor
-                              Integer → 40
-                            MultiplicationTail
-                          AdditionTail
-                        RelationTail
-                      Semicolon → ;
-                StatementList
-                  Statement
-                    IdentifierStatement
-                      Identifier → نقطة_ب
-                      IdentifierStatementTail
-                        AccessTail
-                          Dot → .
-                          Identifier → رمز
-                          AccessTail
-                        Assign → =
-                        Expression
-                          SimpleExpression
-                            SignOpt
-                            Term
-                              Factor
-                                Character → B
-                              MultiplicationTail
-                            AdditionTail
-                          RelationTail
-                        Semicolon → ;
-                  StatementList
-                    Statement
-                      IdentifierStatement
-                        Identifier → مجموع_الإحداثيات
-                        IdentifierStatementTail
-                          AccessTail
-                          Assign → =
-                          Expression
-                            SimpleExpression
-                              SignOpt
-                              Term
-                                Factor
-                                  Access
-                                    Identifier → نقطة_أ
-                                    AccessTail
-                                      Dot → .
-                                      Identifier → س
-                                      AccessTail
-                                MultiplicationTail
-                              AdditionTail
-                                AdditionOperator
-                                  Plus → +
-                                Term
-                                  Factor
-                                    Access
-                                      Identifier → نقطة_أ
-                                      AccessTail
-                                        Dot → .
-                                        Identifier → ص
-                                        AccessTail
-                                  MultiplicationTail
-                                AdditionTail
-                                  AdditionOperator
-                                    Plus → +
-                                  Term
-                                    Factor
-                                      Access
-                                        Identifier → نقطة_ب
-                                        AccessTail
-                                          Dot → .
-                                          Identifier → س
-                                          AccessTail
-                                    MultiplicationTail
-                                  AdditionTail
-                                    AdditionOperator
-                                      Plus → +
-                                    Term
-                                      Factor
-                                        Access
-                                          Identifier → نقطة_ب
-                                          AccessTail
-                                            Dot → .
-                                            Identifier → ص
-                                            AccessTail
-                                      MultiplicationTail
-                                    AdditionTail
-                            RelationTail
-                          Semicolon → ;
-                    StatementList
-                      Statement
-                        PrintStatement
-                          Print → اطبع
-                          LeftParen → (
-                          PrintItems
-                            Expression
-                              SimpleExpression
-                                SignOpt
-                                Term
-                                  Factor
-                                    String → === بيانات النقطة [أ] ===
-                                  MultiplicationTail
-                                AdditionTail
-                              RelationTail
-                            PrintItemsTail
-                          RightParen → )
-                          Semicolon → ;
-                      StatementList
-                        Statement
-                          PrintStatement
-                            Print → اطبع
-                            LeftParen → (
-                            PrintItems
-                              Expression
-                                SimpleExpression
-                                  SignOpt
-                                  Term
-                                    Factor
-                                      String → الإحداثي السيني (س) = 
-                                    MultiplicationTail
-                                  AdditionTail
-                                RelationTail
-                              PrintItemsTail
-                                Comma → ,
-                                Expression
-                                  SimpleExpression
-                                    SignOpt
-                                    Term
-                                      Factor
-                                        Access
-                                          Identifier → نقطة_أ
-                                          AccessTail
-                                            Dot → .
-                                            Identifier → س
-                                            AccessTail
-                                      MultiplicationTail
-                                    AdditionTail
-                                  RelationTail
-                                PrintItemsTail
-                            RightParen → )
-                            Semicolon → ;
-                        StatementList
-                          Statement
-                            PrintStatement
-                              Print → اطبع
-                              LeftParen → (
-                              PrintItems
-                                Expression
-                                  SimpleExpression
-                                    SignOpt
-                                    Term
-                                      Factor
-                                        String → الإحداثي الصادي (ص) = 
-                                      MultiplicationTail
-                                    AdditionTail
-                                  RelationTail
-                                PrintItemsTail
-                                  Comma → ,
-                                  Expression
-                                    SimpleExpression
-                                      SignOpt
-                                      Term
-                                        Factor
-                                          Access
-                                            Identifier → نقطة_أ
-                                            AccessTail
-                                              Dot → .
-                                              Identifier → ص
-                                              AccessTail
-                                        MultiplicationTail
-                                      AdditionTail
-                                    RelationTail
-                                  PrintItemsTail
-                              RightParen → )
-                              Semicolon → ;
-                          StatementList
-                            Statement
-                              PrintStatement
-                                Print → اطبع
-                                LeftParen → (
-                                PrintItems
-                                  Expression
-                                    SimpleExpression
-                                      SignOpt
-                                      Term
-                                        Factor
-                                          String → رمز النقطة المميز = 
-                                        MultiplicationTail
-                                      AdditionTail
-                                    RelationTail
-                                  PrintItemsTail
-                                    Comma → ,
-                                    Expression
-                                      SimpleExpression
-                                        SignOpt
-                                        Term
-                                          Factor
-                                            Access
-                                              Identifier → نقطة_أ
-                                              AccessTail
-                                                Dot → .
-                                                Identifier → رمز
-                                                AccessTail
-                                          MultiplicationTail
-                                        AdditionTail
-                                      RelationTail
-                                    PrintItemsTail
-                                RightParen → )
-                                Semicolon → ;
-                            StatementList
-                              Statement
-                                PrintStatement
-                                  Print → اطبع
-                                  LeftParen → (
-                                  PrintItems
-                                    Expression
-                                      SimpleExpression
-                                        SignOpt
-                                        Term
-                                          Factor
-                                            String → === بيانات النقطة [ب] ===
-                                          MultiplicationTail
-                                        AdditionTail
-                                      RelationTail
-                                    PrintItemsTail
-                                  RightParen → )
-                                  Semicolon → ;
-                              StatementList
-                                Statement
-                                  PrintStatement
-                                    Print → اطبع
-                                    LeftParen → (
-                                    PrintItems
-                                      Expression
-                                        SimpleExpression
-                                          SignOpt
-                                          Term
-                                            Factor
-                                              String → الإحداثي السيني (س) = 
-                                            MultiplicationTail
-                                          AdditionTail
-                                        RelationTail
-                                      PrintItemsTail
-                                        Comma → ,
-                                        Expression
-                                          SimpleExpression
-                                            SignOpt
-                                            Term
-                                              Factor
-                                                Access
-                                                  Identifier → نقطة_ب
-                                                  AccessTail
-                                                    Dot → .
-                                                    Identifier → س
-                                                    AccessTail
-                                              MultiplicationTail
-                                            AdditionTail
-                                          RelationTail
-                                        PrintItemsTail
-                                    RightParen → )
-                                    Semicolon → ;
-                                StatementList
-                                  Statement
-                                    PrintStatement
-                                      Print → اطبع
-                                      LeftParen → (
-                                      PrintItems
-                                        Expression
-                                          SimpleExpression
-                                            SignOpt
-                                            Term
-                                              Factor
-                                                String → الإحداثي الصادي (ص) = 
-                                              MultiplicationTail
-                                            AdditionTail
-                                          RelationTail
-                                        PrintItemsTail
-                                          Comma → ,
-                                          Expression
-                                            SimpleExpression
-                                              SignOpt
-                                              Term
-                                                Factor
-                                                  Access
-                                                    Identifier → نقطة_ب
-                                                    AccessTail
-                                                      Dot → .
-                                                      Identifier → ص
-                                                      AccessTail
-                                                MultiplicationTail
-                                              AdditionTail
-                                            RelationTail
-                                          PrintItemsTail
-                                      RightParen → )
-                                      Semicolon → ;
-                                  StatementList
-                                    Statement
-                                      PrintStatement
-                                        Print → اطبع
-                                        LeftParen → (
-                                        PrintItems
-                                          Expression
-                                            SimpleExpression
-                                              SignOpt
-                                              Term
-                                                Factor
-                                                  String → رمز النقطة المميز = 
-                                                MultiplicationTail
-                                              AdditionTail
-                                            RelationTail
-                                          PrintItemsTail
-                                            Comma → ,
-                                            Expression
-                                              SimpleExpression
-                                                SignOpt
-                                                Term
-                                                  Factor
-                                                    Access
-                                                      Identifier → نقطة_ب
-                                                      AccessTail
-                                                        Dot → .
-                                                        Identifier → رمز
-                                                        AccessTail
-                                                  MultiplicationTail
-                                                AdditionTail
-                                              RelationTail
-                                            PrintItemsTail
-                                        RightParen → )
-                                        Semicolon → ;
-                                    StatementList
-                                      Statement
-                                        PrintStatement
-                                          Print → اطبع
-                                          LeftParen → (
-                                          PrintItems
-                                            Expression
-                                              SimpleExpression
-                                                SignOpt
-                                                Term
-                                                  Factor
-                                                    String → === إجمالي الإحداثيات ===
-                                                  MultiplicationTail
-                                                AdditionTail
-                                              RelationTail
-                                            PrintItemsTail
-                                          RightParen → )
-                                          Semicolon → ;
-                                      StatementList
-                                        Statement
-                                          PrintStatement
-                                            Print → اطبع
-                                            LeftParen → (
-                                            PrintItems
-                                              Expression
-                                                SimpleExpression
-                                                  SignOpt
-                                                  Term
-                                                    Factor
-                                                      String → المجموع الكلي = 
-                                                    MultiplicationTail
-                                                  AdditionTail
-                                                RelationTail
-                                              PrintItemsTail
-                                                Comma → ,
-                                                Expression
-                                                  SimpleExpression
-                                                    SignOpt
-                                                    Term
-                                                      Factor
-                                                        Access
-                                                          Identifier → مجموع_الإحداثيات
-                                                          AccessTail
-                                                      MultiplicationTail
-                                                    AdditionTail
-                                                  RelationTail
-                                                PrintItemsTail
-                                            RightParen → )
-                                            Semicolon → ;
-                                        StatementList
       RightBrace → }
     Dot → .
   Eof → 

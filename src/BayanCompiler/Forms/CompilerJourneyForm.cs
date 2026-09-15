@@ -1457,33 +1457,46 @@ public sealed class CompilerJourneyForm : Form
 
         EnsureBottomPanelVisible();
         bottomTabs.SelectedIndex = 0;
+        terminalControl.ClearAndReset();
         terminalControl.SetWaiting();
         SetBusy(true, "يجري تشغيل output.exe...");
+
+        EventHandler<string> onInput = async (sender, input) =>
+        {
+            await executableRuntimeClient.WriteInputAsync(input);
+        };
+        terminalControl.InputSubmitted += onInput;
 
         var stopwatch = Stopwatch.StartNew();
         try
         {
-            string input = terminalControl.GetProvidedInput();
-            WindowsExecutableRun run = await executableRuntimeClient.ExecuteAsync(lastExecutablePath, input);
+            WindowsExecutableRun run = await executableRuntimeClient.ExecuteInteractiveAsync(
+                lastExecutablePath,
+                output => Invoke(() => terminalControl.AppendText(output)),
+                error => Invoke(() => terminalControl.AppendError(error))
+            );
             stopwatch.Stop();
 
-            terminalControl.SetResult(run.StandardOutput, run.StandardError, run.ExitCode, stopwatch.Elapsed);
+            terminalControl.SetCompleted(run.ExitCode, stopwatch.Elapsed);
             statusMessageLabel.Text = run.ExitCode == 0 ? "اكتمل تشغيل البرنامج بنجاح (كود 0)." : $"انتهى البرنامج برمز خروج ({run.ExitCode}).";
         }
         catch (TimeoutException)
         {
             stopwatch.Stop();
-            terminalControl.SetResult("", "[تجاوز وقت التنفيذ] استغرق البرنامج وقتاً أطول من المسموح.", -1, stopwatch.Elapsed);
+            terminalControl.AppendError("\n[تجاوز وقت التنفيذ] استغرق البرنامج وقتاً أطول من المسموح.");
+            terminalControl.SetCompleted(-1, stopwatch.Elapsed);
             statusMessageLabel.Text = "تجاوز البرنامج الحد الزمني المسموح.";
         }
         catch (Exception ex)
         {
             stopwatch.Stop();
-            terminalControl.SetResult("", "[خطأ تشغيل] " + ex.Message, -1, stopwatch.Elapsed);
+            terminalControl.AppendError("\n[خطأ تشغيل] " + ex.Message);
+            terminalControl.SetCompleted(-1, stopwatch.Elapsed);
             statusMessageLabel.Text = "تعذر تشغيل الملف التنفيذي.";
         }
         finally
         {
+            terminalControl.InputSubmitted -= onInput;
             SetBusy(false);
         }
     }

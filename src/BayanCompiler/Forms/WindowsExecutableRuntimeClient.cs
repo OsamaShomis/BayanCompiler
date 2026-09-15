@@ -8,10 +8,16 @@ namespace BayanCompiler.Forms;
 /// </summary>
 internal sealed class WindowsExecutableRuntimeClient
 {
+    private Process? activeProcess;
+
     /// <summary>
-    /// Starts one generated executable with redirected output and a finite timeout.
+    /// Starts one generated executable with redirected output and allows interactive standard input.
     /// </summary>
-    public async Task<WindowsExecutableRun> ExecuteAsync(string executablePath, string standardInput = "", CancellationToken cancellationToken = default)
+    public async Task<WindowsExecutableRun> ExecuteInteractiveAsync(
+        string executablePath,
+        Action<string> onOutput,
+        Action<string> onError,
+        CancellationToken cancellationToken = default)
     {
         if (!OperatingSystem.IsWindows())
         {
@@ -36,34 +42,68 @@ internal sealed class WindowsExecutableRuntimeClient
             StandardErrorEncoding = Encoding.UTF8
         };
 
-        using Process process = Process.Start(startInfo)
+        activeProcess = Process.Start(startInfo)
             ?? throw new InvalidOperationException("تعذر بدء program.exe.");
-            
-        if (!string.IsNullOrEmpty(standardInput))
-        {
-            await process.StandardInput.WriteAsync(standardInput);
-        }
-        process.StandardInput.Close();
 
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        timeout.CancelAfter(TimeSpan.FromSeconds(20));
-        Task<string> stdoutTask = process.StandardOutput.ReadToEndAsync();
-        Task<string> stderrTask = process.StandardError.ReadToEndAsync();
+        timeout.CancelAfter(TimeSpan.FromMinutes(5));
+
+        var stdoutTask = ReadStreamAsync(activeProcess.StandardOutput, onOutput, timeout.Token);
+        var stderrTask = ReadStreamAsync(activeProcess.StandardError, onError, timeout.Token);
+
+        int exitCode = -1;
         try
         {
-            await process.WaitForExitAsync(timeout.Token);
+            await activeProcess.WaitForExitAsync(timeout.Token);
+            await Task.WhenAll(stdoutTask, stderrTask);
+            exitCode = activeProcess.ExitCode;
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
-            if (!process.HasExited)
+            if (!activeProcess.HasExited)
             {
-                process.Kill(true);
+                activeProcess.Kill(true);
             }
 
-            throw new TimeoutException("تجاوز program.exe مهلة 20 ثانية.");
+            throw new TimeoutException("تجاوز program.exe مهلة 5 دقائق.");
+        }
+        finally
+        {
+            if (activeProcess != null)
+            {
+                activeProcess.Dispose();
+                activeProcess = null;
+            }
         }
 
-        return new WindowsExecutableRun(process.ExitCode, await stdoutTask, await stderrTask);
+        return new WindowsExecutableRun(exitCode, "", "");
+    }
+
+    private async Task ReadStreamAsync(StreamReader reader, Action<string> onData, CancellationToken token)
+    {
+        char[] buffer = new char[256];
+        try
+        {
+            while (!token.IsCancellationRequested)
+            {
+                int read = await reader.ReadAsync(buffer, 0, buffer.Length);
+                if (read == 0) break;
+                onData(new string(buffer, 0, read));
+            }
+        }
+        catch (Exception)
+        {
+            // Ignore stream read errors on close
+        }
+    }
+
+    public async Task WriteInputAsync(string input)
+    {
+        if (activeProcess != null && !activeProcess.HasExited)
+        {
+            await activeProcess.StandardInput.WriteLineAsync(input);
+            await activeProcess.StandardInput.FlushAsync();
+        }
     }
 }
 
