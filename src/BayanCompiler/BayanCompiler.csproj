@@ -3,6 +3,7 @@
     <OutputType>WinExe</OutputType>
     <AssemblyName>Bayan.Editor.WinForms</AssemblyName>
     <TargetFramework>net6.0-windows</TargetFramework>
+    <RollForward>Major</RollForward>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -11,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="../Bayan.Compiler.Core/Bayan.Compiler.Core.csproj" />
-    <ProjectReference Include="../Bayan.Compiler.Cli/Bayan.Compiler.Cli.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <Target Name="CopyCompilerCliArtifacts" AfterTargets="Build">

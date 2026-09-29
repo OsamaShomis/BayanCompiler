@@ -23,6 +23,7 @@ build/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 *.visualstate
+*.pdb
 
 # Publish output & temporary compiler outputs
 publish/

@@ -1,0 +1,72 @@
+Start
+  ProgramUnit
+    Program → برنامج
+    Identifier → اختبار_صح
+    Semicolon → ;
+    DefinitionList
+      Definition
+        VariableDeclaration
+          Variable → متغير
+          NameList
+            Identifier → عدد
+            NameListTail
+          Colon → :
+          DataType
+            TypeInt → صحيح
+          Semicolon → ;
+      DefinitionList
+    Block
+      LeftBrace → {
+      StatementList
+        Statement
+          WhileStatement
+            While → طالما
+            LeftParen → (
+            Expression
+              SimpleExpression
+                SignOpt
+                Term
+                  Factor
+                    True → صح
+                  MultiplicationTail
+                AdditionTail
+              RelationTail
+            RightParen → )
+            Continue → استمر
+            Statement
+              Block
+                LeftBrace → {
+                StatementList
+                  Statement
+                    PrintStatement
+                      Print → اطبع
+                      LeftParen → (
+                      PrintItems
+                        Expression
+                          SimpleExpression
+                            SignOpt
+                            Term
+                              Factor
+                                String → رسالة
+                              MultiplicationTail
+                            AdditionTail
+                          RelationTail
+                        PrintItemsTail
+                      RightParen → )
+                      Semicolon → ;
+                  StatementList
+                    Statement
+                      ReadStatement
+                        Read → اقرأ
+                        LeftParen → (
+                        Access
+                          Identifier → عدد
+                          AccessTail
+                        RightParen → )
+                        Semicolon → ;
+                    StatementList
+                RightBrace → }
+        StatementList
+      RightBrace → }
+    Dot → .
+  Eof → 

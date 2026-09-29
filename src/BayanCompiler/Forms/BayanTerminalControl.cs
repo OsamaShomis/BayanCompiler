@@ -301,16 +301,33 @@ public sealed class BayanTerminalControl : UserControl
     {
         if (string.IsNullOrEmpty(text)) return string.Empty;
 
-        string trimmed = text.TrimEnd('\r', '\n');
-        string eol = text.EndsWith(Environment.NewLine) ? Environment.NewLine : (text.EndsWith("\n") ? "\n" : "");
-
-        if (string.IsNullOrEmpty(trimmed))
+        // If this is a partial stream chunk without any newline, do not inject boundary RLM in the middle of text
+        if (!text.Contains('\n') && !text.Contains('\r'))
         {
-            return eol;
+            return text;
         }
 
-        // Anchor with RLM (\u200F) at both ends of the line content
-        return "\u200F" + trimmed + "\u200F" + eol;
+        string[] lines = text.Replace("\r\n", "\n").Split('\n');
+        var sb = new StringBuilder();
+        for (int i = 0; i < lines.Length; i++)
+        {
+            string line = lines[i];
+            if (!string.IsNullOrWhiteSpace(line))
+            {
+                sb.Append("\u200F").Append(line).Append("\u200F");
+            }
+            else
+            {
+                sb.Append(line);
+            }
+
+            if (i < lines.Length - 1)
+            {
+                sb.AppendLine();
+            }
+        }
+
+        return sb.ToString();
     }
 
     private void SubmitInput()

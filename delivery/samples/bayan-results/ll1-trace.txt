@@ -3,547 +3,125 @@
   1 | Start | "برنامج" (Program) | M[Start, Program] = ProgramUnit Eof
   2 | ProgramUnit Eof | "برنامج" (Program) | M[ProgramUnit, Program] = Program Identifier Semicolon DefinitionList Block Dot
   3 | Program Identifier Semicolon DefinitionList Block Dot Eof | "برنامج" (Program) | Match terminal Program
-  4 | Identifier Semicolon DefinitionList Block Dot Eof | "السجلات_وهياكل_البيانات" (Identifier) | Match terminal Identifier
+  4 | Identifier Semicolon DefinitionList Block Dot Eof | "اختبار_الخطأ_الدلالي" (Identifier) | Match terminal Identifier
   5 | Semicolon DefinitionList Block Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-  6 | DefinitionList Block Dot Eof | "نوع" (TypeDeclaration) | M[DefinitionList, TypeDeclaration] = Definition DefinitionList
-  7 | Definition DefinitionList Block Dot Eof | "نوع" (TypeDeclaration) | M[Definition, TypeDeclaration] = TypeDeclaration
-  8 | TypeDeclaration DefinitionList Block Dot Eof | "نوع" (TypeDeclaration) | M[TypeDeclaration, TypeDeclaration] = TypeDeclaration Identifier Assign CompositeType Semicolon
-  9 | TypeDeclaration Identifier Assign CompositeType Semicolon DefinitionList Block Dot Eof | "نوع" (TypeDeclaration) | Match terminal TypeDeclaration
- 10 | Identifier Assign CompositeType Semicolon DefinitionList Block Dot Eof | "نقطة_هندسية" (Identifier) | Match terminal Identifier
- 11 | Assign CompositeType Semicolon DefinitionList Block Dot Eof | "=" (Assign) | Match terminal Assign
- 12 | CompositeType Semicolon DefinitionList Block Dot Eof | "سجل" (Record) | M[CompositeType, Record] = RecordType
- 13 | RecordType Semicolon DefinitionList Block Dot Eof | "سجل" (Record) | M[RecordType, Record] = Record LeftBrace FieldList RightBrace
- 14 | Record LeftBrace FieldList RightBrace Semicolon DefinitionList Block Dot Eof | "سجل" (Record) | Match terminal Record
- 15 | LeftBrace FieldList RightBrace Semicolon DefinitionList Block Dot Eof | "{" (LeftBrace) | Match terminal LeftBrace
- 16 | FieldList RightBrace Semicolon DefinitionList Block Dot Eof | "س" (Identifier) | M[FieldList, Identifier] = FieldDeclaration FieldListTail
- 17 | FieldDeclaration FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | "س" (Identifier) | M[FieldDeclaration, Identifier] = Identifier Colon DataType
- 18 | Identifier Colon DataType FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | "س" (Identifier) | Match terminal Identifier
- 19 | Colon DataType FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | ":" (Colon) | Match terminal Colon
- 20 | DataType FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | "صحيح" (TypeInt) | M[DataType, TypeInt] = TypeInt
- 21 | TypeInt FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | "صحيح" (TypeInt) | Match terminal TypeInt
- 22 | FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | ";" (Semicolon) | M[FieldListTail, Semicolon] = Semicolon FieldList
- 23 | Semicolon FieldList RightBrace Semicolon DefinitionList Block Dot Eof | ";" (Semicolon) | Match terminal Semicolon
- 24 | FieldList RightBrace Semicolon DefinitionList Block Dot Eof | "ص" (Identifier) | M[FieldList, Identifier] = FieldDeclaration FieldListTail
- 25 | FieldDeclaration FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | "ص" (Identifier) | M[FieldDeclaration, Identifier] = Identifier Colon DataType
- 26 | Identifier Colon DataType FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | "ص" (Identifier) | Match terminal Identifier
- 27 | Colon DataType FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | ":" (Colon) | Match terminal Colon
- 28 | DataType FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | "صحيح" (TypeInt) | M[DataType, TypeInt] = TypeInt
- 29 | TypeInt FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | "صحيح" (TypeInt) | Match terminal TypeInt
- 30 | FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | ";" (Semicolon) | M[FieldListTail, Semicolon] = Semicolon FieldList
- 31 | Semicolon FieldList RightBrace Semicolon DefinitionList Block Dot Eof | ";" (Semicolon) | Match terminal Semicolon
- 32 | FieldList RightBrace Semicolon DefinitionList Block Dot Eof | "رمز" (Identifier) | M[FieldList, Identifier] = FieldDeclaration FieldListTail
- 33 | FieldDeclaration FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | "رمز" (Identifier) | M[FieldDeclaration, Identifier] = Identifier Colon DataType
- 34 | Identifier Colon DataType FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | "رمز" (Identifier) | Match terminal Identifier
- 35 | Colon DataType FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | ":" (Colon) | Match terminal Colon
- 36 | DataType FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | "حرفي" (TypeChar) | M[DataType, TypeChar] = TypeChar
- 37 | TypeChar FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | "حرفي" (TypeChar) | Match terminal TypeChar
- 38 | FieldListTail RightBrace Semicolon DefinitionList Block Dot Eof | "}" (RightBrace) | M[FieldListTail, RightBrace] = ε
- 39 | RightBrace Semicolon DefinitionList Block Dot Eof | "}" (RightBrace) | Match terminal RightBrace
- 40 | Semicolon DefinitionList Block Dot Eof | ";" (Semicolon) | Match terminal Semicolon
- 41 | DefinitionList Block Dot Eof | "متغير" (Variable) | M[DefinitionList, Variable] = Definition DefinitionList
- 42 | Definition DefinitionList Block Dot Eof | "متغير" (Variable) | M[Definition, Variable] = VariableDeclaration
- 43 | VariableDeclaration DefinitionList Block Dot Eof | "متغير" (Variable) | M[VariableDeclaration, Variable] = Variable NameList Colon DataType Semicolon
- 44 | Variable NameList Colon DataType Semicolon DefinitionList Block Dot Eof | "متغير" (Variable) | Match terminal Variable
- 45 | NameList Colon DataType Semicolon DefinitionList Block Dot Eof | "نقطة_أ" (Identifier) | M[NameList, Identifier] = Identifier NameListTail
- 46 | Identifier NameListTail Colon DataType Semicolon DefinitionList Block Dot Eof | "نقطة_أ" (Identifier) | Match terminal Identifier
- 47 | NameListTail Colon DataType Semicolon DefinitionList Block Dot Eof | ":" (Colon) | M[NameListTail, Colon] = ε
- 48 | Colon DataType Semicolon DefinitionList Block Dot Eof | ":" (Colon) | Match terminal Colon
- 49 | DataType Semicolon DefinitionList Block Dot Eof | "نقطة_هندسية" (Identifier) | M[DataType, Identifier] = Identifier
- 50 | Identifier Semicolon DefinitionList Block Dot Eof | "نقطة_هندسية" (Identifier) | Match terminal Identifier
- 51 | Semicolon DefinitionList Block Dot Eof | ";" (Semicolon) | Match terminal Semicolon
- 52 | DefinitionList Block Dot Eof | "متغير" (Variable) | M[DefinitionList, Variable] = Definition DefinitionList
- 53 | Definition DefinitionList Block Dot Eof | "متغير" (Variable) | M[Definition, Variable] = VariableDeclaration
- 54 | VariableDeclaration DefinitionList Block Dot Eof | "متغير" (Variable) | M[VariableDeclaration, Variable] = Variable NameList Colon DataType Semicolon
- 55 | Variable NameList Colon DataType Semicolon DefinitionList Block Dot Eof | "متغير" (Variable) | Match terminal Variable
- 56 | NameList Colon DataType Semicolon DefinitionList Block Dot Eof | "نقطة_ب" (Identifier) | M[NameList, Identifier] = Identifier NameListTail
- 57 | Identifier NameListTail Colon DataType Semicolon DefinitionList Block Dot Eof | "نقطة_ب" (Identifier) | Match terminal Identifier
- 58 | NameListTail Colon DataType Semicolon DefinitionList Block Dot Eof | ":" (Colon) | M[NameListTail, Colon] = ε
- 59 | Colon DataType Semicolon DefinitionList Block Dot Eof | ":" (Colon) | Match terminal Colon
- 60 | DataType Semicolon DefinitionList Block Dot Eof | "نقطة_هندسية" (Identifier) | M[DataType, Identifier] = Identifier
- 61 | Identifier Semicolon DefinitionList Block Dot Eof | "نقطة_هندسية" (Identifier) | Match terminal Identifier
- 62 | Semicolon DefinitionList Block Dot Eof | ";" (Semicolon) | Match terminal Semicolon
- 63 | DefinitionList Block Dot Eof | "متغير" (Variable) | M[DefinitionList, Variable] = Definition DefinitionList
- 64 | Definition DefinitionList Block Dot Eof | "متغير" (Variable) | M[Definition, Variable] = VariableDeclaration
- 65 | VariableDeclaration DefinitionList Block Dot Eof | "متغير" (Variable) | M[VariableDeclaration, Variable] = Variable NameList Colon DataType Semicolon
- 66 | Variable NameList Colon DataType Semicolon DefinitionList Block Dot Eof | "متغير" (Variable) | Match terminal Variable
- 67 | NameList Colon DataType Semicolon DefinitionList Block Dot Eof | "مجموع_الإحداثيات" (Identifier) | M[NameList, Identifier] = Identifier NameListTail
- 68 | Identifier NameListTail Colon DataType Semicolon DefinitionList Block Dot Eof | "مجموع_الإحداثيات" (Identifier) | Match terminal Identifier
- 69 | NameListTail Colon DataType Semicolon DefinitionList Block Dot Eof | ":" (Colon) | M[NameListTail, Colon] = ε
- 70 | Colon DataType Semicolon DefinitionList Block Dot Eof | ":" (Colon) | Match terminal Colon
- 71 | DataType Semicolon DefinitionList Block Dot Eof | "صحيح" (TypeInt) | M[DataType, TypeInt] = TypeInt
- 72 | TypeInt Semicolon DefinitionList Block Dot Eof | "صحيح" (TypeInt) | Match terminal TypeInt
- 73 | Semicolon DefinitionList Block Dot Eof | ";" (Semicolon) | Match terminal Semicolon
- 74 | DefinitionList Block Dot Eof | "{" (LeftBrace) | M[DefinitionList, LeftBrace] = ε
- 75 | Block Dot Eof | "{" (LeftBrace) | M[Block, LeftBrace] = LeftBrace StatementList RightBrace
- 76 | LeftBrace StatementList RightBrace Dot Eof | "{" (LeftBrace) | Match terminal LeftBrace
- 77 | StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[StatementList, Identifier] = Statement StatementList
- 78 | Statement StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Statement, Identifier] = IdentifierStatement
- 79 | IdentifierStatement StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[IdentifierStatement, Identifier] = Identifier IdentifierStatementTail
- 80 | Identifier IdentifierStatementTail StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | Match terminal Identifier
- 81 | IdentifierStatementTail StatementList RightBrace Dot Eof | "." (Dot) | M[IdentifierStatementTail, Dot] = AccessTail Assign Expression Semicolon
- 82 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
- 83 | Dot Identifier AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
- 84 | Identifier AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "س" (Identifier) | Match terminal Identifier
- 85 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | M[AccessTail, Assign] = ε
- 86 | Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | Match terminal Assign
- 87 | Expression Semicolon StatementList RightBrace Dot Eof | "10" (Integer) | M[Expression, Integer] = SimpleExpression RelationTail
- 88 | SimpleExpression RelationTail Semicolon StatementList RightBrace Dot Eof | "10" (Integer) | M[SimpleExpression, Integer] = SignOpt Term AdditionTail
- 89 | SignOpt Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "10" (Integer) | M[SignOpt, Integer] = ε
- 90 | Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "10" (Integer) | M[Term, Integer] = Factor MultiplicationTail
- 91 | Factor MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "10" (Integer) | M[Factor, Integer] = Integer
- 92 | Integer MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "10" (Integer) | Match terminal Integer
- 93 | MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[MultiplicationTail, Semicolon] = ε
- 94 | AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[AdditionTail, Semicolon] = ε
- 95 | RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[RelationTail, Semicolon] = ε
- 96 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
- 97 | StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[StatementList, Identifier] = Statement StatementList
- 98 | Statement StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Statement, Identifier] = IdentifierStatement
- 99 | IdentifierStatement StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[IdentifierStatement, Identifier] = Identifier IdentifierStatementTail
-100 | Identifier IdentifierStatementTail StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | Match terminal Identifier
-101 | IdentifierStatementTail StatementList RightBrace Dot Eof | "." (Dot) | M[IdentifierStatementTail, Dot] = AccessTail Assign Expression Semicolon
-102 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-103 | Dot Identifier AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-104 | Identifier AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "ص" (Identifier) | Match terminal Identifier
-105 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | M[AccessTail, Assign] = ε
-106 | Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | Match terminal Assign
-107 | Expression Semicolon StatementList RightBrace Dot Eof | "20" (Integer) | M[Expression, Integer] = SimpleExpression RelationTail
-108 | SimpleExpression RelationTail Semicolon StatementList RightBrace Dot Eof | "20" (Integer) | M[SimpleExpression, Integer] = SignOpt Term AdditionTail
-109 | SignOpt Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "20" (Integer) | M[SignOpt, Integer] = ε
-110 | Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "20" (Integer) | M[Term, Integer] = Factor MultiplicationTail
-111 | Factor MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "20" (Integer) | M[Factor, Integer] = Integer
-112 | Integer MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "20" (Integer) | Match terminal Integer
-113 | MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[MultiplicationTail, Semicolon] = ε
-114 | AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[AdditionTail, Semicolon] = ε
-115 | RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[RelationTail, Semicolon] = ε
-116 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-117 | StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[StatementList, Identifier] = Statement StatementList
-118 | Statement StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Statement, Identifier] = IdentifierStatement
-119 | IdentifierStatement StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[IdentifierStatement, Identifier] = Identifier IdentifierStatementTail
-120 | Identifier IdentifierStatementTail StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | Match terminal Identifier
-121 | IdentifierStatementTail StatementList RightBrace Dot Eof | "." (Dot) | M[IdentifierStatementTail, Dot] = AccessTail Assign Expression Semicolon
-122 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-123 | Dot Identifier AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-124 | Identifier AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "رمز" (Identifier) | Match terminal Identifier
-125 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | M[AccessTail, Assign] = ε
-126 | Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | Match terminal Assign
-127 | Expression Semicolon StatementList RightBrace Dot Eof | "A" (Character) | M[Expression, Character] = SimpleExpression RelationTail
-128 | SimpleExpression RelationTail Semicolon StatementList RightBrace Dot Eof | "A" (Character) | M[SimpleExpression, Character] = SignOpt Term AdditionTail
-129 | SignOpt Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "A" (Character) | M[SignOpt, Character] = ε
-130 | Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "A" (Character) | M[Term, Character] = Factor MultiplicationTail
-131 | Factor MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "A" (Character) | M[Factor, Character] = Character
-132 | Character MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "A" (Character) | Match terminal Character
-133 | MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[MultiplicationTail, Semicolon] = ε
-134 | AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[AdditionTail, Semicolon] = ε
-135 | RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[RelationTail, Semicolon] = ε
-136 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-137 | StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[StatementList, Identifier] = Statement StatementList
-138 | Statement StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Statement, Identifier] = IdentifierStatement
-139 | IdentifierStatement StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[IdentifierStatement, Identifier] = Identifier IdentifierStatementTail
-140 | Identifier IdentifierStatementTail StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | Match terminal Identifier
-141 | IdentifierStatementTail StatementList RightBrace Dot Eof | "." (Dot) | M[IdentifierStatementTail, Dot] = AccessTail Assign Expression Semicolon
-142 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-143 | Dot Identifier AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-144 | Identifier AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "س" (Identifier) | Match terminal Identifier
-145 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | M[AccessTail, Assign] = ε
-146 | Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | Match terminal Assign
-147 | Expression Semicolon StatementList RightBrace Dot Eof | "30" (Integer) | M[Expression, Integer] = SimpleExpression RelationTail
-148 | SimpleExpression RelationTail Semicolon StatementList RightBrace Dot Eof | "30" (Integer) | M[SimpleExpression, Integer] = SignOpt Term AdditionTail
-149 | SignOpt Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "30" (Integer) | M[SignOpt, Integer] = ε
-150 | Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "30" (Integer) | M[Term, Integer] = Factor MultiplicationTail
-151 | Factor MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "30" (Integer) | M[Factor, Integer] = Integer
-152 | Integer MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "30" (Integer) | Match terminal Integer
-153 | MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[MultiplicationTail, Semicolon] = ε
-154 | AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[AdditionTail, Semicolon] = ε
-155 | RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[RelationTail, Semicolon] = ε
-156 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-157 | StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[StatementList, Identifier] = Statement StatementList
-158 | Statement StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Statement, Identifier] = IdentifierStatement
-159 | IdentifierStatement StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[IdentifierStatement, Identifier] = Identifier IdentifierStatementTail
-160 | Identifier IdentifierStatementTail StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | Match terminal Identifier
-161 | IdentifierStatementTail StatementList RightBrace Dot Eof | "." (Dot) | M[IdentifierStatementTail, Dot] = AccessTail Assign Expression Semicolon
-162 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-163 | Dot Identifier AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-164 | Identifier AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "ص" (Identifier) | Match terminal Identifier
-165 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | M[AccessTail, Assign] = ε
-166 | Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | Match terminal Assign
-167 | Expression Semicolon StatementList RightBrace Dot Eof | "40" (Integer) | M[Expression, Integer] = SimpleExpression RelationTail
-168 | SimpleExpression RelationTail Semicolon StatementList RightBrace Dot Eof | "40" (Integer) | M[SimpleExpression, Integer] = SignOpt Term AdditionTail
-169 | SignOpt Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "40" (Integer) | M[SignOpt, Integer] = ε
-170 | Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "40" (Integer) | M[Term, Integer] = Factor MultiplicationTail
-171 | Factor MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "40" (Integer) | M[Factor, Integer] = Integer
-172 | Integer MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "40" (Integer) | Match terminal Integer
-173 | MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[MultiplicationTail, Semicolon] = ε
-174 | AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[AdditionTail, Semicolon] = ε
-175 | RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[RelationTail, Semicolon] = ε
-176 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-177 | StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[StatementList, Identifier] = Statement StatementList
-178 | Statement StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Statement, Identifier] = IdentifierStatement
-179 | IdentifierStatement StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[IdentifierStatement, Identifier] = Identifier IdentifierStatementTail
-180 | Identifier IdentifierStatementTail StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | Match terminal Identifier
-181 | IdentifierStatementTail StatementList RightBrace Dot Eof | "." (Dot) | M[IdentifierStatementTail, Dot] = AccessTail Assign Expression Semicolon
-182 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-183 | Dot Identifier AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-184 | Identifier AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "رمز" (Identifier) | Match terminal Identifier
-185 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | M[AccessTail, Assign] = ε
-186 | Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | Match terminal Assign
-187 | Expression Semicolon StatementList RightBrace Dot Eof | "B" (Character) | M[Expression, Character] = SimpleExpression RelationTail
-188 | SimpleExpression RelationTail Semicolon StatementList RightBrace Dot Eof | "B" (Character) | M[SimpleExpression, Character] = SignOpt Term AdditionTail
-189 | SignOpt Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "B" (Character) | M[SignOpt, Character] = ε
-190 | Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "B" (Character) | M[Term, Character] = Factor MultiplicationTail
-191 | Factor MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "B" (Character) | M[Factor, Character] = Character
-192 | Character MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "B" (Character) | Match terminal Character
-193 | MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[MultiplicationTail, Semicolon] = ε
-194 | AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[AdditionTail, Semicolon] = ε
-195 | RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[RelationTail, Semicolon] = ε
-196 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-197 | StatementList RightBrace Dot Eof | "مجموع_الإحداثيات" (Identifier) | M[StatementList, Identifier] = Statement StatementList
-198 | Statement StatementList RightBrace Dot Eof | "مجموع_الإحداثيات" (Identifier) | M[Statement, Identifier] = IdentifierStatement
-199 | IdentifierStatement StatementList RightBrace Dot Eof | "مجموع_الإحداثيات" (Identifier) | M[IdentifierStatement, Identifier] = Identifier IdentifierStatementTail
-200 | Identifier IdentifierStatementTail StatementList RightBrace Dot Eof | "مجموع_الإحداثيات" (Identifier) | Match terminal Identifier
-201 | IdentifierStatementTail StatementList RightBrace Dot Eof | "=" (Assign) | M[IdentifierStatementTail, Assign] = AccessTail Assign Expression Semicolon
-202 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | M[AccessTail, Assign] = ε
-203 | Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | Match terminal Assign
-204 | Expression Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Expression, Identifier] = SimpleExpression RelationTail
-205 | SimpleExpression RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[SimpleExpression, Identifier] = SignOpt Term AdditionTail
-206 | SignOpt Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[SignOpt, Identifier] = ε
-207 | Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Term, Identifier] = Factor MultiplicationTail
-208 | Factor MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Factor, Identifier] = Access
-209 | Access MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Access, Identifier] = Identifier AccessTail
-210 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | Match terminal Identifier
-211 | AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-212 | Dot Identifier AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-213 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "س" (Identifier) | Match terminal Identifier
-214 | AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[AccessTail, Plus] = ε
-215 | MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[MultiplicationTail, Plus] = ε
-216 | AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[AdditionTail, Plus] = AdditionOperator Term AdditionTail
-217 | AdditionOperator Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[AdditionOperator, Plus] = Plus
-218 | Plus Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | Match terminal Plus
-219 | Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Term, Identifier] = Factor MultiplicationTail
-220 | Factor MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Factor, Identifier] = Access
-221 | Access MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Access, Identifier] = Identifier AccessTail
-222 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | Match terminal Identifier
-223 | AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-224 | Dot Identifier AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-225 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "ص" (Identifier) | Match terminal Identifier
-226 | AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[AccessTail, Plus] = ε
-227 | MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[MultiplicationTail, Plus] = ε
-228 | AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[AdditionTail, Plus] = AdditionOperator Term AdditionTail
-229 | AdditionOperator Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[AdditionOperator, Plus] = Plus
-230 | Plus Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | Match terminal Plus
-231 | Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Term, Identifier] = Factor MultiplicationTail
-232 | Factor MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Factor, Identifier] = Access
-233 | Access MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Access, Identifier] = Identifier AccessTail
-234 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | Match terminal Identifier
-235 | AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-236 | Dot Identifier AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-237 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "س" (Identifier) | Match terminal Identifier
-238 | AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[AccessTail, Plus] = ε
-239 | MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[MultiplicationTail, Plus] = ε
-240 | AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[AdditionTail, Plus] = AdditionOperator Term AdditionTail
-241 | AdditionOperator Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[AdditionOperator, Plus] = Plus
-242 | Plus Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | Match terminal Plus
-243 | Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Term, Identifier] = Factor MultiplicationTail
-244 | Factor MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Factor, Identifier] = Access
-245 | Access MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Access, Identifier] = Identifier AccessTail
-246 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | Match terminal Identifier
-247 | AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-248 | Dot Identifier AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-249 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "ص" (Identifier) | Match terminal Identifier
-250 | AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[AccessTail, Semicolon] = ε
-251 | MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[MultiplicationTail, Semicolon] = ε
-252 | AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[AdditionTail, Semicolon] = ε
-253 | RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[RelationTail, Semicolon] = ε
-254 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-255 | StatementList RightBrace Dot Eof | "اطبع" (Print) | M[StatementList, Print] = Statement StatementList
-256 | Statement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[Statement, Print] = PrintStatement
-257 | PrintStatement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[PrintStatement, Print] = Print LeftParen PrintItems RightParen Semicolon
-258 | Print LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "اطبع" (Print) | Match terminal Print
-259 | LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "(" (LeftParen) | Match terminal LeftParen
-260 | PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "=== بيانات النقطة [أ] ===" (String) | M[PrintItems, String] = Expression PrintItemsTail
-261 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== بيانات النقطة [أ] ===" (String) | M[Expression, String] = SimpleExpression RelationTail
-262 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== بيانات النقطة [أ] ===" (String) | M[SimpleExpression, String] = SignOpt Term AdditionTail
-263 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== بيانات النقطة [أ] ===" (String) | M[SignOpt, String] = ε
-264 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== بيانات النقطة [أ] ===" (String) | M[Term, String] = Factor MultiplicationTail
-265 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== بيانات النقطة [أ] ===" (String) | M[Factor, String] = String
-266 | String MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== بيانات النقطة [أ] ===" (String) | Match terminal String
-267 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[MultiplicationTail, RightParen] = ε
-268 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AdditionTail, RightParen] = ε
-269 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[RelationTail, RightParen] = ε
-270 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[PrintItemsTail, RightParen] = ε
-271 | RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | Match terminal RightParen
-272 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-273 | StatementList RightBrace Dot Eof | "اطبع" (Print) | M[StatementList, Print] = Statement StatementList
-274 | Statement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[Statement, Print] = PrintStatement
-275 | PrintStatement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[PrintStatement, Print] = Print LeftParen PrintItems RightParen Semicolon
-276 | Print LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "اطبع" (Print) | Match terminal Print
-277 | LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "(" (LeftParen) | Match terminal LeftParen
-278 | PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي السيني (س) = " (String) | M[PrintItems, String] = Expression PrintItemsTail
-279 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي السيني (س) = " (String) | M[Expression, String] = SimpleExpression RelationTail
-280 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي السيني (س) = " (String) | M[SimpleExpression, String] = SignOpt Term AdditionTail
-281 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي السيني (س) = " (String) | M[SignOpt, String] = ε
-282 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي السيني (س) = " (String) | M[Term, String] = Factor MultiplicationTail
-283 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي السيني (س) = " (String) | M[Factor, String] = String
-284 | String MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي السيني (س) = " (String) | Match terminal String
-285 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[MultiplicationTail, Comma] = ε
-286 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[AdditionTail, Comma] = ε
-287 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[RelationTail, Comma] = ε
-288 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[PrintItemsTail, Comma] = Comma Expression PrintItemsTail
-289 | Comma Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | Match terminal Comma
-290 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Expression, Identifier] = SimpleExpression RelationTail
-291 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[SimpleExpression, Identifier] = SignOpt Term AdditionTail
-292 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[SignOpt, Identifier] = ε
-293 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Term, Identifier] = Factor MultiplicationTail
-294 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Factor, Identifier] = Access
-295 | Access MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Access, Identifier] = Identifier AccessTail
-296 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | Match terminal Identifier
-297 | AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-298 | Dot Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-299 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "س" (Identifier) | Match terminal Identifier
-300 | AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AccessTail, RightParen] = ε
-301 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[MultiplicationTail, RightParen] = ε
-302 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AdditionTail, RightParen] = ε
-303 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[RelationTail, RightParen] = ε
-304 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[PrintItemsTail, RightParen] = ε
-305 | RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | Match terminal RightParen
-306 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-307 | StatementList RightBrace Dot Eof | "اطبع" (Print) | M[StatementList, Print] = Statement StatementList
-308 | Statement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[Statement, Print] = PrintStatement
-309 | PrintStatement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[PrintStatement, Print] = Print LeftParen PrintItems RightParen Semicolon
-310 | Print LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "اطبع" (Print) | Match terminal Print
-311 | LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "(" (LeftParen) | Match terminal LeftParen
-312 | PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي الصادي (ص) = " (String) | M[PrintItems, String] = Expression PrintItemsTail
-313 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي الصادي (ص) = " (String) | M[Expression, String] = SimpleExpression RelationTail
-314 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي الصادي (ص) = " (String) | M[SimpleExpression, String] = SignOpt Term AdditionTail
-315 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي الصادي (ص) = " (String) | M[SignOpt, String] = ε
-316 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي الصادي (ص) = " (String) | M[Term, String] = Factor MultiplicationTail
-317 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي الصادي (ص) = " (String) | M[Factor, String] = String
-318 | String MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي الصادي (ص) = " (String) | Match terminal String
-319 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[MultiplicationTail, Comma] = ε
-320 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[AdditionTail, Comma] = ε
-321 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[RelationTail, Comma] = ε
-322 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[PrintItemsTail, Comma] = Comma Expression PrintItemsTail
-323 | Comma Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | Match terminal Comma
-324 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Expression, Identifier] = SimpleExpression RelationTail
-325 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[SimpleExpression, Identifier] = SignOpt Term AdditionTail
-326 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[SignOpt, Identifier] = ε
-327 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Term, Identifier] = Factor MultiplicationTail
-328 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Factor, Identifier] = Access
-329 | Access MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Access, Identifier] = Identifier AccessTail
-330 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | Match terminal Identifier
-331 | AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-332 | Dot Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-333 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "ص" (Identifier) | Match terminal Identifier
-334 | AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AccessTail, RightParen] = ε
-335 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[MultiplicationTail, RightParen] = ε
-336 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AdditionTail, RightParen] = ε
-337 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[RelationTail, RightParen] = ε
-338 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[PrintItemsTail, RightParen] = ε
-339 | RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | Match terminal RightParen
-340 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-341 | StatementList RightBrace Dot Eof | "اطبع" (Print) | M[StatementList, Print] = Statement StatementList
-342 | Statement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[Statement, Print] = PrintStatement
-343 | PrintStatement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[PrintStatement, Print] = Print LeftParen PrintItems RightParen Semicolon
-344 | Print LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "اطبع" (Print) | Match terminal Print
-345 | LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "(" (LeftParen) | Match terminal LeftParen
-346 | PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "رمز النقطة المميز = " (String) | M[PrintItems, String] = Expression PrintItemsTail
-347 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "رمز النقطة المميز = " (String) | M[Expression, String] = SimpleExpression RelationTail
-348 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "رمز النقطة المميز = " (String) | M[SimpleExpression, String] = SignOpt Term AdditionTail
-349 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "رمز النقطة المميز = " (String) | M[SignOpt, String] = ε
-350 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "رمز النقطة المميز = " (String) | M[Term, String] = Factor MultiplicationTail
-351 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "رمز النقطة المميز = " (String) | M[Factor, String] = String
-352 | String MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "رمز النقطة المميز = " (String) | Match terminal String
-353 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[MultiplicationTail, Comma] = ε
-354 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[AdditionTail, Comma] = ε
-355 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[RelationTail, Comma] = ε
-356 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[PrintItemsTail, Comma] = Comma Expression PrintItemsTail
-357 | Comma Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | Match terminal Comma
-358 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Expression, Identifier] = SimpleExpression RelationTail
-359 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[SimpleExpression, Identifier] = SignOpt Term AdditionTail
-360 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[SignOpt, Identifier] = ε
-361 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Term, Identifier] = Factor MultiplicationTail
-362 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Factor, Identifier] = Access
-363 | Access MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | M[Access, Identifier] = Identifier AccessTail
-364 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_أ" (Identifier) | Match terminal Identifier
-365 | AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-366 | Dot Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-367 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "رمز" (Identifier) | Match terminal Identifier
-368 | AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AccessTail, RightParen] = ε
-369 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[MultiplicationTail, RightParen] = ε
-370 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AdditionTail, RightParen] = ε
-371 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[RelationTail, RightParen] = ε
-372 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[PrintItemsTail, RightParen] = ε
-373 | RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | Match terminal RightParen
-374 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-375 | StatementList RightBrace Dot Eof | "اطبع" (Print) | M[StatementList, Print] = Statement StatementList
-376 | Statement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[Statement, Print] = PrintStatement
-377 | PrintStatement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[PrintStatement, Print] = Print LeftParen PrintItems RightParen Semicolon
-378 | Print LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "اطبع" (Print) | Match terminal Print
-379 | LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "(" (LeftParen) | Match terminal LeftParen
-380 | PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "=== بيانات النقطة [ب] ===" (String) | M[PrintItems, String] = Expression PrintItemsTail
-381 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== بيانات النقطة [ب] ===" (String) | M[Expression, String] = SimpleExpression RelationTail
-382 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== بيانات النقطة [ب] ===" (String) | M[SimpleExpression, String] = SignOpt Term AdditionTail
-383 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== بيانات النقطة [ب] ===" (String) | M[SignOpt, String] = ε
-384 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== بيانات النقطة [ب] ===" (String) | M[Term, String] = Factor MultiplicationTail
-385 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== بيانات النقطة [ب] ===" (String) | M[Factor, String] = String
-386 | String MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== بيانات النقطة [ب] ===" (String) | Match terminal String
-387 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[MultiplicationTail, RightParen] = ε
-388 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AdditionTail, RightParen] = ε
-389 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[RelationTail, RightParen] = ε
-390 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[PrintItemsTail, RightParen] = ε
-391 | RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | Match terminal RightParen
-392 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-393 | StatementList RightBrace Dot Eof | "اطبع" (Print) | M[StatementList, Print] = Statement StatementList
-394 | Statement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[Statement, Print] = PrintStatement
-395 | PrintStatement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[PrintStatement, Print] = Print LeftParen PrintItems RightParen Semicolon
-396 | Print LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "اطبع" (Print) | Match terminal Print
-397 | LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "(" (LeftParen) | Match terminal LeftParen
-398 | PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي السيني (س) = " (String) | M[PrintItems, String] = Expression PrintItemsTail
-399 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي السيني (س) = " (String) | M[Expression, String] = SimpleExpression RelationTail
-400 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي السيني (س) = " (String) | M[SimpleExpression, String] = SignOpt Term AdditionTail
-401 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي السيني (س) = " (String) | M[SignOpt, String] = ε
-402 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي السيني (س) = " (String) | M[Term, String] = Factor MultiplicationTail
-403 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي السيني (س) = " (String) | M[Factor, String] = String
-404 | String MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي السيني (س) = " (String) | Match terminal String
-405 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[MultiplicationTail, Comma] = ε
-406 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[AdditionTail, Comma] = ε
-407 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[RelationTail, Comma] = ε
-408 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[PrintItemsTail, Comma] = Comma Expression PrintItemsTail
-409 | Comma Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | Match terminal Comma
-410 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Expression, Identifier] = SimpleExpression RelationTail
-411 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[SimpleExpression, Identifier] = SignOpt Term AdditionTail
-412 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[SignOpt, Identifier] = ε
-413 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Term, Identifier] = Factor MultiplicationTail
-414 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Factor, Identifier] = Access
-415 | Access MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Access, Identifier] = Identifier AccessTail
-416 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | Match terminal Identifier
-417 | AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-418 | Dot Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-419 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "س" (Identifier) | Match terminal Identifier
-420 | AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AccessTail, RightParen] = ε
-421 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[MultiplicationTail, RightParen] = ε
-422 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AdditionTail, RightParen] = ε
-423 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[RelationTail, RightParen] = ε
-424 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[PrintItemsTail, RightParen] = ε
-425 | RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | Match terminal RightParen
-426 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-427 | StatementList RightBrace Dot Eof | "اطبع" (Print) | M[StatementList, Print] = Statement StatementList
-428 | Statement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[Statement, Print] = PrintStatement
-429 | PrintStatement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[PrintStatement, Print] = Print LeftParen PrintItems RightParen Semicolon
-430 | Print LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "اطبع" (Print) | Match terminal Print
-431 | LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "(" (LeftParen) | Match terminal LeftParen
-432 | PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي الصادي (ص) = " (String) | M[PrintItems, String] = Expression PrintItemsTail
-433 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي الصادي (ص) = " (String) | M[Expression, String] = SimpleExpression RelationTail
-434 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي الصادي (ص) = " (String) | M[SimpleExpression, String] = SignOpt Term AdditionTail
-435 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي الصادي (ص) = " (String) | M[SignOpt, String] = ε
-436 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي الصادي (ص) = " (String) | M[Term, String] = Factor MultiplicationTail
-437 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي الصادي (ص) = " (String) | M[Factor, String] = String
-438 | String MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "الإحداثي الصادي (ص) = " (String) | Match terminal String
-439 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[MultiplicationTail, Comma] = ε
-440 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[AdditionTail, Comma] = ε
-441 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[RelationTail, Comma] = ε
-442 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[PrintItemsTail, Comma] = Comma Expression PrintItemsTail
-443 | Comma Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | Match terminal Comma
-444 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Expression, Identifier] = SimpleExpression RelationTail
-445 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[SimpleExpression, Identifier] = SignOpt Term AdditionTail
-446 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[SignOpt, Identifier] = ε
-447 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Term, Identifier] = Factor MultiplicationTail
-448 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Factor, Identifier] = Access
-449 | Access MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Access, Identifier] = Identifier AccessTail
-450 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | Match terminal Identifier
-451 | AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-452 | Dot Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-453 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "ص" (Identifier) | Match terminal Identifier
-454 | AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AccessTail, RightParen] = ε
-455 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[MultiplicationTail, RightParen] = ε
-456 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AdditionTail, RightParen] = ε
-457 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[RelationTail, RightParen] = ε
-458 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[PrintItemsTail, RightParen] = ε
-459 | RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | Match terminal RightParen
-460 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-461 | StatementList RightBrace Dot Eof | "اطبع" (Print) | M[StatementList, Print] = Statement StatementList
-462 | Statement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[Statement, Print] = PrintStatement
-463 | PrintStatement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[PrintStatement, Print] = Print LeftParen PrintItems RightParen Semicolon
-464 | Print LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "اطبع" (Print) | Match terminal Print
-465 | LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "(" (LeftParen) | Match terminal LeftParen
-466 | PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "رمز النقطة المميز = " (String) | M[PrintItems, String] = Expression PrintItemsTail
-467 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "رمز النقطة المميز = " (String) | M[Expression, String] = SimpleExpression RelationTail
-468 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "رمز النقطة المميز = " (String) | M[SimpleExpression, String] = SignOpt Term AdditionTail
-469 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "رمز النقطة المميز = " (String) | M[SignOpt, String] = ε
-470 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "رمز النقطة المميز = " (String) | M[Term, String] = Factor MultiplicationTail
-471 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "رمز النقطة المميز = " (String) | M[Factor, String] = String
-472 | String MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "رمز النقطة المميز = " (String) | Match terminal String
-473 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[MultiplicationTail, Comma] = ε
-474 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[AdditionTail, Comma] = ε
-475 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[RelationTail, Comma] = ε
-476 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[PrintItemsTail, Comma] = Comma Expression PrintItemsTail
-477 | Comma Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | Match terminal Comma
-478 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Expression, Identifier] = SimpleExpression RelationTail
-479 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[SimpleExpression, Identifier] = SignOpt Term AdditionTail
-480 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[SignOpt, Identifier] = ε
-481 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Term, Identifier] = Factor MultiplicationTail
-482 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Factor, Identifier] = Access
-483 | Access MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | M[Access, Identifier] = Identifier AccessTail
-484 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "نقطة_ب" (Identifier) | Match terminal Identifier
-485 | AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "." (Dot) | M[AccessTail, Dot] = Dot Identifier AccessTail
-486 | Dot Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "." (Dot) | Match terminal Dot
-487 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "رمز" (Identifier) | Match terminal Identifier
-488 | AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AccessTail, RightParen] = ε
-489 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[MultiplicationTail, RightParen] = ε
-490 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AdditionTail, RightParen] = ε
-491 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[RelationTail, RightParen] = ε
-492 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[PrintItemsTail, RightParen] = ε
-493 | RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | Match terminal RightParen
-494 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-495 | StatementList RightBrace Dot Eof | "اطبع" (Print) | M[StatementList, Print] = Statement StatementList
-496 | Statement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[Statement, Print] = PrintStatement
-497 | PrintStatement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[PrintStatement, Print] = Print LeftParen PrintItems RightParen Semicolon
-498 | Print LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "اطبع" (Print) | Match terminal Print
-499 | LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "(" (LeftParen) | Match terminal LeftParen
-500 | PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "=== إجمالي الإحداثيات ===" (String) | M[PrintItems, String] = Expression PrintItemsTail
-501 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== إجمالي الإحداثيات ===" (String) | M[Expression, String] = SimpleExpression RelationTail
-502 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== إجمالي الإحداثيات ===" (String) | M[SimpleExpression, String] = SignOpt Term AdditionTail
-503 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== إجمالي الإحداثيات ===" (String) | M[SignOpt, String] = ε
-504 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== إجمالي الإحداثيات ===" (String) | M[Term, String] = Factor MultiplicationTail
-505 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== إجمالي الإحداثيات ===" (String) | M[Factor, String] = String
-506 | String MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "=== إجمالي الإحداثيات ===" (String) | Match terminal String
-507 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[MultiplicationTail, RightParen] = ε
-508 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AdditionTail, RightParen] = ε
-509 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[RelationTail, RightParen] = ε
-510 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[PrintItemsTail, RightParen] = ε
-511 | RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | Match terminal RightParen
-512 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-513 | StatementList RightBrace Dot Eof | "اطبع" (Print) | M[StatementList, Print] = Statement StatementList
-514 | Statement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[Statement, Print] = PrintStatement
-515 | PrintStatement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[PrintStatement, Print] = Print LeftParen PrintItems RightParen Semicolon
-516 | Print LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "اطبع" (Print) | Match terminal Print
-517 | LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "(" (LeftParen) | Match terminal LeftParen
-518 | PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "المجموع الكلي = " (String) | M[PrintItems, String] = Expression PrintItemsTail
-519 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "المجموع الكلي = " (String) | M[Expression, String] = SimpleExpression RelationTail
-520 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "المجموع الكلي = " (String) | M[SimpleExpression, String] = SignOpt Term AdditionTail
-521 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "المجموع الكلي = " (String) | M[SignOpt, String] = ε
-522 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "المجموع الكلي = " (String) | M[Term, String] = Factor MultiplicationTail
-523 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "المجموع الكلي = " (String) | M[Factor, String] = String
-524 | String MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "المجموع الكلي = " (String) | Match terminal String
-525 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[MultiplicationTail, Comma] = ε
-526 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[AdditionTail, Comma] = ε
-527 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[RelationTail, Comma] = ε
-528 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | M[PrintItemsTail, Comma] = Comma Expression PrintItemsTail
-529 | Comma Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "," (Comma) | Match terminal Comma
-530 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "مجموع_الإحداثيات" (Identifier) | M[Expression, Identifier] = SimpleExpression RelationTail
-531 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "مجموع_الإحداثيات" (Identifier) | M[SimpleExpression, Identifier] = SignOpt Term AdditionTail
-532 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "مجموع_الإحداثيات" (Identifier) | M[SignOpt, Identifier] = ε
-533 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "مجموع_الإحداثيات" (Identifier) | M[Term, Identifier] = Factor MultiplicationTail
-534 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "مجموع_الإحداثيات" (Identifier) | M[Factor, Identifier] = Access
-535 | Access MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "مجموع_الإحداثيات" (Identifier) | M[Access, Identifier] = Identifier AccessTail
-536 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "مجموع_الإحداثيات" (Identifier) | Match terminal Identifier
-537 | AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AccessTail, RightParen] = ε
-538 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[MultiplicationTail, RightParen] = ε
-539 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AdditionTail, RightParen] = ε
-540 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[RelationTail, RightParen] = ε
-541 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[PrintItemsTail, RightParen] = ε
-542 | RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | Match terminal RightParen
-543 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
-544 | StatementList RightBrace Dot Eof | "}" (RightBrace) | M[StatementList, RightBrace] = ε
-545 | RightBrace Dot Eof | "}" (RightBrace) | Match terminal RightBrace
-546 | Dot Eof | "." (Dot) | Match terminal Dot
-547 | Eof | نهاية الملف | Match terminal Eof
+  6 | DefinitionList Block Dot Eof | "ثابت" (Const) | M[DefinitionList, Const] = Definition DefinitionList
+  7 | Definition DefinitionList Block Dot Eof | "ثابت" (Const) | M[Definition, Const] = ConstantDeclaration
+  8 | ConstantDeclaration DefinitionList Block Dot Eof | "ثابت" (Const) | M[ConstantDeclaration, Const] = Const Identifier Assign ConstantValue Semicolon
+  9 | Const Identifier Assign ConstantValue Semicolon DefinitionList Block Dot Eof | "ثابت" (Const) | Match terminal Const
+ 10 | Identifier Assign ConstantValue Semicolon DefinitionList Block Dot Eof | "النسبة_الرسمية" (Identifier) | Match terminal Identifier
+ 11 | Assign ConstantValue Semicolon DefinitionList Block Dot Eof | "=" (Assign) | Match terminal Assign
+ 12 | ConstantValue Semicolon DefinitionList Block Dot Eof | "10" (Integer) | M[ConstantValue, Integer] = Integer
+ 13 | Integer Semicolon DefinitionList Block Dot Eof | "10" (Integer) | Match terminal Integer
+ 14 | Semicolon DefinitionList Block Dot Eof | ";" (Semicolon) | Match terminal Semicolon
+ 15 | DefinitionList Block Dot Eof | "متغير" (Variable) | M[DefinitionList, Variable] = Definition DefinitionList
+ 16 | Definition DefinitionList Block Dot Eof | "متغير" (Variable) | M[Definition, Variable] = VariableDeclaration
+ 17 | VariableDeclaration DefinitionList Block Dot Eof | "متغير" (Variable) | M[VariableDeclaration, Variable] = Variable NameList Colon DataType Semicolon
+ 18 | Variable NameList Colon DataType Semicolon DefinitionList Block Dot Eof | "متغير" (Variable) | Match terminal Variable
+ 19 | NameList Colon DataType Semicolon DefinitionList Block Dot Eof | "عدد" (Identifier) | M[NameList, Identifier] = Identifier NameListTail
+ 20 | Identifier NameListTail Colon DataType Semicolon DefinitionList Block Dot Eof | "عدد" (Identifier) | Match terminal Identifier
+ 21 | NameListTail Colon DataType Semicolon DefinitionList Block Dot Eof | ":" (Colon) | M[NameListTail, Colon] = ε
+ 22 | Colon DataType Semicolon DefinitionList Block Dot Eof | ":" (Colon) | Match terminal Colon
+ 23 | DataType Semicolon DefinitionList Block Dot Eof | "صحيح" (TypeInt) | M[DataType, TypeInt] = TypeInt
+ 24 | TypeInt Semicolon DefinitionList Block Dot Eof | "صحيح" (TypeInt) | Match terminal TypeInt
+ 25 | Semicolon DefinitionList Block Dot Eof | ";" (Semicolon) | Match terminal Semicolon
+ 26 | DefinitionList Block Dot Eof | "متغير" (Variable) | M[DefinitionList, Variable] = Definition DefinitionList
+ 27 | Definition DefinitionList Block Dot Eof | "متغير" (Variable) | M[Definition, Variable] = VariableDeclaration
+ 28 | VariableDeclaration DefinitionList Block Dot Eof | "متغير" (Variable) | M[VariableDeclaration, Variable] = Variable NameList Colon DataType Semicolon
+ 29 | Variable NameList Colon DataType Semicolon DefinitionList Block Dot Eof | "متغير" (Variable) | Match terminal Variable
+ 30 | NameList Colon DataType Semicolon DefinitionList Block Dot Eof | "حالة" (Identifier) | M[NameList, Identifier] = Identifier NameListTail
+ 31 | Identifier NameListTail Colon DataType Semicolon DefinitionList Block Dot Eof | "حالة" (Identifier) | Match terminal Identifier
+ 32 | NameListTail Colon DataType Semicolon DefinitionList Block Dot Eof | ":" (Colon) | M[NameListTail, Colon] = ε
+ 33 | Colon DataType Semicolon DefinitionList Block Dot Eof | ":" (Colon) | Match terminal Colon
+ 34 | DataType Semicolon DefinitionList Block Dot Eof | "منطقي" (TypeBool) | M[DataType, TypeBool] = TypeBool
+ 35 | TypeBool Semicolon DefinitionList Block Dot Eof | "منطقي" (TypeBool) | Match terminal TypeBool
+ 36 | Semicolon DefinitionList Block Dot Eof | ";" (Semicolon) | Match terminal Semicolon
+ 37 | DefinitionList Block Dot Eof | "{" (LeftBrace) | M[DefinitionList, LeftBrace] = ε
+ 38 | Block Dot Eof | "{" (LeftBrace) | M[Block, LeftBrace] = LeftBrace StatementList RightBrace
+ 39 | LeftBrace StatementList RightBrace Dot Eof | "{" (LeftBrace) | Match terminal LeftBrace
+ 40 | StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[StatementList, Identifier] = Statement StatementList
+ 41 | Statement StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[Statement, Identifier] = IdentifierStatement
+ 42 | IdentifierStatement StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[IdentifierStatement, Identifier] = Identifier IdentifierStatementTail
+ 43 | Identifier IdentifierStatementTail StatementList RightBrace Dot Eof | "عدد" (Identifier) | Match terminal Identifier
+ 44 | IdentifierStatementTail StatementList RightBrace Dot Eof | "=" (Assign) | M[IdentifierStatementTail, Assign] = AccessTail Assign Expression Semicolon
+ 45 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | M[AccessTail, Assign] = ε
+ 46 | Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | Match terminal Assign
+ 47 | Expression Semicolon StatementList RightBrace Dot Eof | "20" (Integer) | M[Expression, Integer] = SimpleExpression RelationTail
+ 48 | SimpleExpression RelationTail Semicolon StatementList RightBrace Dot Eof | "20" (Integer) | M[SimpleExpression, Integer] = SignOpt Term AdditionTail
+ 49 | SignOpt Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "20" (Integer) | M[SignOpt, Integer] = ε
+ 50 | Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "20" (Integer) | M[Term, Integer] = Factor MultiplicationTail
+ 51 | Factor MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "20" (Integer) | M[Factor, Integer] = Integer
+ 52 | Integer MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "20" (Integer) | Match terminal Integer
+ 53 | MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[MultiplicationTail, Semicolon] = ε
+ 54 | AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[AdditionTail, Semicolon] = ε
+ 55 | RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[RelationTail, Semicolon] = ε
+ 56 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
+ 57 | StatementList RightBrace Dot Eof | "حالة" (Identifier) | M[StatementList, Identifier] = Statement StatementList
+ 58 | Statement StatementList RightBrace Dot Eof | "حالة" (Identifier) | M[Statement, Identifier] = IdentifierStatement
+ 59 | IdentifierStatement StatementList RightBrace Dot Eof | "حالة" (Identifier) | M[IdentifierStatement, Identifier] = Identifier IdentifierStatementTail
+ 60 | Identifier IdentifierStatementTail StatementList RightBrace Dot Eof | "حالة" (Identifier) | Match terminal Identifier
+ 61 | IdentifierStatementTail StatementList RightBrace Dot Eof | "=" (Assign) | M[IdentifierStatementTail, Assign] = AccessTail Assign Expression Semicolon
+ 62 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | M[AccessTail, Assign] = ε
+ 63 | Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | Match terminal Assign
+ 64 | Expression Semicolon StatementList RightBrace Dot Eof | "صح" (True) | M[Expression, True] = SimpleExpression RelationTail
+ 65 | SimpleExpression RelationTail Semicolon StatementList RightBrace Dot Eof | "صح" (True) | M[SimpleExpression, True] = SignOpt Term AdditionTail
+ 66 | SignOpt Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "صح" (True) | M[SignOpt, True] = ε
+ 67 | Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "صح" (True) | M[Term, True] = Factor MultiplicationTail
+ 68 | Factor MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "صح" (True) | M[Factor, True] = True
+ 69 | True MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "صح" (True) | Match terminal True
+ 70 | MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[MultiplicationTail, Semicolon] = ε
+ 71 | AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[AdditionTail, Semicolon] = ε
+ 72 | RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[RelationTail, Semicolon] = ε
+ 73 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
+ 74 | StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[StatementList, Identifier] = Statement StatementList
+ 75 | Statement StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[Statement, Identifier] = IdentifierStatement
+ 76 | IdentifierStatement StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[IdentifierStatement, Identifier] = Identifier IdentifierStatementTail
+ 77 | Identifier IdentifierStatementTail StatementList RightBrace Dot Eof | "عدد" (Identifier) | Match terminal Identifier
+ 78 | IdentifierStatementTail StatementList RightBrace Dot Eof | "=" (Assign) | M[IdentifierStatementTail, Assign] = AccessTail Assign Expression Semicolon
+ 79 | AccessTail Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | M[AccessTail, Assign] = ε
+ 80 | Assign Expression Semicolon StatementList RightBrace Dot Eof | "=" (Assign) | Match terminal Assign
+ 81 | Expression Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[Expression, Identifier] = SimpleExpression RelationTail
+ 82 | SimpleExpression RelationTail Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[SimpleExpression, Identifier] = SignOpt Term AdditionTail
+ 83 | SignOpt Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[SignOpt, Identifier] = ε
+ 84 | Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[Term, Identifier] = Factor MultiplicationTail
+ 85 | Factor MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[Factor, Identifier] = Access
+ 86 | Access MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[Access, Identifier] = Identifier AccessTail
+ 87 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | Match terminal Identifier
+ 88 | AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[AccessTail, Plus] = ε
+ 89 | MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[MultiplicationTail, Plus] = ε
+ 90 | AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[AdditionTail, Plus] = AdditionOperator Term AdditionTail
+ 91 | AdditionOperator Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | M[AdditionOperator, Plus] = Plus
+ 92 | Plus Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "+" (Plus) | Match terminal Plus
+ 93 | Term AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "حالة" (Identifier) | M[Term, Identifier] = Factor MultiplicationTail
+ 94 | Factor MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "حالة" (Identifier) | M[Factor, Identifier] = Access
+ 95 | Access MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "حالة" (Identifier) | M[Access, Identifier] = Identifier AccessTail
+ 96 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | "حالة" (Identifier) | Match terminal Identifier
+ 97 | AccessTail MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[AccessTail, Semicolon] = ε
+ 98 | MultiplicationTail AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[MultiplicationTail, Semicolon] = ε
+ 99 | AdditionTail RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[AdditionTail, Semicolon] = ε
+100 | RelationTail Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | M[RelationTail, Semicolon] = ε
+101 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
+102 | StatementList RightBrace Dot Eof | "اطبع" (Print) | M[StatementList, Print] = Statement StatementList
+103 | Statement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[Statement, Print] = PrintStatement
+104 | PrintStatement StatementList RightBrace Dot Eof | "اطبع" (Print) | M[PrintStatement, Print] = Print LeftParen PrintItems RightParen Semicolon
+105 | Print LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "اطبع" (Print) | Match terminal Print
+106 | LeftParen PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "(" (LeftParen) | Match terminal LeftParen
+107 | PrintItems RightParen Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[PrintItems, Identifier] = Expression PrintItemsTail
+108 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[Expression, Identifier] = SimpleExpression RelationTail
+109 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[SimpleExpression, Identifier] = SignOpt Term AdditionTail
+110 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[SignOpt, Identifier] = ε
+111 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[Term, Identifier] = Factor MultiplicationTail
+112 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[Factor, Identifier] = Access
+113 | Access MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[Access, Identifier] = Identifier AccessTail
+114 | Identifier AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | "عدد" (Identifier) | Match terminal Identifier
+115 | AccessTail MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AccessTail, RightParen] = ε
+116 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[MultiplicationTail, RightParen] = ε
+117 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[AdditionTail, RightParen] = ε
+118 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[RelationTail, RightParen] = ε
+119 | PrintItemsTail RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | M[PrintItemsTail, RightParen] = ε
+120 | RightParen Semicolon StatementList RightBrace Dot Eof | ")" (RightParen) | Match terminal RightParen
+121 | Semicolon StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
+122 | StatementList RightBrace Dot Eof | "}" (RightBrace) | M[StatementList, RightBrace] = ε
+123 | RightBrace Dot Eof | "}" (RightBrace) | Match terminal RightBrace
+124 | Dot Eof | "." (Dot) | Match terminal Dot
+125 | Eof | نهاية الملف | Match terminal Eof

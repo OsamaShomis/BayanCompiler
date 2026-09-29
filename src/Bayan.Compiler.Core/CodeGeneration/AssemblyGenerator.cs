@@ -129,6 +129,13 @@ public sealed class AssemblyGenerator
         builder.AppendLine("    {");
         builder.AppendLine("        .entrypoint");
         builder.AppendLine("        .maxstack 32");
+        builder.AppendLine();
+        builder.AppendLine("        // Explicitly enforce UTF-8 console encoding for Arabic input and output streams");
+        builder.AppendLine("        call class [mscorlib]System.Text.Encoding [mscorlib]System.Text.Encoding::get_UTF8()");
+        builder.AppendLine("        call void [mscorlib]System.Console::set_OutputEncoding(class [mscorlib]System.Text.Encoding)");
+        builder.AppendLine("        call class [mscorlib]System.Text.Encoding [mscorlib]System.Text.Encoding::get_UTF8()");
+        builder.AppendLine("        call void [mscorlib]System.Console::set_InputEncoding(class [mscorlib]System.Text.Encoding)");
+        builder.AppendLine();
 
         // Initialize aggregate array fields in Main
         foreach (var f in fields)
@@ -240,9 +247,14 @@ public sealed class AssemblyGenerator
                     program.Strings.TryGetValue(instruction.Left.Name, out string? strVal) &&
                     !strVal.StartsWith("===") &&
                     !strVal.StartsWith("---") &&
-                    (strVal.EndsWith(": ") || strVal.EndsWith("= ") || strVal.EndsWith(" : ") || strVal.EndsWith(" = ")))
+                    (strVal.EndsWith(": ") || strVal.EndsWith("= ") || strVal.EndsWith(" : ") || strVal.EndsWith(" = ") || strVal.EndsWith(":")))
                 {
                     builder.AppendLine("        call void [mscorlib]System.Console::Write(string)");
+                    if (strVal.EndsWith(":") && !strVal.EndsWith(": "))
+                    {
+                        builder.AppendLine("        ldstr \" \"");
+                        builder.AppendLine("        call void [mscorlib]System.Console::Write(string)");
+                    }
                 }
                 else
                 {

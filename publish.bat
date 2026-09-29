@@ -17,8 +17,9 @@ if %errorlevel% neq 0 (
     exit /b %errorlevel%
 )
 
-echo [3/3] Copying official samples...
+echo [3/3] Copying official samples and companion CLI...
 xcopy /E /I /Y "samples" "publish\BayanCompiler\samples" >nul
+copy /Y "publish\Bayan.Compiler.Cli\Bayan.Compiler.Cli.exe" "publish\BayanCompiler\" >nul
 
 echo.
 echo ========================================================

@@ -1,0 +1,74 @@
+تتبع LL(1) الرسمي: Stack → Lookahead → Action
+====================================================================================================
+  1 | Start | "برنامج" (Program) | M[Start, Program] = ProgramUnit Eof
+  2 | ProgramUnit Eof | "برنامج" (Program) | M[ProgramUnit, Program] = Program Identifier Semicolon DefinitionList Block Dot
+  3 | Program Identifier Semicolon DefinitionList Block Dot Eof | "برنامج" (Program) | Match terminal Program
+  4 | Identifier Semicolon DefinitionList Block Dot Eof | "اختبار_صح" (Identifier) | Match terminal Identifier
+  5 | Semicolon DefinitionList Block Dot Eof | ";" (Semicolon) | Match terminal Semicolon
+  6 | DefinitionList Block Dot Eof | "متغير" (Variable) | M[DefinitionList, Variable] = Definition DefinitionList
+  7 | Definition DefinitionList Block Dot Eof | "متغير" (Variable) | M[Definition, Variable] = VariableDeclaration
+  8 | VariableDeclaration DefinitionList Block Dot Eof | "متغير" (Variable) | M[VariableDeclaration, Variable] = Variable NameList Colon DataType Semicolon
+  9 | Variable NameList Colon DataType Semicolon DefinitionList Block Dot Eof | "متغير" (Variable) | Match terminal Variable
+ 10 | NameList Colon DataType Semicolon DefinitionList Block Dot Eof | "عدد" (Identifier) | M[NameList, Identifier] = Identifier NameListTail
+ 11 | Identifier NameListTail Colon DataType Semicolon DefinitionList Block Dot Eof | "عدد" (Identifier) | Match terminal Identifier
+ 12 | NameListTail Colon DataType Semicolon DefinitionList Block Dot Eof | ":" (Colon) | M[NameListTail, Colon] = ε
+ 13 | Colon DataType Semicolon DefinitionList Block Dot Eof | ":" (Colon) | Match terminal Colon
+ 14 | DataType Semicolon DefinitionList Block Dot Eof | "صحيح" (TypeInt) | M[DataType, TypeInt] = TypeInt
+ 15 | TypeInt Semicolon DefinitionList Block Dot Eof | "صحيح" (TypeInt) | Match terminal TypeInt
+ 16 | Semicolon DefinitionList Block Dot Eof | ";" (Semicolon) | Match terminal Semicolon
+ 17 | DefinitionList Block Dot Eof | "{" (LeftBrace) | M[DefinitionList, LeftBrace] = ε
+ 18 | Block Dot Eof | "{" (LeftBrace) | M[Block, LeftBrace] = LeftBrace StatementList RightBrace
+ 19 | LeftBrace StatementList RightBrace Dot Eof | "{" (LeftBrace) | Match terminal LeftBrace
+ 20 | StatementList RightBrace Dot Eof | "طالما" (While) | M[StatementList, While] = Statement StatementList
+ 21 | Statement StatementList RightBrace Dot Eof | "طالما" (While) | M[Statement, While] = WhileStatement
+ 22 | WhileStatement StatementList RightBrace Dot Eof | "طالما" (While) | M[WhileStatement, While] = While LeftParen Expression RightParen Continue Statement
+ 23 | While LeftParen Expression RightParen Continue Statement StatementList RightBrace Dot Eof | "طالما" (While) | Match terminal While
+ 24 | LeftParen Expression RightParen Continue Statement StatementList RightBrace Dot Eof | "(" (LeftParen) | Match terminal LeftParen
+ 25 | Expression RightParen Continue Statement StatementList RightBrace Dot Eof | "صح" (True) | M[Expression, True] = SimpleExpression RelationTail
+ 26 | SimpleExpression RelationTail RightParen Continue Statement StatementList RightBrace Dot Eof | "صح" (True) | M[SimpleExpression, True] = SignOpt Term AdditionTail
+ 27 | SignOpt Term AdditionTail RelationTail RightParen Continue Statement StatementList RightBrace Dot Eof | "صح" (True) | M[SignOpt, True] = ε
+ 28 | Term AdditionTail RelationTail RightParen Continue Statement StatementList RightBrace Dot Eof | "صح" (True) | M[Term, True] = Factor MultiplicationTail
+ 29 | Factor MultiplicationTail AdditionTail RelationTail RightParen Continue Statement StatementList RightBrace Dot Eof | "صح" (True) | M[Factor, True] = True
+ 30 | True MultiplicationTail AdditionTail RelationTail RightParen Continue Statement StatementList RightBrace Dot Eof | "صح" (True) | Match terminal True
+ 31 | MultiplicationTail AdditionTail RelationTail RightParen Continue Statement StatementList RightBrace Dot Eof | ")" (RightParen) | M[MultiplicationTail, RightParen] = ε
+ 32 | AdditionTail RelationTail RightParen Continue Statement StatementList RightBrace Dot Eof | ")" (RightParen) | M[AdditionTail, RightParen] = ε
+ 33 | RelationTail RightParen Continue Statement StatementList RightBrace Dot Eof | ")" (RightParen) | M[RelationTail, RightParen] = ε
+ 34 | RightParen Continue Statement StatementList RightBrace Dot Eof | ")" (RightParen) | Match terminal RightParen
+ 35 | Continue Statement StatementList RightBrace Dot Eof | "استمر" (Continue) | Match terminal Continue
+ 36 | Statement StatementList RightBrace Dot Eof | "{" (LeftBrace) | M[Statement, LeftBrace] = Block
+ 37 | Block StatementList RightBrace Dot Eof | "{" (LeftBrace) | M[Block, LeftBrace] = LeftBrace StatementList RightBrace
+ 38 | LeftBrace StatementList RightBrace StatementList RightBrace Dot Eof | "{" (LeftBrace) | Match terminal LeftBrace
+ 39 | StatementList RightBrace StatementList RightBrace Dot Eof | "اطبع" (Print) | M[StatementList, Print] = Statement StatementList
+ 40 | Statement StatementList RightBrace StatementList RightBrace Dot Eof | "اطبع" (Print) | M[Statement, Print] = PrintStatement
+ 41 | PrintStatement StatementList RightBrace StatementList RightBrace Dot Eof | "اطبع" (Print) | M[PrintStatement, Print] = Print LeftParen PrintItems RightParen Semicolon
+ 42 | Print LeftParen PrintItems RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | "اطبع" (Print) | Match terminal Print
+ 43 | LeftParen PrintItems RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | "(" (LeftParen) | Match terminal LeftParen
+ 44 | PrintItems RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | "رسالة" (String) | M[PrintItems, String] = Expression PrintItemsTail
+ 45 | Expression PrintItemsTail RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | "رسالة" (String) | M[Expression, String] = SimpleExpression RelationTail
+ 46 | SimpleExpression RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | "رسالة" (String) | M[SimpleExpression, String] = SignOpt Term AdditionTail
+ 47 | SignOpt Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | "رسالة" (String) | M[SignOpt, String] = ε
+ 48 | Term AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | "رسالة" (String) | M[Term, String] = Factor MultiplicationTail
+ 49 | Factor MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | "رسالة" (String) | M[Factor, String] = String
+ 50 | String MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | "رسالة" (String) | Match terminal String
+ 51 | MultiplicationTail AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | ")" (RightParen) | M[MultiplicationTail, RightParen] = ε
+ 52 | AdditionTail RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | ")" (RightParen) | M[AdditionTail, RightParen] = ε
+ 53 | RelationTail PrintItemsTail RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | ")" (RightParen) | M[RelationTail, RightParen] = ε
+ 54 | PrintItemsTail RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | ")" (RightParen) | M[PrintItemsTail, RightParen] = ε
+ 55 | RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | ")" (RightParen) | Match terminal RightParen
+ 56 | Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
+ 57 | StatementList RightBrace StatementList RightBrace Dot Eof | "اقرأ" (Read) | M[StatementList, Read] = Statement StatementList
+ 58 | Statement StatementList RightBrace StatementList RightBrace Dot Eof | "اقرأ" (Read) | M[Statement, Read] = ReadStatement
+ 59 | ReadStatement StatementList RightBrace StatementList RightBrace Dot Eof | "اقرأ" (Read) | M[ReadStatement, Read] = Read LeftParen Access RightParen Semicolon
+ 60 | Read LeftParen Access RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | "اقرأ" (Read) | Match terminal Read
+ 61 | LeftParen Access RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | "(" (LeftParen) | Match terminal LeftParen
+ 62 | Access RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | "عدد" (Identifier) | M[Access, Identifier] = Identifier AccessTail
+ 63 | Identifier AccessTail RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | "عدد" (Identifier) | Match terminal Identifier
+ 64 | AccessTail RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | ")" (RightParen) | M[AccessTail, RightParen] = ε
+ 65 | RightParen Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | ")" (RightParen) | Match terminal RightParen
+ 66 | Semicolon StatementList RightBrace StatementList RightBrace Dot Eof | ";" (Semicolon) | Match terminal Semicolon
+ 67 | StatementList RightBrace StatementList RightBrace Dot Eof | "}" (RightBrace) | M[StatementList, RightBrace] = ε
+ 68 | RightBrace StatementList RightBrace Dot Eof | "}" (RightBrace) | Match terminal RightBrace
+ 69 | StatementList RightBrace Dot Eof | "}" (RightBrace) | M[StatementList, RightBrace] = ε
+ 70 | RightBrace Dot Eof | "}" (RightBrace) | Match terminal RightBrace
+ 71 | Dot Eof | "." (Dot) | Match terminal Dot
+ 72 | Eof | نهاية الملف | Match terminal Eof

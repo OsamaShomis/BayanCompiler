@@ -1,0 +1,11 @@
+ProgramNode: اختبار_صح
+    Declarations:
+        VariableDeclarationGroupNode: عدد : NamedTypeSyntaxNode
+    WhileNode:
+        Condition:
+            LiteralNode: صح
+        Body:
+            BlockNode:
+                PrintNode:
+                    LiteralNode: رسالة
+                ReadNode

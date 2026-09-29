@@ -65,7 +65,8 @@ public sealed class CompilerJourneyForm : Form
 
     // Inspector tab content viewers (monospaced, zero overlap)
     private readonly RichTextBox txtTokens = CreateMonospaceViewer();
-    private readonly RichTextBox txtParseTree = CreateMonospaceViewer();
+    private readonly BayanTreeViewerControl treeViewerCst = new();
+    private readonly BayanTreeViewerControl treeViewerAst = new();
     private readonly RichTextBox txtSymbolTable = CreateMonospaceViewer();
     private readonly RichTextBox txtTac = CreateMonospaceViewer();
     private readonly RichTextBox txtAssembly = CreateMonospaceViewer();
@@ -227,7 +228,8 @@ public sealed class CompilerJourneyForm : Form
     private void InitializeDefaultArtifacts()
     {
         txtTokens.Text = "لم تُشغَّل الترجمة بعد. اضغط «ترجمة ⚙ (F6)» لاستخراج الرموز المعجمية (Tokens).";
-        txtParseTree.Text = "ستظهر هنا شجرة التحليل النحوي الرسمية (Parse Tree) الناتجة عن LL(1) Parser.";
+        treeViewerCst.LoadTree("", "🌳 شجرة الإعراب النحوية (CST)");
+        treeViewerAst.LoadTree("", "🌲 الشجرة النحوية المجردة (AST)");
         txtSymbolTable.Text = "سيظهر هنا جدول الرموز الدلالي (Symbol Table) للمتغيرات والأنواع والنطاقات.";
         txtTac.Text = "سيظهر هنا كود Three-Address Code (TAC) الوسيط للبرنامج.";
         txtAssembly.Text = "سيظهر هنا كود لغة التجميع x86 المستهدف (output.asm) المولد.";
@@ -399,12 +401,12 @@ public sealed class CompilerJourneyForm : Form
             Padding = new Padding(0, 2, 0, 0)
         };
 
-        // 1. Compile Button (F6)
-        ConfigureActionBtn(btnQuickCompile, "ترجمة ⚙ (F6)", "تشغيل مراحل المترجم كاملة وإنتاج TAC وx86 Assembly وEXE (F6)", (_, _) => CompileSource(), isPrimary: true, primaryColor: IdeTheme.AccentPrimary);
+        // 1. Compile Button (F6) - Build & Inspect Only
+        ConfigureActionBtn(btnQuickCompile, "ترجمة وفحص ⚙ (F6)", "تشغيل مراحل المترجم والتحقق من القواعد ومعاينة الشجرة والجداول دون تشغيل (F6)", (_, _) => CompileSource(), isPrimary: true, primaryColor: IdeTheme.AccentPrimary);
 
-        // 2. Run Button (F5)
-        ConfigureActionBtn(btnQuickRun, "تشغيل ▶ (F5)", "تشغيل output.exe فوراً في الطرفية التفاعلية (F5)", (_, _) => RunExecutable(), isPrimary: true, primaryColor: IdeTheme.AccentSuccess);
-        btnQuickRun.Enabled = false;
+        // 2. Run Button (F5) - Smart Build & Run!
+        ConfigureActionBtn(btnQuickRun, "تشغيل ذكي ▶ (F5)", "ترجمة الكود تلقائياً وتشغيله مباشرة بنقرة واحدة (Build & Run - F5)", (_, _) => RunExecutable(), isPrimary: true, primaryColor: IdeTheme.AccentSuccess);
+        btnQuickRun.Enabled = true;
 
         // 3. Toggle Inspector Button
         ConfigureActionBtn(btnToggleInspector, "◫ فاحص المراحل", "إظهار أو طي لوحة فاحص مراحل المترجم الجانبية (Ctrl+\\)", (_, _) => ToggleInspectorView());
@@ -904,9 +906,10 @@ public sealed class CompilerJourneyForm : Form
         inspectorTabs.DrawItem += TabControl_DrawItem;
 
         inspectorTabs.TabPages.Clear();
-        inspectorTabs.TabPages.Add(CreateTabPage("🔤 الرموز (Tokens)", txtTokens));
-        inspectorTabs.TabPages.Add(CreateTabPage("🌳 شجرة الإعراب (Tree)", txtParseTree));
-        inspectorTabs.TabPages.Add(CreateTabPage("📋 جدول الرموز (Symbols)", txtSymbolTable));
+        inspectorTabs.TabPages.Add(CreateTabPage("🔤 الرموز", txtTokens));
+        inspectorTabs.TabPages.Add(CreateTabPage("🌳 شجرة الإعراب (CST)", treeViewerCst));
+        inspectorTabs.TabPages.Add(CreateTabPage("🌲 الشجرة المجردة (AST)", treeViewerAst));
+        inspectorTabs.TabPages.Add(CreateTabPage("📋 جدول الرموز", txtSymbolTable));
         inspectorTabs.TabPages.Add(CreateTabPage("⚡ TAC / IR", txtTac));
         inspectorTabs.TabPages.Add(CreateTabPage("⚙ Assembly x86", txtAssembly));
         inspectorTabs.TabPages.Add(CreateTabPage("🔬 التحليل الدلالي", txtSemantics));
@@ -1365,7 +1368,12 @@ public sealed class CompilerJourneyForm : Form
 
     private async void CompileSource()
     {
-        if (isBusy) return;
+        await CompileSourceAsync();
+    }
+
+    private async Task<bool> CompileSourceAsync()
+    {
+        if (isBusy) return false;
 
         // Save current editor content into active document
         if (activeDocumentIndex >= 0 && activeDocumentIndex < openDocuments.Count)
@@ -1379,7 +1387,8 @@ public sealed class CompilerJourneyForm : Form
             CliCompilationRun run = await compilerClient.CompileAsync(sourceEditor.SourceCode);
 
             txtTokens.Text = run.GetArtifact("tokens.txt");
-            txtParseTree.Text = run.GetArtifact("parse-tree.txt");
+            treeViewerCst.LoadTree(run.GetArtifact("parse-tree.txt"), "🌳 شجرة الإعراب النحوية (CST)");
+            treeViewerAst.LoadTree(run.GetArtifact("ast.txt"), "🌲 الشجرة النحوية المجردة (AST)");
             txtSymbolTable.Text = run.GetArtifact("symbol-table.txt");
 
             string diagnostics = run.GetArtifact("diagnostics.txt");
@@ -1393,7 +1402,7 @@ public sealed class CompilerJourneyForm : Form
                 : string.Empty;
 
             bool succeeded = run.Manifest?.Success == true && run.ExitCode == 0;
-            btnQuickRun.Enabled = succeeded && !string.IsNullOrWhiteSpace(lastExecutablePath) && File.Exists(lastExecutablePath);
+            bool hasExe = succeeded && !string.IsNullOrWhiteSpace(lastExecutablePath) && File.Exists(lastExecutablePath);
 
             // Update error counters
             if (!succeeded)
@@ -1413,7 +1422,7 @@ public sealed class CompilerJourneyForm : Form
                 $"=== نتيجة معالجة مترجم بيان ===\n\n" +
                 $"• الحالة: {(succeeded ? "نجاح الترجمة الكاملة ✔" : "توقفت الترجمة لوجود أخطاء ✖")}\n" +
                 $"• آخر مرحلة مكتملة: {run.Manifest?.CompletedStage ?? "غير محدد"}\n" +
-                $"• توفر ملف التنفيذ (output.exe): {(btnQuickRun.Enabled ? "نعم — جاهز للتشغيل في الطرفية" : "لا")}\n" +
+                $"• توفر ملف التنفيذ (output.exe): {(hasExe ? "نعم — جاهز للتشغيل في الطرفية" : "لا")}\n" +
                 $"• مسار الملف التنفيذي: {lastExecutablePath}\n" +
                 $"• رمز الخروج للـ CLI: {run.ExitCode}\n\n" +
                 $"التفاصيل:\n{run.StandardOutput}\n{run.StandardError}";
@@ -1429,6 +1438,8 @@ public sealed class CompilerJourneyForm : Form
                 EnsureBottomPanelVisible();
                 bottomTabs.SelectedIndex = 1; // Show Problems tab
             }
+
+            return succeeded;
         }
         catch (Exception ex)
         {
@@ -1438,6 +1449,7 @@ public sealed class CompilerJourneyForm : Form
             statusProblemsLabel.Text = $"⊗ {errorCount}  ⚠ {warningCount}";
             EnsureBottomPanelVisible();
             bottomTabs.SelectedIndex = 1;
+            return false;
         }
         finally
         {
@@ -1449,9 +1461,17 @@ public sealed class CompilerJourneyForm : Form
     {
         if (isBusy) return;
 
+        // Smart Build & Run: Automatically compile latest source before executing!
+        bool compileSuccess = await CompileSourceAsync();
+        if (!compileSuccess)
+        {
+            // If compilation failed, errors are already highlighted in Problems tab
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(lastExecutablePath) || !File.Exists(lastExecutablePath))
         {
-            MessageBox.Show(this, "يرجى تشغيل «ترجمة ⚙ (F6)» أولاً لبناء ملف output.exe.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, "تعذر العثور على الملف التنفيذي الناتج output.exe.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
@@ -1691,8 +1711,8 @@ public sealed class CompilerJourneyForm : Form
         txtTokens.BackColor = viewBg;
         txtTokens.ForeColor = viewFg;
 
-        txtParseTree.BackColor = viewBg;
-        txtParseTree.ForeColor = viewFg;
+        treeViewerCst.ApplyTheme();
+        treeViewerAst.ApplyTheme();
 
         txtSymbolTable.BackColor = viewBg;
         txtSymbolTable.ForeColor = viewFg;
@@ -1733,7 +1753,7 @@ public sealed class CompilerJourneyForm : Form
         UseWaitCursor = busy;
 
         btnQuickCompile.Enabled = !busy;
-        btnQuickRun.Enabled = !busy && !string.IsNullOrWhiteSpace(lastExecutablePath) && File.Exists(lastExecutablePath);
+        btnQuickRun.Enabled = !busy;
 
         if (!string.IsNullOrEmpty(message))
         {

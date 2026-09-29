@@ -160,6 +160,14 @@ public sealed class CilExecutableGenerator
 
             builder.AppendLine("        )");
         }
+
+        builder.AppendLine();
+        builder.AppendLine("        // Explicitly enforce UTF-8 console encoding for Arabic input and output streams");
+        builder.AppendLine("        call class [mscorlib]System.Text.Encoding [mscorlib]System.Text.Encoding::get_UTF8()");
+        builder.AppendLine("        call void [mscorlib]System.Console::set_OutputEncoding(class [mscorlib]System.Text.Encoding)");
+        builder.AppendLine("        call class [mscorlib]System.Text.Encoding [mscorlib]System.Text.Encoding::get_UTF8()");
+        builder.AppendLine("        call void [mscorlib]System.Console::set_InputEncoding(class [mscorlib]System.Text.Encoding)");
+        builder.AppendLine();
     }
 
     /// <summary>

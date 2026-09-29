@@ -1,7 +1,6 @@
 # Symbol Table
 Name | Kind | Type | Read-only | Line | Column
 --- | --- | --- | --- | --- | ---
-مجموع_الإحداثيات | Variable | Int | False | 16 | 1
-نقطة_أ | Variable | Record | False | 14 | 1
-نقطة_ب | Variable | Record | False | 15 | 1
-نقطة_هندسية | Type | Record | True | 8 | 1
+النسبة_الرسمية | Constant | Int | True | 8 | 1
+حالة | Variable | Bool | False | 10 | 1
+عدد | Variable | Int | False | 9 | 1

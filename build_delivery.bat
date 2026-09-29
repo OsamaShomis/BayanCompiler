@@ -3,8 +3,9 @@ setlocal enabledelayedexpansion
 title Bayan Project Delivery Packaging
 
 set "GROUP_ID=01"
-set "DELIVERY_DIR=d:\COMPILER\delivery"
-set "PUBLISH_DIR=d:\COMPILER\publish\BayanCompiler"
+set "BASE_DIR=%~dp0"
+set "DELIVERY_DIR=%BASE_DIR%delivery"
+set "PUBLISH_DIR=%BASE_DIR%publish\BayanCompiler"
 
 echo ==============================================================================
 echo [Bayan Delivery System] Packaging Official Delivery Artifacts (Group %GROUP_ID%)
@@ -12,7 +13,7 @@ echo ===========================================================================
 
 echo.
 echo [1/4] Publishing standalone compiler and editor...
-call d:\COMPILER\publish.bat
+call "%BASE_DIR%publish.bat"
 
 echo.
 echo [2/4] Copying official executable deliverables...
@@ -23,23 +24,23 @@ if exist "%PUBLISH_DIR%\Bayan.Editor.WinForms.exe" (
 ) else (
     echo    [ERROR] Executable not found in publish directory!
 )
-if exist "d:\COMPILER\publish\Bayan.Compiler.Cli\Bayan.Compiler.Cli.exe" (
-    copy /y "d:\COMPILER\publish\Bayan.Compiler.Cli\Bayan.Compiler.Cli.exe" "%DELIVERY_DIR%\Bayan.Compiler.Cli.exe" > nul
+if exist "%BASE_DIR%publish\Bayan.Compiler.Cli\Bayan.Compiler.Cli.exe" (
+    copy /y "%BASE_DIR%publish\Bayan.Compiler.Cli\Bayan.Compiler.Cli.exe" "%DELIVERY_DIR%\Bayan.Compiler.Cli.exe" > nul
     echo    - Bayan.Compiler.Cli.exe copied successfully.
 )
-xcopy /E /I /Y "d:\COMPILER\samples" "%DELIVERY_DIR%\samples" > nul
+xcopy /E /I /Y "%BASE_DIR%samples" "%DELIVERY_DIR%\samples" > nul
 
 echo.
 echo [3/4] Copying LaTeX report and HTML view...
-copy /y "d:\COMPILER\report\RPT-G01.tex" "%DELIVERY_DIR%\RPT-G%GROUP_ID%.tex" > nul
-copy /y "d:\COMPILER\report\RPT-G01.html" "%DELIVERY_DIR%\RPT-G%GROUP_ID%.html" > nul
-if exist "d:\COMPILER\report\RPT-G01.pdf" (
-    copy /y "d:\COMPILER\report\RPT-G01.pdf" "%DELIVERY_DIR%\RPT-G%GROUP_ID%.pdf" > nul
+if exist "%BASE_DIR%report\RPT-G01.tex" copy /y "%BASE_DIR%report\RPT-G01.tex" "%DELIVERY_DIR%\RPT-G%GROUP_ID%.tex" > nul
+if exist "%BASE_DIR%report\RPT-G01.html" copy /y "%BASE_DIR%report\RPT-G01.html" "%DELIVERY_DIR%\RPT-G%GROUP_ID%.html" > nul
+if exist "%BASE_DIR%report\RPT-G01.pdf" (
+    copy /y "%BASE_DIR%report\RPT-G01.pdf" "%DELIVERY_DIR%\RPT-G%GROUP_ID%.pdf" > nul
 )
 
 echo.
 echo [4/4] Creating clean ZIP archives via Python packager...
-python d:\COMPILER\package_delivery.py
+python "%BASE_DIR%package_delivery.py"
 
 echo.
 echo ==============================================================================

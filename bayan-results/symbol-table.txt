@@ -1,0 +1,4 @@
+# Symbol Table
+Name | Kind | Type | Read-only | Line | Column
+--- | --- | --- | --- | --- | ---
+عدد | Variable | Int | False | 3 | 1

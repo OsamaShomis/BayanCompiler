@@ -9,17 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #007ACC;
-            --primary-dark: #005A9E;
-            --secondary: #4EC9B0;
-            --accent: #CE9178;
-            --bg-page: #F8F9FA;
+            --primary: #0F2C59;
+            --primary-dark: #081B38;
+            --secondary: #1E4E8C;
+            --accent: #8A6B3D;
+            --bg-page: #F8FAFC;
             --bg-card: #FFFFFF;
-            --text-main: #2D3748;
-            --text-muted: #718096;
-            --border: #E2E8F0;
-            --code-bg: #1E1E1E;
-            --code-text: #D4D4D4;
+            --text-main: #1E293B;
+            --text-muted: #475569;
+            --border: #CBD5E1;
+            --code-bg: #1E293B;
+            --code-text: #F1F5F9;
         }
 
         * {
@@ -42,7 +42,7 @@
             background: var(--bg-card);
             padding: 50px 70px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-            border-radius: 8px;
+            border-radius: 4px;
         }
 
         /* -------------------------------------------------------------
@@ -51,11 +51,11 @@
         @media print {
             body {
                 background: #FFF;
-                font-size: 13pt;
+                font-size: 11pt;
             }
             .container {
                 box-shadow: none;
-                padding: 0;
+                padding: 8px 24px;
                 max-width: 100%;
             }
             .page-break {
@@ -65,8 +65,73 @@
             .no-print {
                 display: none !important;
             }
-            .card, .table-container, .figure-box {
+            .card, .figure-box {
                 break-inside: avoid;
+            }
+            h2, h3 {
+                break-after: avoid;
+                page-break-after: avoid;
+            }
+            h2.section-title {
+                margin-top: 16px;
+                margin-bottom: 10px;
+                font-size: 19px;
+            }
+            h3.sub-title {
+                margin-top: 14px;
+                margin-bottom: 6px;
+                font-size: 15px;
+            }
+            p {
+                margin-bottom: 8px;
+                line-height: 1.55;
+            }
+            .highlight-card {
+                margin: 8px 0;
+                padding: 8px 14px;
+                font-size: 10.5pt;
+                line-height: 1.5;
+            }
+            ul, ol {
+                margin-bottom: 10px;
+            }
+            li {
+                margin-bottom: 4px;
+            }
+            .spec-card {
+                margin: 10px 0 14px 0;
+            }
+            .spec-card-header {
+                padding: 6px 12px;
+                font-size: 11pt;
+            }
+            .spec-table td {
+                padding: 4px 8px;
+                font-size: 9.5pt;
+                line-height: 1.4;
+            }
+            .spec-table td.label-col {
+                width: 25%;
+                font-size: 9.5pt;
+            }
+            pre {
+                padding: 10px 14px;
+                margin: 10px 0;
+                font-size: 9.5pt;
+                line-height: 1.35;
+                break-inside: avoid;
+            }
+            .table-container {
+                margin: 10px 0;
+            }
+            table th {
+                padding: 6px 10px;
+                font-size: 10.5pt;
+            }
+            table td {
+                padding: 6px 10px;
+                font-size: 10pt;
+                line-height: 1.4;
             }
         }
 
@@ -84,11 +149,11 @@
             color: white;
             border: none;
             padding: 12px 24px;
-            border-radius: 30px;
+            border-radius: 6px;
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,122,204,0.4);
+            box-shadow: 0 4px 15px rgba(15,44,89,0.3);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -100,109 +165,196 @@
         }
 
         /* -------------------------------------------------------------
-           Cover Page Styling
+           Formal Academic Cover Page Styling
         ------------------------------------------------------------- */
         .cover-page {
             text-align: center;
-            padding: 40px 20px;
-            min-height: 90vh;
+            padding: 35px 30px;
+            min-height: 94vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            border: 2px solid var(--border);
-            border-radius: 12px;
+            border: 3px double var(--primary);
+            border-radius: 4px;
             position: relative;
-            background: linear-gradient(180deg, #FAFAFA 0%, #FFFFFF 100%);
+            background: #FFFFFF;
         }
 
-        .cover-header h3 {
-            font-size: 18px;
-            color: var(--text-muted);
-            font-weight: 600;
-            margin-bottom: 5px;
+        .cover-header-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr 1.2fr;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
         }
-
-        .project-title-box {
-            background: linear-gradient(135deg, #007ACC 0%, #005A9E 100%);
-            color: white;
-            padding: 35px 25px;
-            border-radius: 12px;
-            margin: 40px auto;
-            max-width: 850px;
-            box-shadow: 0 10px 25px rgba(0,122,204,0.25);
-        }
-        .project-title-box h1 {
-            font-size: 34px;
-            font-weight: 900;
-            margin-bottom: 10px;
-        }
-        .project-title-box h2 {
-            font-size: 20px;
-            font-weight: 600;
-            opacity: 0.95;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            direction: ltr;
-        }
-        .project-title-box p {
-            margin-top: 12px;
-            font-size: 16px;
-            background: rgba(255,255,255,0.15);
-            display: inline-block;
-            padding: 4px 18px;
-            border-radius: 20px;
-        }
-
-        .course-info {
-            font-size: 18px;
+        .header-col h3 {
+            font-size: 13.5px;
             font-weight: 700;
+            line-height: 1.6;
             color: var(--text-main);
-            margin: 15px 0;
         }
-
-        .team-box {
-            background: #F1F5F9;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 25px;
-            max-width: 650px;
-            margin: 20px auto;
+        .header-col.ar-col {
             text-align: right;
         }
-        .team-box h4 {
-            color: var(--primary);
-            font-size: 18px;
-            margin-bottom: 15px;
-            text-align: center;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 8px;
-        }
-        .team-list {
-            list-style: none;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            font-size: 15px;
-        }
-        .team-list li {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 12px;
-            background: white;
-            border-radius: 6px;
-            border-right: 4px solid var(--primary);
-        }
-        .team-list .en-name {
-            color: var(--text-muted);
+        .header-col.en-col {
+            text-align: left;
             direction: ltr;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            font-size: 14px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: var(--text-muted);
+        }
+        .header-col.logo-col {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .univ-logo {
+            max-height: 110px;
+            width: auto;
+            object-fit: contain;
         }
 
-        .cover-footer {
-            margin-top: 30px;
-            font-size: 15px;
-            color: var(--text-muted);
+        .academic-divider-double {
+            border-top: 3px double var(--primary);
+            margin: 12px 0 22px 0;
+        }
+        .academic-divider-single {
+            border-top: 1px solid var(--border);
+            margin: 12px auto;
+            max-width: 400px;
+        }
+
+        .formal-title-section {
+            margin: 15px 0;
+        }
+        .report-type-badge {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        .project-main-title {
+            font-size: 27px;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+        .project-sub-title {
+            font-size: 18px;
             font-weight: 600;
+            color: #334155;
+            direction: ltr;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin-bottom: 12px;
+        }
+        .project-description-text {
+            font-size: 14.5px;
+            color: var(--text-muted);
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .course-academic-card {
+            background: #F8FAFC;
+            border: 1px solid var(--border);
+            border-right: 4px solid var(--primary);
+            padding: 12px 20px;
+            margin: 15px auto;
+            max-width: 650px;
+            border-radius: 4px;
+        }
+        .course-label {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            margin-bottom: 3px;
+        }
+        .course-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .people-grid {
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            gap: 20px;
+            margin: 20px 0;
+            text-align: right;
+        }
+        .person-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .card-role-title {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 2px solid #E2E8F0;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+        .supervisor-card {
+            text-align: center;
+        }
+        .supervisor-content {
+            margin-top: 15px;
+        }
+        .supervisor-name {
+            font-size: 22px;
+            font-weight: 900;
+            color: #0F172A;
+            margin-bottom: 8px;
+        }
+        .supervisor-title {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .students-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .students-table td {
+            padding: 6px 4px;
+            font-size: 13.5px;
+            border-bottom: 1px solid #F1F5F9;
+            white-space: nowrap;
+        }
+        .students-table tr:last-child td {
+            border-bottom: none;
+        }
+        .st-num {
+            font-weight: 700;
+            color: var(--primary);
+            width: 22px;
+            text-align: center;
+        }
+        .st-ar {
+            font-weight: 700;
+            color: var(--text-main);
+            text-align: right;
+            padding-right: 6px;
+        }
+        .st-en {
+            direction: ltr;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: var(--text-muted);
+            font-size: 12.5px;
+            text-align: left;
+        }
+
+        .cover-footer-formal {
+            margin-top: 15px;
+        }
+        .term-date {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
         }
 
         /* -------------------------------------------------------------
@@ -336,6 +488,48 @@
             border-radius: 6px;
             margin: 20px 0;
         }
+
+        /* Specification Breakdown Cards */
+        .spec-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 15px 0 20px 0;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        .spec-card-header {
+            background: #F1F5F9;
+            padding: 10px 16px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            border-bottom: 1px solid var(--border);
+            font-size: 14.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .spec-table td {
+            padding: 9px 14px;
+            vertical-align: top;
+            font-size: 13.5px;
+            border-bottom: 1px solid #EDF2F7;
+            line-height: 1.6;
+        }
+        .spec-table tr:last-child td {
+            border-bottom: none;
+        }
+        .spec-table td.label-col {
+            width: 28%;
+            background: #F8FAFC;
+            font-weight: 700;
+            color: #334155;
+            border-left: 1px solid var(--border);
+        }
     </style>
 </head>
 <body>
@@ -343,61 +537,106 @@
     <!-- زر الطباعة وتصدير PDF -->
     <div class="action-bar no-print">
         <button class="btn-print" onclick="window.print()">
-            <span>🖨️</span> طباعة وحفظ التقرير بصيغة PDF
+            طباعة وحفظ التقرير بصيغة PDF
         </button>
     </div>
 
     <div class="container">
 
         <!-- =======================================================
-             الصفحة الأولى: صفحة الغلاف الرسمية
+             الصفحة الأولى: صفحة الغلاف الرسمية الأكاديمية
         ======================================================= -->
         <div class="cover-page">
-            <div class="cover-header">
-                <h3>الجمهورية اليمنية</h3>
-                <h3>وزارة التعليم العالي والبحث العلمي</h3>
-                <h3>كلية الحاسوب وتكنولوجيا المعلومات</h3>
-                <h3>قسم علوم الحاسوب وتقنية المعلومات</h3>
+            <div>
+                <!-- ترويسة الجامعة والشعار الرسمي -->
+                <div class="cover-header-grid">
+                    <div class="header-col ar-col">
+                        <h3>الجمهورية اليمنية</h3>
+                        <h3>وزارة التعليم العالي والبحث العلمي</h3>
+                        <h3>جامعة إب</h3>
+                        <h3>كلية الحاسوب وتكنولوجيا المعلومات</h3>
+                        <h3>قسم علوم الحاسوب وتقنية المعلومات</h3>
+                    </div>
+                    <div class="header-col logo-col">
+                        <img src="images/ibb_university_logo.png" alt="شعار جامعة إب" class="univ-logo">
+                    </div>
+                    <div class="header-col en-col">
+                        <h3>Republic of Yemen</h3>
+                        <h3>Ministry of Higher Education</h3>
+                        <h3>Ibb University</h3>
+                        <h3>Faculty of Computer & IT</h3>
+                        <h3>Computer Science Dept.</h3>
+                    </div>
+                </div>
+
+                <div class="academic-divider-double"></div>
+
+                <!-- عنوان المشروع الرسمي -->
+                <div class="formal-title-section">
+                    <div class="report-type-badge">تقرير المشروع النهائي — Final Project Report</div>
+                    <h1 class="project-main-title">مـشـروع تـطـويـر مـتـرجـم ومـحـرّر لـغـة بـيـان الـعـربـيـة</h1>
+                    <h2 class="project-sub-title">Bayan Arabic Compiler & Arabic IDE Studio</h2>
+                    <p class="project-description-text">نظام تطبيقي متكامل لتصميم وبناء المترجمات وتوليد البرامج التنفيذية الأصلية المستقلة (Windows PE EXE)</p>
+                </div>
+
+                <div class="course-academic-card">
+                    <div class="course-label">تقرير علمي مقدم لنيل درجة متطلب مقرر:</div>
+                    <div class="course-name">تـصـمـيـم وبـنـاء الـمـتـرجـمـات (Compilers Design)</div>
+                </div>
+
+                <!-- كتلة الإشراف وإعداد الطلاب -->
+                <div class="people-grid">
+                    <!-- جهة اليمين: إشراف الدكتور -->
+                    <div class="person-card supervisor-card">
+                        <div class="card-role-title">إشراف الدكتور الفاضل:</div>
+                        <div class="supervisor-content">
+                            <div class="supervisor-name">د. خالد الكحسة</div>
+                            <div class="supervisor-title">
+                                أستاذ مقرر تصميم وبناء المترجمات<br>
+                                كلية الحاسوب وتكنولوجيا المعلومات<br>
+                                جامعة إب
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- جهة اليسار: إعداد الطلاب -->
+                    <div class="person-card team-card">
+                        <div class="card-role-title">إعداد طلاب المجموعة (رقم: 01):</div>
+                        <table class="students-table">
+                            <tr>
+                                <td class="st-num">1.</td>
+                                <td class="st-ar">محمد رشاد الإدريسي</td>
+                                <td class="st-en">Mohammed Rashad Al-Edrisi</td>
+                            </tr>
+                            <tr>
+                                <td class="st-num">2.</td>
+                                <td class="st-ar">أسامة شميس</td>
+                                <td class="st-en">Osama Shomis</td>
+                            </tr>
+                            <tr>
+                                <td class="st-num">3.</td>
+                                <td class="st-ar">أسامة العقاب</td>
+                                <td class="st-en">Osama Al-Oqab</td>
+                            </tr>
+                            <tr>
+                                <td class="st-num">4.</td>
+                                <td class="st-ar">محمد فيصل الدعيس</td>
+                                <td class="st-en">Mohammed Faisal Al-Doais</td>
+                            </tr>
+                            <tr>
+                                <td class="st-num">5.</td>
+                                <td class="st-ar">شعيب جازم</td>
+                                <td class="st-en">Shoaib Jazem</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <div class="project-title-box">
-                <h1>مشروع مترجم ومحرر لغة بيان</h1>
-                <h2>Bayan Arabic Compiler & Arabic VS Code Studio</h2>
-                <p>نظام متكامل لتصميم المترجمات وتوليد البرامج التنفيذية الأصلية (PE EXE)</p>
-            </div>
-
-            <div class="course-info">
-                تقرير المشروع النهائي لمقرر: تصميم وبناء المترجمات (Compilers Design)
-            </div>
-
-            <div class="team-box">
-                <h4>إعداد فريق العمل (المجموعة رقم: 01)</h4>
-                <ul class="team-list">
-                    <li>
-                        <span><strong>1. م. محمد رشاد أحمد محمد الإدريسي</strong></span>
-                        <span class="en-name">Mohammed Rashad Al-Edrisi</span>
-                    </li>
-                    <li>
-                        <span><strong>2. أسامة شميس</strong></span>
-                        <span class="en-name">Osama Shomis</span>
-                    </li>
-                    <li>
-                        <span><strong>3. أسامة العقاب</strong></span>
-                        <span class="en-name">Osama Al-Oqab</span>
-                    </li>
-                    <li>
-                        <span><strong>4. محمد فيصل الدعيس</strong></span>
-                        <span class="en-name">Mohammed Faisal Al-Doais</span>
-                    </li>
-                    <li>
-                        <span><strong>5. شعيب جازم</strong></span>
-                        <span class="en-name">Shoaib Jazem</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="cover-footer">
-                <div>الفصل الدراسي الثاني — العام الجامعي 2025 / 2026 م</div>
+            <!-- التذييل الزمني للغلاف -->
+            <div class="cover-footer-formal">
+                <div class="academic-divider-single"></div>
+                <div class="term-date">الفصل الدراسي الثاني — العام الجامعي: 2025 / 2026 م — 1447 هـ</div>
             </div>
         </div>
 
@@ -469,60 +708,306 @@
         <div class="page-break"></div>
 
         <!-- =======================================================
-             مراحل المترجم التسع وشرح الأكواد
+             مراحل المترجم ومحرر الكود وشرح الأكواد (وفق البنود الـ 9 الإلزامية)
         ======================================================= -->
-        <h2 class="section-title">2. الشرح التخصصي لمراحل المترجم وهياكل البيانات</h2>
-
-        <h3 class="sub-title">2.1 التحليل المعجمي (Lexer.cs)</h3>
+        <h2 class="section-title">2. توثيق وشرح أكواد المشروع ومراحل الترجمة (وفق المعايير الـ 9)</h2>
         <p>
-            يقوم المحلل المعجمي بقراءة الملف المصدري حرفاً بحرف وتحويله إلى قائمة متتابعة من الرموز (Tokens). يتعرف المحلل على الكلمات المفتاحية العربية (ثابت، متغير، اذا، والا، طالما، كرر، اطبع)، المعرفات، الأرقام الصحيحة والعشرية، النصوص، والمعاملات الحسابية والمنطقية.
+            امتثالاً للبند الثامن من وثيقة تعليمات المشروع، يقدم هذا القسم شرحاً تحليلياً شاملاً لكافة أجزاء ومراحل المترجم ومحرر اللغة، يغطي لكل جزء النقاط التسع الإلزامية المحددة في معايير التقييم:
         </p>
-        <ul>
-            <li><strong>المدخلات:</strong> النص المصدري بترميز UTF-8.</li>
-            <li><strong>المخرجات:</strong> قائمة كائنات <code>List&lt;Token&gt;</code> مع توثيق السطر والعمود.</li>
-            <li><strong>هياكل البيانات:</strong> <code>TokenType Enum</code>, <code>Token Class</code>, وقاموس الكلمات المحجوزة <code>Dictionary&lt;string, TokenType&gt;</code>.</li>
-        </ul>
-        <pre><code>// جزء من كود التحليل المعجمي ومطابقة الرموز
-if (char.IsLetter(c) || c == '_')
-{
-    int startCol = col;
-    string lexeme = ReadIdentifier(sourceCode, ref index, ref col);
-    TokenType type = Keywords.TryGetValue(lexeme, out var kw) ? kw : TokenType.IDENTIFIER;
-    tokens.Add(new Token(type, lexeme, line, startCol));
-    continue;
-}</code></pre>
 
-        <h3 class="sub-title">2.2 التحليل النحوي التنبؤي وشجرة الإعراب (Parser.cs & AstNodes.cs)</h3>
-        <p>
-            يطبق المحلل النحوي خوارزمية التحليل التنبؤي الصارم $LL(1)$ الخالي من التراجع، مع ضمان خلو القواعد من اللف العودي اليساري، ويقوم ببناء شجرة الإعراب المجردة كشجرة كائنية متدرجة (ProgramNode -> StatementNode -> ExpressionNode).
-        </p>
-        <pre><code>// التحليل النحوي للتعبيرات وبناء عقد العمليات الحسابية
-private ExpressionNode ParseExpression()
+        <!-- 2.1 Lexer -->
+        <h3 class="sub-title">2.1 المحلل المعجمي واستخراج الرموز (Lexer.cs)</h3>
+        <div class="spec-card">
+            <div class="spec-card-header">بطاقة المواصفات البرمجية: المحلل المعجمي (Lexical Analyzer Specification)</div>
+            <table class="spec-table">
+                <tr><td class="label-col">1. وظيفة الجزء من الكود</td><td>قراءة الكود المصدري العربي حرفاً بحرف وتحليله معجمياً، وتفكيكه إلى تدفق من الرموز المعجمية (Tokens)، مع عزل التعليقات والفراغات، واحتساب إحداثيات السطر والعمود بدقة، وتشخيص الرموز غير المعرفة.</td></tr>
+                <tr><td class="label-col">2. المدخلات (Inputs)</td><td>النص البرمجي المصدري المكتوب بلغة بيان بترميز <code>UTF-8</code> الممرر من المحرر أو سطر الأوامر.</td></tr>
+                <tr><td class="label-col">3. المخرجات (Outputs)</td><td>كائن <code>LexResult</code> يحتوي على قائمة الرموز المعجمية المتسلسلة <code>List&lt;Token&gt;</code>، بالإضافة إلى سجل الأخطاء المعجمية <code>DiagnosticBag</code> إن وُجدت.</td></tr>
+                <tr><td class="label-col">4. المتغيرات المستخدمة</td><td><code>_position</code> (مؤشر موقع القراءة الحالي في النص)، <code>_line</code> (رقم السطر النشط يبدأ من 1)، <code>_column</code> (رقم العمود النشط)، <code>_startPosition / _startLine / _startColumn</code> (إحداثيات بداية الرمز)، <code>c</code> (المحرف الحالي المفحوص).</td></tr>
+                <tr><td class="label-col">5. هياكل البيانات المستخدمة</td><td><code>enum TokenType</code> (يحوي أكثر من 40 نوعاً للرموز)، <code>class Token</code> (سجل يضم النوع، القيمة النصية Lexeme، السطر، والعمود)، قاموس الكلمات المحجوزة <code>Dictionary&lt;string, TokenType&gt;</code> لمطابقة الكلمات المفتاحية في زمن ثابت $O(1)$.</td></tr>
+                <tr><td class="label-col">6. الدوال أو الإجراءات المستخدمة</td><td><code>Lex()</code> (الدالة الرئيسية لبدء المسح)، <code>NextToken()</code> (استخراج الرمز التالي)، <code>ReadIdentifierOrKeyword()</code> (قراءة المعرفات والكلمات العربية)، <code>ReadNumber()</code> (معالجة الأعداد الصحيحة والحقيقية)، <code>ReadString()</code> (قراءة السلاسل النصية)، <code>Peek()</code> (استشراف المحرف التالي).</td></tr>
+                <tr><td class="label-col">7. المكتبات المستخدمة</td><td><code>System</code>, <code>System.Collections.Generic</code>, <code>System.Text</code>, ومكتبة الواجهة الأمامية للمشروع <code>BayanCompiler.Frontend</code>.</td></tr>
+                <tr><td class="label-col">8. الملفات المرتبطة بالجزء</td><td><code>Token.cs</code>, <code>TokenType.cs</code>, <code>SourceText.cs</code>, <code>Diagnostic.cs</code>, <code>DiagnosticBag.cs</code>.</td></tr>
+                <tr><td class="label-col">9. كيفية ارتباطه بباقي المشروع</td><td>يمثل المرحلة الأولى (بوابة خط الأنابيب)؛ يستقبل النص المباشر من واجهة المحرر، ويمرر مصفوفة الرموز (Tokens) مباشرة كمدخل أساسي للمحلل النحوي التنبؤي <code>DoctorLl1Parser.cs</code>.</td></tr>
+            </table>
+        </div>
+        <pre><code>// مقتطف حقيقي من المحلل المعجمي Lexer.cs
+public LexResult Lex()
 {
-    ExpressionNode left = ParseTerm();
-    while (CurrentToken.Type == TokenType.OP_PLUS || CurrentToken.Type == TokenType.OP_MINUS)
+    var tokens = new List&lt;Token&gt;();
+    while (_position &lt; _text.Length)
     {
-        Token op = ConsumeToken();
-        ExpressionNode right = ParseTerm();
-        left = new BinaryOpNode(op.Lexeme, left, right, op.Line, op.Column);
+        char current = Current;
+        if (char.IsWhiteSpace(current)) { Advance(); continue; }
+        if (current == '/' && Peek(1) == '/') { SkipLineComment(); continue; }
+
+        if (char.IsLetter(current) || current == '_')
+        {
+            tokens.Add(ReadIdentifierOrKeyword());
+            continue;
+        }
+        if (char.IsDigit(current))
+        {
+            tokens.Add(ReadNumber());
+            continue;
+        }
+        if (current == '"')
+        {
+            tokens.Add(ReadString());
+            continue;
+        }
+        tokens.Add(ReadOperatorOrDelimiter());
     }
-    return left;
+    tokens.Add(new Token(TokenType.EndOfFile, "\0", new SourceSpan(_position, 0, _line, _column)));
+    return new LexResult(tokens, _diagnostics.ToReadOnlyList());
 }</code></pre>
 
-        <h3 class="sub-title">2.3 التحليل الدلالي وجدول الرموز (SemanticAnalyzer.cs & SymbolTable.cs)</h3>
-        <p>
-            يقوم المحلل الدلالي بزيارة شجرة الإعراب، وتطبيق القواعد المنطقية للغة: التأكد من التصريح المسبق عن المتغيرات، منع التعديل على الثوابت، التحقق من توافق أنواع البيانات، وعزل مجالات الرؤية (Scopes) في هيكل هرمي متعدد المستويات.
-        </p>
+        <div class="page-break"></div>
 
-        <h3 class="sub-title">2.4 الشفرة الوسيطة ثلاثية العناوين (TacGenerator.cs)</h3>
-        <p>
-            توليد تعليمات TAC الخطية المكونة من معاملات رباعية (Operator, Arg1, Arg2, Result) باستخدام سجلات وسيطة مؤقتة ($t0, $t1, ...) وعناوين قفز شرطية وغير شرطية (Labels).
-        </p>
+        <!-- 2.2 Parser -->
+        <h3 class="sub-title">2.2 المحلل النحوي التنبؤي LL(1) وبناء الشجرة المجردة (DoctorLl1Parser.cs & DoctorAstBuilder.cs)</h3>
+        <div class="spec-card">
+            <div class="spec-card-header">بطاقة المواصفات البرمجية: المحلل النحوي (Predictive LL(1) Parser Specification)</div>
+            <table class="spec-table">
+                <tr><td class="label-col">1. وظيفة الجزء من الكود</td><td>التحقق من صحة القواعد النحوية للكود المصدري وفق قواعد الطبيب عبر خوارزمية التحليل التنبؤي الصارم $LL(1)$ غير العودي والخالي من التراجع، مع بناء شجرة الاشتقاق (Parse Tree) وشجرة الإعراب المجردة (AST).</td></tr>
+                <tr><td class="label-col">2. المدخلات (Inputs)</td><td>مصفوفة الرموز المعجمية <code>IReadOnlyList&lt;Token&gt;</code> الناتجة من المحلل المعجمي.</td></tr>
+                <tr><td class="label-col">3. المخرجات (Outputs)</td><td>كائن <code>DoctorParseResult</code> يتضمن جذر الشجرة المجردة <code>ProgramNode Program</code>، شجرة الاشتقاق <code>ParseTreeNode ParseTree</code>، سجل تتبع المكدس <code>Ll1Trace</code>، وجدول التحليل <code>Ll1Table</code>.</td></tr>
+                <tr><td class="label-col">4. المتغيرات المستخدمة</td><td><code>_tokens</code> (قائمة الرموز الممررة)، <code>_position</code> (مؤشر الرمز المفحوص)، <code>_parseStack</code> (مكدس التحليل التنبؤي للرموز غير النهائية والنهائية)، <code>_traceBuilder</code> (سجل توثيق خطوات التحليل).</td></tr>
+                <tr><td class="label-col">5. هياكل البيانات المستخدمة</td><td><code>Stack&lt;string&gt;</code> (مكدس رموز القواعد)، جدول توجيه التحليل $M[A, a]$ ممثلاً بـ <code>Dictionary&lt;(string, TokenType), List&lt;string&gt;&gt;</code>، وشجرة كائنية هرمية للعقد: <code>ProgramNode</code>, <code>VariableDeclarationNode</code>, <code>AssignmentNode</code>, <code>IfNode</code>, <code>LoopNode</code>, <code>ProcedureNode</code>.</td></tr>
+                <tr><td class="label-col">6. الدوال أو الإجراءات المستخدمة</td><td><code>Parse()</code> (بدء التحليل النحوي)، <code>Predict()</code> (استخراج قاعدة الإنتاج المطابقة من جدول LL1)، <code>Match()</code> (مطابقة الرمز النهائي واستهلاكه)، <code>BuildAst()</code> (تحويل شجرة الاشتقاق لعقد AST)، <code>FormatTrace()</code> (تنسيق خطوات التحليل).</td></tr>
+                <tr><td class="label-col">7. المكتبات المستخدمة</td><td><code>System</code>, <code>System.Collections.Generic</code>, <code>BayanCompiler.Syntax</code>, <code>BayanCompiler.Lexing</code>.</td></tr>
+                <tr><td class="label-col">8. الملفات المرتبطة بالجزء</td><td><code>DoctorAstBuilder.cs</code>, <code>DoctorSpecificationNodes.cs</code>, <code>ParseResult.cs</code>, <code>AstNode.cs</code>, <code>Statements.cs</code>, <code>Expressions.cs</code>.</td></tr>
+                <tr><td class="label-col">9. كيفية ارتباطه بباقي المشروع</td><td>يستهلك رموز المحلل المعجمي، ويبني شجرة الإعراب المجردة (AST) التي تمثل الهيكل المحوري الممرر للمحلل الدلالي <code>DoctorSemanticAnalyzer.cs</code>.</td></tr>
+            </table>
+        </div>
+        <pre><code>// مقتطف حقيقي من التحليل النحوي التنبؤي وبناء عقد التعبيرات DoctorLl1Parser.cs
+public DoctorParseResult Parse()
+{
+    var parseStack = new Stack&lt;string&gt;();
+    parseStack.Push(DoctorGrammar.RuleEndMarker);
+    parseStack.Push(DoctorGrammar.StartSymbol); // "برنامج"
 
-        <h3 class="sub-title">2.5 توليد كود التجميع الهدفي x86 ومولد PE EXE (AssemblyGenerator.cs & CilGenerator.cs)</h3>
-        <p>
-            يقوم المترجم بتوليد شفرة أسمبلي x86 متوافقة مع NASM/MASM لإثبات الفهم النظري لمعمارية المعالجات وسجلات EAX وEBX وإطار المكدس، وفي الوقت ذاته يولد كود CIL ليتم تجميعه عبر <code>ilasm.exe</code> إلى ملف تنفيذي حقيقي ومستقل <code>program.exe</code>.
-        </p>
+    while (parseStack.Count > 0)
+    {
+        string top = parseStack.Pop();
+        Token currentToken = Current;
+
+        if (IsTerminal(top))
+        {
+            if (MatchTerminal(top, currentToken))
+            {
+                Advance(); // استهلاك الرمز بعد التأكد من صحته
+            }
+            else
+            {
+                ReportSyntaxError(top, currentToken);
+                return DoctorParseResult.Failure(_diagnostics);
+            }
+        }
+        else // رمز غير نهائي Non-terminal: تطبيق قاعدة الإنتاج من جدول LL(1)
+        {
+            var production = LookupProduction(top, currentToken.Type);
+            for (int i = production.Count - 1; i >= 0; i--)
+            {
+                if (production[i] != DoctorGrammar.Epsilon)
+                    parseStack.Push(production[i]);
+            }
+        }
+    }
+    return DoctorParseResult.Success(_astBuilder.Build());
+}</code></pre>
+
+        <div class="page-break"></div>
+
+        <!-- 2.3 Semantic Analyzer -->
+        <h3 class="sub-title">2.3 التحليل الدلالي وإدارة مجالات الرؤية وجدول الرموز (DoctorSemanticAnalyzer.cs & SymbolTable.cs)</h3>
+        <div class="spec-card">
+            <div class="spec-card-header">بطاقة المواصفات البرمجية: التحليل الدلالي (Semantic Analyzer Specification)</div>
+            <table class="spec-table">
+                <tr><td class="label-col">1. وظيفة الجزء من الكود</td><td>التحقق من صحة المعنى والمنطق البرمجي (Semantic Rules)، فرض التصريح المسبق عن المتغيرات، حماية الثوابت من التعديل، التحقق من تطابق وتوافق الأنواع في العمليات الرياضية والمقارنات، وإدارة مجالات الرؤية المتداخلة (Scopes).</td></tr>
+                <tr><td class="label-col">2. المدخلات (Inputs)</td><td>شجرة الإعراب المجردة <code>ProgramNode</code> الناتجة من مرحلة التحليل النحوي.</td></tr>
+                <tr><td class="label-col">3. المخرجات (Outputs)</td><td>كائن <code>DoctorSemanticResult</code> يحتوي على حالة النجاح <code>bool Succeeded</code>، جدول الرموز الهرمي <code>SymbolTable</code> شاملاً كافة المعرفات وأنواعها ومجالاتها، ومصفوفة التشخيصات الدلالية <code>Diagnostics</code>.</td></tr>
+                <tr><td class="label-col">4. المتغيرات المستخدمة</td><td><code>_currentScope</code> (النطاق النشط حالياً أثناء التجوال)، <code>_globalScope</code> (نطاق البرنامج العام)، <code>_diagnostics</code> (سجل تجميع الأخطاء الدلالية)، <code>expectedType</code> (النوع المتوقع للطرفين)، <code>actualType</code> (النوع المشتق للتعبير).</td></tr>
+                <tr><td class="label-col">5. هياكل البيانات المستخدمة</td><td>كلاس <code>SymbolTable</code> بآلية الإشارة للنطاق الأب <code>ParentScope</code>، قاموس الرموز <code>Dictionary&lt;string, Symbol&gt;</code>، كلاس <code>Symbol</code> (يحمل الاسم، الفئة، نوع البيانات، هل هو للقراءة فقط ReadOnly، ورقم السطر)، وتعداد أنواع اللغة <code>LanguageType</code> (صحيح، حقيقي، منطقي، حرفي، خيط رمزي، قائمة، سجل، إجراء).</td></tr>
+                <tr><td class="label-col">6. الدوال أو الإجراءات المستخدمة</td><td><code>Analyze()</code> (نقطة الدخول للتحليل)، <code>VisitStatement()</code> (فحص الجمل والتصريحات)، <code>VisitExpression()</code> (اشتقاق نوع التعبير)، <code>Declare()</code> (تسجيل رمز جديد بالنطاق)، <code>Lookup()</code> (البحث عن رمز صعوداً عبر النطاقات)، <code>EnterScope() / ExitScope()</code> (إدارة بيئات الرؤية).</td></tr>
+                <tr><td class="label-col">7. المكتبات المستخدمة</td><td><code>System</code>, <code>System.Collections.Generic</code>, <code>BayanCompiler.Syntax</code>, <code>BayanCompiler.Frontend</code>.</td></tr>
+                <tr><td class="label-col">8. الملفات المرتبطة بالجزء</td><td><code>Symbol.cs</code>, <code>SymbolTable.cs</code>, <code>LanguageType.cs</code>, <code>TypeDescriptor.cs</code>, <code>DoctorSemanticAnalyzer.cs</code>.</td></tr>
+                <tr><td class="label-col">9. كيفية ارتباطه بباقي المشروع</td><td>يستقبل شجرة AST من المحلل النحوي، ويؤكد سلامتها من أخطاء الأنواع والمجالات، ويزود مولد الشفرة الوسيطة <code>IrGenerator.cs</code> بالأنواع المؤكدة لإنتاج كود سليم ومحسن.</td></tr>
+            </table>
+        </div>
+        <pre><code>// مقتطف حقيقي من التحقق الدلالي وفحص مجالات الرؤية DoctorSemanticAnalyzer.cs
+public override void VisitAssignment(AssignmentNode node)
+{
+    var symbol = _currentScope.Lookup(node.VariableName);
+    if (symbol == null)
+    {
+        ReportError($"المعرف '{node.VariableName}' غير معرّف في هذا النطاق.", node.Span);
+        return;
+    }
+    if (symbol.IsReadOnly)
+    {
+        ReportError($"لا يمكن تعديل الثابت '{node.VariableName}' بعد تعيين قيمته الأولية.", node.Span);
+        return;
+    }
+
+    LanguageType exprType = EvaluateType(node.ValueExpression);
+    if (!IsTypeCompatible(symbol.Type, exprType))
+    {
+        ReportError($"تعارض في الأنواع: لا يمكن إسناد قيمة من نوع '{exprType}' إلى متغير من نوع '{symbol.Type}'.", node.Span);
+    }
+}</code></pre>
+
+        <div class="page-break"></div>
+
+        <!-- 2.4 TAC Generator -->
+        <h3 class="sub-title">2.4 توليد الشفرة الوسيطة ثلاثية العناوين (IrGenerator.cs & IrInstruction.cs)</h3>
+        <div class="spec-card">
+            <div class="spec-card-header">بطاقة المواصفات البرمجية: الشفرة الوسيطة (Three-Address Code Specification)</div>
+            <table class="spec-table">
+                <tr><td class="label-col">1. وظيفة الجزء من الكود</td><td>تسطيح (Flattening) شجرة الإعراب الهرمية وتحويلها إلى متتالية خطية من أوامر العناوين الثلاثية (TAC)، وتوليد السجلات المؤقتة (temp_0, temp_1) وعناوين القفز الشرطي وغير الشرطي (Labels) لإدارة الحلقات والشروط.</td></tr>
+                <tr><td class="label-col">2. المدخلات (Inputs)</td><td>شجرة الإعراب المجردة <code>ProgramNode</code> المؤكدة والمفحوصة دلالياً مع جدول الرموز.</td></tr>
+                <tr><td class="label-col">3. المخرجات (Outputs)</td><td>كائن <code>IrProgram</code> يحتوي على قائمة الأوامر الوسيطة الخطية <code>List&lt;IrInstruction&gt;</code>، خريطة حجز الذاكرة والمؤقتات <code>StorageMap</code>، وجدول النصوص الثابتة <code>StringLiterals</code>.</td></tr>
+                <tr><td class="label-col">4. المتغيرات المستخدمة</td><td><code>_tempCounter</code> (عداد المؤقتات الخطية)، <code>_labelCounter</code> (عداد العلامات والعناوين)، <code>_instructions</code> (قائمة الأوامر الناتجة)، <code>_storageMap</code> (خريطة تسجيل أسماء المتغيرات وأنواعها).</td></tr>
+                <tr><td class="label-col">5. هياكل البيانات المستخدمة</td><td>سجل <code>IrInstruction</code> (يحتوي على: Opcode, Left, Right, Result, TargetLabel, Span)، كلاس <code>IrValue</code> (يمثل: Immediate, Variable, Temporary, StringLabel)، وتعداد <code>IrOpcode</code> (أوامر الحساب، المقارنات، القفز، الطباعة، والقراءة).</td></tr>
+                <tr><td class="label-col">6. الدوال أو الإجراءات المستخدمة</td><td><code>Generate()</code> (بدء التوليد الوسيط)، <code>GenerateExpression()</code> (تسطيح التعبيرات إلى مؤقتات)، <code>NewTemporary()</code> (إنشاء سجل وسيط جديد)، <code>NewLabel()</code> (إنشاء عنوان قفز فريد)، <code>Emit()</code> (حقن تعليمة في البرنامج).</td></tr>
+                <tr><td class="label-col">7. المكتبات المستخدمة</td><td><code>System</code>, <code>System.Collections.Generic</code>, <code>BayanCompiler.Syntax</code>, <code>BayanCompiler.Intermediate</code>.</td></tr>
+                <tr><td class="label-col">8. الملفات المرتبطة بالجزء</td><td><code>IrProgram.cs</code>, <code>IrInstruction.cs</code>, <code>IrValue.cs</code>, <code>IrOpcode.cs</code>, <code>IrPrinter.cs</code>.</td></tr>
+                <tr><td class="label-col">9. كيفية ارتباطه بباقي المشروع</td><td>يمثل جسر العبور الفاصل بين الواجهة الأمامية للمترجم (Frontend) والواجهات الخلفية لتوليد الكود الهدف (Backend: MIPS, x86, CIL).</td></tr>
+            </table>
+        </div>
+        <pre><code>// مقتطف حقيقي من توليد أوامر الشفرة الوسيطة ثلاثية العناوين IrGenerator.cs
+private IrValue GenerateBinaryExpression(BinaryExpressionNode binary)
+{
+    IrValue leftVal = GenerateExpression(binary.Left);
+    IrValue rightVal = GenerateExpression(binary.Right);
+    IrValue temp = NewTemporary(binary.InferredType);
+
+    _program.Emit(new IrInstruction(
+        IrOpcode.Binary,
+        temp,
+        leftVal,
+        rightVal,
+        binary.Operator,
+        null,
+        binary.Span
+    ));
+    return temp;
+}</code></pre>
+
+        <div class="page-break"></div>
+
+        <!-- 2.5 Assembly Generator -->
+        <h3 class="sub-title">2.5 توليد لغة التجميع الهدفية لمعالجات x86 و MIPS (AssemblyGenerator.cs & MipsCodeGenerator.cs)</h3>
+        <div class="spec-card">
+            <div class="spec-card-header">بطاقة المواصفات البرمجية: توليد كود التجميع (Target Assembly Generator Specification)</div>
+            <table class="spec-table">
+                <tr><td class="label-col">1. وظيفة الجزء من الكود</td><td>تحويل تعليمات الشفرة الوسيطة (TAC) إلى شفرة تجميع هدفية حقيقية: إنتاج كود MIPS Assembly أصيل يوضح معمارية المعالجات (الأقسام <code>.data</code> و <code>.text</code>، والسجلات <code>$t0-$t9</code>، وتعليمات الذاكرة <code>lw</code> و <code>sw</code> واستدعاءات النظام <code>syscall</code>)، وتوليد كود x86 32-bit.</td></tr>
+                <tr><td class="label-col">2. المدخلات (Inputs)</td><td>برنامج الشفرة الوسيطة ثلاثية العناوين <code>IrProgram</code> ومسار مجلد الإخراج.</td></tr>
+                <tr><td class="label-col">3. المخرجات (Outputs)</td><td>ملف أسمبلي كامل <code>output.asm</code> يحفظ في مجلد المخرجات ويعرض في التبويب المخصص بالمحرر.</td></tr>
+                <tr><td class="label-col">4. المتغيرات المستخدمة</td><td><code>builder</code> (لبناء النصوص المعمارية للأسمبلي)، <code>fields</code> (جدول حقول الذاكرة والمواقع المحجوزة)، <code>labels</code> (جدول علامات القفز)، <code>allocatedRegisters</code> (خريطة تخصيص السجلات).</td></tr>
+                <tr><td class="label-col">5. هياكل البيانات المستخدمة</td><td><code>StringBuilder</code>، قواميس المعرفات <code>Dictionary&lt;string, string&gt;</code>، مصفوفات حجز الذاكرة للبيانات الأولية والمركبة.</td></tr>
+                <tr><td class="label-col">6. الدوال أو الإجراءات المستخدمة</td><td><code>Generate()</code> (تنسيق توليد الملف)، <code>EmitDataSection()</code> (بناء قسم حجز المتغيرات والسلاسل)، <code>EmitTextSection()</code> (بناء قسم التعليمات التنفيذية)، <code>TranslateInstruction()</code> (تحويل كل أمر TAC لأمر تجميع مقلوب).</td></tr>
+                <tr><td class="label-col">7. المكتبات المستخدمة</td><td><code>System</code>, <code>System.IO</code>, <code>System.Text</code>, <code>BayanCompiler.Intermediate</code>.</td></tr>
+                <tr><td class="label-col">8. الملفات المرتبطة بالجزء</td><td><code>MipsCodeGenerator.cs</code>, <code>AssemblyGenerator.cs</code>, <code>BackendTypeLayout.cs</code>.</td></tr>
+                <tr><td class="label-col">9. كيفية ارتباطه بباقي المشروع</td><td>يأخذ الشفرة الوسيطة من <code>IrGenerator.cs</code>، وينتج الملف <code>output.asm</code> الذي يمثل متطلب مرحلة الأسمبلي الرسمية في التقرير والمحرر.</td></tr>
+            </table>
+        </div>
+        <pre><code>// مقتطف حقيقي من توليد شفرة لغة التجميع MipsCodeGenerator.cs
+private void EmitMipsInstruction(IrInstruction inst, StringBuilder sb)
+{
+    switch (inst.Opcode)
+    {
+        case IrOpcode.Assign:
+            LoadValueToReg(inst.Left, "$t0", sb);
+            sb.AppendLine($"    sw $t0, {GetMemoryLocation(inst.Result)}");
+            break;
+        case IrOpcode.Binary:
+            LoadValueToReg(inst.Left, "$t0", sb);
+            LoadValueToReg(inst.Right, "$t1", sb);
+            string mipsOp = GetMipsOpcode(inst.Operator);
+            sb.AppendLine($"    {mipsOp} $t2, $t0, $t1");
+            sb.AppendLine($"    sw $t2, {GetMemoryLocation(inst.Result)}");
+            break;
+        case IrOpcode.PrintInt:
+            LoadValueToReg(inst.Left, "$a0", sb);
+            sb.AppendLine("    li $v0, 1");       // syscall 1: طباعة عدد صحيح
+            sb.AppendLine("    syscall");
+            break;
+    }
+}</code></pre>
+
+        <div class="page-break"></div>
+
+        <!-- 2.6 Native PE Executable Generator -->
+        <h3 class="sub-title">2.6 توليد الملف التنفيذي الأصلي CIL و PE EXE (CilExecutableGenerator.cs & ilasm.exe)</h3>
+        <div class="spec-card">
+            <div class="spec-card-header">بطاقة المواصفات البرمجية: توليد الملف التنفيذي (PE Executable Generator Specification)</div>
+            <table class="spec-table">
+                <tr><td class="label-col">1. وظيفة الجزء من الكود</td><td>توليد كود لغة مايكروسوفت الوسيطة (Common Intermediate Language - CIL)، وضبط ترميز UTF-8 للمدخلات والمخرجات لحل مشكلة النصوص العربية، ثم استدعاء مجمع مايكروسوفت <code>ilasm.exe</code> لتجميع الكود وإنتاج ملف تنفيذي أصلي <code>output.exe</code> يعمل مباشرة في بيئة ويندوز دون محاكٍ.</td></tr>
+                <tr><td class="label-col">2. المدخلات (Inputs)</td><td>برنامج الشفرة الوسيطة <code>IrProgram</code> ومسار مجلد الحفظ المختار.</td></tr>
+                <tr><td class="label-col">3. المخرجات (Outputs)</td><td>ملف الكود المصدري الوسيط <code>output.il</code>، والملف التنفيذي النهائي المستقل <code>output.exe</code> (Windows Portable Executable).</td></tr>
+                <tr><td class="label-col">4. المتغيرات المستخدمة</td><td><code>ilasmPath</code> (مسار أداة ilasm على نظام ويندوز)، <code>ilText</code> (نص شفرة CIL المولدة)، <code>locals</code> (خريطة مواقع المتغيرات المحلية في إطار المكدس)، <code>startInfo</code> (معلمات إطلاق عملية المجمع).</td></tr>
+                <tr><td class="label-col">5. هياكل البيانات المستخدمة</td><td><code>ProcessStartInfo</code>، قواميس المتغيرات <code>Dictionary&lt;string, int&gt;</code> لترقيم مواقع CIL Local Slots، وقواميس عنونة العلامات <code>Dictionary&lt;string, string&gt;</code>.</td></tr>
+                <tr><td class="label-col">6. الدوال أو الإجراءات المستخدمة</td><td><code>Generate()</code> (تنسيق خطوات التوليد)، <code>EmitMainHeader()</code> (بناء ترويسة دالة Main وضبط ترميز UTF8)، <code>CompileIlToExe()</code> (إطلاق مجمع ilasm كعملية فرعية)، <code>FindIlasmPath()</code> (البحث التلقائي عن مسار مجمع مايكروسوفت).</td></tr>
+                <tr><td class="label-col">7. المكتبات المستخدمة</td><td><code>System</code>, <code>System.Diagnostics</code>, <code>System.IO</code>, <code>System.Text</code>.</td></tr>
+                <tr><td class="label-col">8. الملفات المرتبطة بالجزء</td><td><code>CilExecutableGenerator.cs</code>, <code>AssemblyGenerator.cs</code>, <code>WindowsExecutableBuilder.cs</code>.</td></tr>
+                <tr><td class="label-col">9. كيفية ارتباطه بباقي المشروع</td><td>يمثل محطة الإنتاج الختامية للمترجم؛ يُنتج الملف التنفيذي الحقيقي الذي يقوم المحرر باستدعائه وتشغيله تفاعلياً داخل الطرفية المدمجة.</td></tr>
+            </table>
+        </div>
+        <pre><code>// مقتطف حقيقي من ضبط ترميز UTF-8 وتوليد الملف التنفيذي عبر ilasm AssemblyGenerator.cs
+private void EmitMainHeader(StringBuilder builder, IrProgram program)
+{
+    builder.AppendLine("    .method public static void Main() cil managed");
+    builder.AppendLine("    {");
+    builder.AppendLine("        .entrypoint");
+    builder.AppendLine("        .maxstack 32");
+    builder.AppendLine();
+    // فرض ترميز UTF-8 في دالة المدخل لضمان طباعة وقراءة النصوص العربية
+    builder.AppendLine("        call class [mscorlib]System.Text.Encoding [mscorlib]System.Text.Encoding::get_UTF8()");
+    builder.AppendLine("        call void [mscorlib]System.Console::set_OutputEncoding(class [mscorlib]System.Text.Encoding)");
+    builder.AppendLine("        call class [mscorlib]System.Text.Encoding [mscorlib]System.Text.Encoding::get_UTF8()");
+    builder.AppendLine("        call void [mscorlib]System.Console::set_InputEncoding(class [mscorlib]System.Text.Encoding)");
+}</code></pre>
+
+        <div class="page-break"></div>
+
+        <!-- 2.7 GUI IDE & Terminal -->
+        <h3 class="sub-title">2.7 محرر لغة بيان وبيئة التطوير والطرفية التفاعلية (CompilerJourneyForm.cs & BayanTerminalControl.cs)</h3>
+        <div class="spec-card">
+            <div class="spec-card-header">بطاقة المواصفات البرمجية: محرر اللغة والطرفية (Language Editor & Terminal Specification)</div>
+            <table class="spec-table">
+                <tr><td class="label-col">1. وظيفة الجزء من الكود</td><td>توفير بيئة تطوير برمجية متكاملة (IDE) مستقلة تحاكي واجهة Visual Studio Code، توفر التحرير متعدد التبويبات، تلوين الكلمات المفتاحية، شجرة العينات، فحص مخرجات مراحل المترجم التسع، استدعاء المترجم المستقل، وطرفية تفاعلية لتشغيل البرامج الحية مع استقبال المدخلات (Read).</td></tr>
+                <tr><td class="label-col">2. المدخلات (Inputs)</td><td>تفاعل المبرمج عبر لوحة المفاتيح والفأرة، ملفات الكود المصدري <code>*.bayan</code>، ومدخلات الطرفية الحية أثناء التشغيل.</td></tr>
+                <tr><td class="label-col">3. المخرجات (Outputs)</td><td>شاشة تحرير عربية RTL متطورة، تبويبات عرض نتائج كل مرحلة (الرموز، الشجرة، جدول الرموز، TAC، الأسمبلي، الأخطاء)، والمخرجات الحية للبرامج المنفذة.</td></tr>
+                <tr><td class="label-col">4. المتغيرات المستخدمة</td><td><code>sourceEditor</code> (محرر الكود)، <code>inspectorTabs</code> (فاحص المراحل التسع)، <code>bottomTabs</code> (اللوحة السفلية)، <code>terminalControl</code> (الطرفية التفاعلية)، <code>compilerClient</code> (عميل الاتصال بالمترجم المستقل)، <code>executableRuntimeClient</code> (مشغل الملف التنفيذي).</td></tr>
+                <tr><td class="label-col">5. هياكل البيانات المستخدمة</td><td>كلاس <code>BayanDocument</code> (لحفظ بيانات الملف المفتوح وحالته)، مصفوفة الوثائق <code>List&lt;BayanDocument&gt;</code>، حاويات التقسيم المرنة <code>SplitContainer</code>، عناصر <code>RichTextBox</code> للعرض النقي، وشجرة الاستكشاف <code>TreeView</code>.</td></tr>
+                <tr><td class="label-col">6. الدوال أو الإجراءات المستخدمة</td><td><code>CompileSource()</code> (استدعاء عملية الترجمة عبر IPC)، <code>RunExecutable()</code> (تشغيل الملف التنفيذي والربط بالطرفية)، <code>BuildArabicVsCodeLayout()</code> (هندسة الواجهة والتقسيمات)، <code>NavigateToStage()</code> (القفز الفوري للمرحلة المختارة)، <code>ToggleTheme()</code> (التبديل بين الوضع الداكن والفاتح).</td></tr>
+                <tr><td class="label-col">7. المكتبات المستخدمة</td><td><code>System.Windows.Forms</code>, <code>System.Drawing</code>, <code>System.Diagnostics</code>, <code>BayanCompiler.Forms</code>.</td></tr>
+                <tr><td class="label-col">8. الملفات المرتبطة بالجزء</td><td><code>CompilerJourneyForm.cs</code>, <code>BayanTerminalControl.cs</code>, <code>BayanCodeEditor.cs</code>, <code>CliCompilationClient.cs</code>, <code>WindowsExecutableRuntimeClient.cs</code>, <code>IdeTheme.cs</code>.</td></tr>
+                <tr><td class="label-col">9. كيفية ارتباطه بباقي المشروع</td><td>يمثل الواجهة المرئية الجامعة للنظام بأكمله؛ يحقق معيار الفصل التام (Decoupling) باستدعاء المترجم المستقل كعملية خارجية واستقبال مخرجاته، ثم تشغيل الملف التنفيذي وإدارته داخل الطرفية.</td></tr>
+            </table>
+        </div>
+        <pre><code>// مقتطف حقيقي من استدعاء المترجم المستقل وعرض نتائج المراحل CompilerJourneyForm.cs
+private async void CompileSource()
+{
+    SetBusy(true, "يجري تشغيل مترجم بيان المستقل والتحقق من القواعد...");
+    try
+    {
+        // استدعاء المترجم المستقل عبر IPC
+        CliCompilationRun run = await compilerClient.CompileAsync(sourceEditor.SourceCode);
+
+        // توزيع مخرجات المراحل على تبويبات الفاحص
+        txtTokens.Text = run.GetArtifact("tokens.txt");
+        txtParseTree.Text = run.GetArtifact("parse-tree.txt");
+        txtSymbolTable.Text = run.GetArtifact("symbol-table.txt");
+        txtTac.Text = run.GetArtifact("three-address-code.txt");
+        txtAssembly.Text = run.GetArtifact("output.asm");
+
+        lastExecutablePath = run.Manifest?.WindowsExecutablePath ?? string.Empty;
+        btnQuickRun.Enabled = run.Manifest?.Success == true && File.Exists(lastExecutablePath);
+    }
+    finally { SetBusy(false); }
+}</code></pre>
 
         <div class="page-break"></div>
 
@@ -542,57 +1027,62 @@ private ExpressionNode ParseExpression()
             <div class="figure-caption">الشكل (2): واجهة محرر لغة بيان العربية (Bayan Arabic VS Code Studio)</div>
         </div>
 
+        <div class="figure-box">
+            <img src="images/file_dialog.png" alt="إدارة الملفات والقوائم وتعدد التبويبات">
+            <div class="figure-caption">الشكل (3): إدارة الملفات وقوائم الفتح والحفظ وتعدد التبويبات البرمجية</div>
+        </div>
+
         <div class="page-break"></div>
 
         <div class="figure-box">
             <img src="images/stage1_tokens.png" alt="جدول الرموز المعجمية">
-            <div class="figure-caption">الشكل (3): المرحلة الأولى — جدول تدفق الرموز المعجمية (Tokens Stream Table)</div>
+            <div class="figure-caption">الشكل (4): المرحلة الأولى — جدول تدفق الرموز المعجمية (Tokens Stream Table)</div>
         </div>
 
         <div class="figure-box">
             <img src="images/stage2_ast.png" alt="شجرة الإعراب المجردة AST">
-            <div class="figure-caption">الشكل (4): المرحلتان الثانية والثالثة — شجرة الإعراب المجردة (Abstract Syntax Tree)</div>
+            <div class="figure-caption">الشكل (5): المرحلتان الثانية والثالثة — شجرة الإعراب المجردة (Abstract Syntax Tree)</div>
         </div>
 
         <div class="page-break"></div>
 
         <div class="figure-box">
             <img src="images/stage3_symbols.png" alt="جدول الرموز ومجالات الرؤية">
-            <div class="figure-caption">الشكل (5): المرحلة الرابعة — تفاصيل جدول الرموز ومجالات الرؤية (Symbol Table Scopes)</div>
+            <div class="figure-caption">الشكل (6): المرحلة الرابعة — تفاصيل جدول الرموز ومجالات الرؤية (Symbol Table Scopes)</div>
         </div>
 
         <div class="figure-box">
             <img src="images/stage4_semantics.png" alt="التحليل الدلالي ومطابقة الأنواع">
-            <div class="figure-caption">الشكل (6): المرحلة الرابعة — محرك التحليل الدلالي وفحص الأنواع ومجالات الرؤية</div>
+            <div class="figure-caption">الشكل (7): المرحلة الرابعة — محرك التحليل الدلالي وفحص الأنواع ومجالات الرؤية</div>
         </div>
 
         <div class="page-break"></div>
 
         <div class="figure-box">
             <img src="images/stage5_tac.png" alt="الشفرة الوسيطة ثلاثية العناوين">
-            <div class="figure-caption">الشكل (7): المرحلة الخامسة — الشفرة الوسيطة ثلاثية العناوين (Three-Address Code TAC)</div>
+            <div class="figure-caption">الشكل (8): المرحلة الخامسة — الشفرة الوسيطة ثلاثية العناوين (Three-Address Code TAC)</div>
         </div>
 
         <div class="figure-box">
             <img src="images/stage6_assembly.png" alt="كود التجميع x86">
-            <div class="figure-caption">الشكل (8): المرحلة السادسة — كود التجميع الهدفي لمعالجات x86 32-bit Assembly</div>
+            <div class="figure-caption">الشكل (9): المرحلة السادسة — كود التجميع الهدفي لمعالجات x86 32-bit Assembly</div>
         </div>
 
         <div class="page-break"></div>
 
         <div class="figure-box">
             <img src="images/stage7_executable.png" alt="توليد الملف التنفيذي EXE">
-            <div class="figure-caption">الشكل (9): المرحلة السابعة — توليد الملف التنفيذي المستقل بنظام Windows PE عبر ilasm.exe</div>
+            <div class="figure-caption">الشكل (10): المرحلة السابعة — توليد الملف التنفيذي المستقل بنظام Windows PE عبر ilasm.exe</div>
         </div>
 
         <div class="figure-box">
             <img src="images/stage8_errors.png" alt="تشخيص الأخطاء والقفز التلقائي">
-            <div class="figure-caption">الشكل (10): المرحلة الثامنة — قائمة تشخيص الأخطاء وميزة القفز التلقائي للسطر والعمود</div>
+            <div class="figure-caption">الشكل (11): المرحلة الثامنة — قائمة تشخيص الأخطاء وميزة القفز التلقائي للسطر والعمود</div>
         </div>
 
         <div class="figure-box">
             <img src="images/stage9_terminal_run.png" alt="تشغيل البرامج في الطرفية">
-            <div class="figure-caption">الشكل (11): المرحلة التاسعة — تشغيل البرنامج الناتج وعرض مخرجاته في الطرفية التفاعلية المدمجة</div>
+            <div class="figure-caption">الشكل (12): المرحلة التاسعة — تشغيل البرنامج الناتج وعرض مخرجاته في الطرفية التفاعلية المدمجة</div>
         </div>
 
         <div class="page-break"></div>

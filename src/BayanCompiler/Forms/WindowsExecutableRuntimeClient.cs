@@ -39,7 +39,8 @@ internal sealed class WindowsExecutableRuntimeClient
             RedirectStandardInput = true,
             CreateNoWindow = true,
             StandardOutputEncoding = Encoding.UTF8,
-            StandardErrorEncoding = Encoding.UTF8
+            StandardErrorEncoding = Encoding.UTF8,
+            StandardInputEncoding = Encoding.UTF8
         };
 
         activeProcess = Process.Start(startInfo)

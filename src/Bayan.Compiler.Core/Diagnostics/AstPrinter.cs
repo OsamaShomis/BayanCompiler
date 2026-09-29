@@ -4,7 +4,7 @@ using BayanCompiler.Syntax;
 namespace BayanCompiler.Diagnostics;
 
 /// <summary>
-/// يحول شجرة AST إلى نص هرمي لعرض شكل البرنامج بعد التحليل النحوي.
+/// يحول شجرة AST إلى تمثيل هرمي نقي ومجرد يعكس نموذج لغة بيان بدقة تامة.
 /// </summary>
 public static class AstPrinter
 {
@@ -13,7 +13,6 @@ public static class AstPrinter
     /// </summary>
     public static string Format(ProgramNode program)
     {
-        // يجمع النص قبل عرضه في RichTextBox الخاص بالواجهة.
         StringBuilder builder = new StringBuilder();
 
         // يعرض الجذر الذي يضم اسم البرنامج.
@@ -21,7 +20,7 @@ public static class AstPrinter
 
         if (program.Declarations.Count > 0)
         {
-            AppendLine(builder, 1, "Declarations:");
+            AppendLine(builder, 1, "Declarations");
             foreach (DeclarationNode declaration in program.Declarations)
             {
                 AppendDeclaration(builder, declaration, 2);
@@ -34,12 +33,11 @@ public static class AstPrinter
             AppendStatement(builder, statement, 1);
         }
 
-        // يعيد النص النهائي إلى Windows Forms.
         return builder.ToString();
     }
 
     /// <summary>
-    /// Formats official top-level declarations before executable statements.
+    /// يطبع التعريفات الرأسية مع تفكيك الأنواع والمعرفات كعقد مستقلة.
     /// </summary>
     private static void AppendDeclaration(StringBuilder builder, DeclarationNode declaration, int depth)
     {
@@ -52,13 +50,19 @@ public static class AstPrinter
 
         if (declaration is TypeDeclarationNode typeDeclaration)
         {
-            AppendLine(builder, depth, "TypeDeclarationNode: " + typeDeclaration.Name + " = " + typeDeclaration.Definition.GetType().Name);
+            AppendLine(builder, depth, "TypeDeclarationNode: " + typeDeclaration.Name);
+            AppendType(builder, typeDeclaration.Definition, depth + 1);
             return;
         }
 
         if (declaration is VariableDeclarationGroupNode variables)
         {
-            AppendLine(builder, depth, "VariableDeclarationGroupNode: " + string.Join(", ", variables.Names) + " : " + variables.Type.GetType().Name);
+            AppendLine(builder, depth, "VariableDeclarationGroupNode");
+            foreach (string name in variables.Names)
+            {
+                AppendLine(builder, depth + 1, "IdentifierNode: " + name);
+            }
+            AppendType(builder, variables.Type, depth + 1);
             return;
         }
 
@@ -77,25 +81,54 @@ public static class AstPrinter
         AppendLine(builder, depth, declaration.GetType().Name);
     }
 
+    private static void AppendType(StringBuilder builder, TypeSyntaxNode type, int depth)
+    {
+        if (type is NamedTypeSyntaxNode named)
+        {
+            AppendLine(builder, depth, "NamedTypeSyntaxNode: " + named.Name);
+            return;
+        }
+
+        if (type is ListTypeSyntaxNode list)
+        {
+            AppendLine(builder, depth, "ListTypeSyntaxNode");
+            AppendExpression(builder, list.Size, depth + 1);
+            AppendType(builder, list.ElementType, depth + 1);
+            return;
+        }
+
+        if (type is RecordTypeSyntaxNode record)
+        {
+            AppendLine(builder, depth, "RecordTypeSyntaxNode");
+            foreach (FieldDeclarationNode field in record.Fields)
+            {
+                AppendLine(builder, depth + 1, "FieldDeclarationNode: " + field.Name);
+                AppendType(builder, field.Type, depth + 2);
+            }
+            return;
+        }
+
+        AppendLine(builder, depth, type.GetType().Name);
+    }
+
     /// <summary>
     /// يطبع أي نوع من أنواع العبارات في الشجرة.
     /// </summary>
     private static void AppendStatement(StringBuilder builder, StatementNode statement, int depth)
     {
-        // يطبع تعريف المتغير وقيمة التهيئة إن وجدت.
         if (statement is VarDeclarationNode declaration)
         {
-            AppendLine(builder, depth, "VarDeclarationNode: " + declaration.Name + " : " + declaration.TypeName);
+            AppendLine(builder, depth, "VariableDeclarationGroupNode");
+            AppendLine(builder, depth + 1, "IdentifierNode: " + declaration.Name);
+            AppendLine(builder, depth + 1, "NamedTypeSyntaxNode: " + declaration.TypeName);
             if (declaration.Initializer is not null)
             {
                 AppendLine(builder, depth + 1, "Initializer:");
                 AppendExpression(builder, declaration.Initializer, depth + 2);
             }
-
             return;
         }
 
-        // يطبع تعليمة الإسناد ثم التعبير الذي يمثل القيمة الجديدة.
         if (statement is AssignmentNode assignment)
         {
             AppendLine(builder, depth, "AssignmentNode: " + assignment.Name);
@@ -103,15 +136,38 @@ public static class AstPrinter
             return;
         }
 
-        // يطبع تعليمة الطباعة ثم التعبير الذي ستعرضه.
+        if (statement is ComplexAssignmentNode complexAssign)
+        {
+            AppendLine(builder, depth, "AssignmentNode");
+            AppendExpression(builder, complexAssign.Target, depth + 1);
+            AppendExpression(builder, complexAssign.Expression, depth + 1);
+            return;
+        }
+
         if (statement is PrintNode print)
         {
-            AppendLine(builder, depth, "PrintNode:");
+            AppendLine(builder, depth, "PrintNode");
             AppendExpression(builder, print.Expression, depth + 1);
             return;
         }
 
-        // يطبع الشرط وفرع إذا وفرع وإلا عند وجوده.
+        if (statement is PrintListNode printList)
+        {
+            AppendLine(builder, depth, "PrintNode");
+            foreach (ExpressionNode expr in printList.Expressions)
+            {
+                AppendExpression(builder, expr, depth + 1);
+            }
+            return;
+        }
+
+        if (statement is ReadNode read)
+        {
+            AppendLine(builder, depth, "ReadNode");
+            AppendExpression(builder, read.Target, depth + 1);
+            return;
+        }
+
         if (statement is IfNode ifNode)
         {
             AppendLine(builder, depth, "IfNode:");
@@ -129,7 +185,6 @@ public static class AstPrinter
             return;
         }
 
-        // يطبع شرط الحلقة ثم جسمها.
         if (statement is WhileNode whileNode)
         {
             AppendLine(builder, depth, "WhileNode:");
@@ -140,52 +195,71 @@ public static class AstPrinter
             return;
         }
 
-        // يطبع كتلة مستقلة إن أضيفت مباشرة إلى البرنامج.
+        if (statement is RepeatToNode repeatTo)
+        {
+            AppendLine(builder, depth, "RepeatToNode: " + repeatTo.IteratorName);
+            AppendLine(builder, depth + 1, "Start:");
+            AppendExpression(builder, repeatTo.Start, depth + 2);
+            AppendLine(builder, depth + 1, "End:");
+            AppendExpression(builder, repeatTo.End, depth + 2);
+            if (repeatTo.Step is not null)
+            {
+                AppendLine(builder, depth + 1, "Step:");
+                AppendExpression(builder, repeatTo.Step, depth + 2);
+            }
+            AppendLine(builder, depth + 1, "Body:");
+            AppendBlock(builder, repeatTo.Body, depth + 2);
+            return;
+        }
+
+        if (statement is RepeatUntilNode repeatUntil)
+        {
+            AppendLine(builder, depth, "RepeatUntilNode:");
+            AppendLine(builder, depth + 1, "Body:");
+            AppendBlock(builder, repeatUntil.Body, depth + 2);
+            AppendLine(builder, depth + 1, "Condition:");
+            AppendExpression(builder, repeatUntil.Condition, depth + 2);
+            return;
+        }
+
+        if (statement is ExpressionStatementNode exprStmt)
+        {
+            AppendExpression(builder, exprStmt.Expression, depth);
+            return;
+        }
+
         if (statement is BlockNode block)
         {
             AppendBlock(builder, block, depth);
             return;
         }
 
-        // يعرض اسم النوع عند إضافة عقدة جديدة لم تحدث الطابعة بعد.
         AppendLine(builder, depth, statement.GetType().Name);
     }
 
-    /// <summary>
-    /// يطبع قائمة تعليمات داخل BlockNode.
-    /// </summary>
     private static void AppendBlock(StringBuilder builder, BlockNode block, int depth)
     {
-        // يوضح بداية الكتلة في النص الهرمي.
         AppendLine(builder, depth, "BlockNode:");
-
-        // يطبع كل تعليمة داخل الكتلة بمستوى أعمق.
         foreach (StatementNode statement in block.Statements)
         {
             AppendStatement(builder, statement, depth + 1);
         }
     }
 
-    /// <summary>
-    /// يطبع تعبيراً وعقده الداخلية حسب نوعه.
-    /// </summary>
     private static void AppendExpression(StringBuilder builder, ExpressionNode expression, int depth)
     {
-        // يطبع الأعداد والنصوص والقيم المنطقية.
         if (expression is LiteralNode literal)
         {
             AppendLine(builder, depth, "LiteralNode: " + literal.Value);
             return;
         }
 
-        // يطبع اسم المتغير المستخدم في التعبير.
         if (expression is IdentifierNode identifier)
         {
             AppendLine(builder, depth, "IdentifierNode: " + identifier.Name);
             return;
         }
 
-        // يطبع العامل الثنائي وطرفيه بالتسلسل.
         if (expression is BinaryExpressionNode binary)
         {
             AppendLine(builder, depth, "BinaryExpressionNode: " + binary.Operator);
@@ -194,7 +268,6 @@ public static class AstPrinter
             return;
         }
 
-        // يطبع العامل الأحادي مثل ! أو - ثم التعبير التابع له.
         if (expression is UnaryExpressionNode unary)
         {
             AppendLine(builder, depth, "UnaryExpressionNode: " + unary.Operator);
@@ -202,7 +275,6 @@ public static class AstPrinter
             return;
         }
 
-        // يطبع التعبير الموضوع بين قوسين.
         if (expression is GroupingNode grouping)
         {
             AppendLine(builder, depth, "GroupingNode:");
@@ -210,19 +282,37 @@ public static class AstPrinter
             return;
         }
 
-        // يعرض اسم النوع عند إضافة تعبير جديد لاحقاً.
+        if (expression is CallExpressionNode call)
+        {
+            AppendLine(builder, depth, "CallExpressionNode: " + call.ProcedureName);
+            foreach (ExpressionNode arg in call.Arguments)
+            {
+                AppendExpression(builder, arg, depth + 1);
+            }
+            return;
+        }
+
+        if (expression is IndexedAccessNode indexAccess)
+        {
+            AppendLine(builder, depth, "IndexedAccessNode");
+            AppendExpression(builder, indexAccess.Collection, depth + 1);
+            AppendExpression(builder, indexAccess.Index, depth + 1);
+            return;
+        }
+
+        if (expression is FieldAccessNode fieldAccess)
+        {
+            AppendLine(builder, depth, "FieldAccessNode: " + fieldAccess.FieldName);
+            AppendExpression(builder, fieldAccess.Record, depth + 1);
+            return;
+        }
+
         AppendLine(builder, depth, expression.GetType().Name);
     }
 
-    /// <summary>
-    /// يضيف سطراً بمسافة بادئة تساوي عمق العقدة داخل الشجرة.
-    /// </summary>
     private static void AppendLine(StringBuilder builder, int depth, string text)
     {
-        // يضيف أربع مسافات لكل مستوى من مستويات AST.
         builder.Append(' ', depth * 4);
-
-        // يضيف نص العقدة ثم ينتقل إلى السطر التالي.
         builder.AppendLine(text);
     }
 }

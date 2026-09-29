@@ -1,0 +1,2635 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>دليل الفهم الشامل والعميق لمترجم «بيان» — Bayan Compiler Master Study Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;0,700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --navy-bg: #0E131F;
+      --slide-bg: #FAF8F4;
+      --slide-card: #FFFFFF;
+      --slide-border: #E6DDCF;
+      --slide-border-subtle: rgba(212, 199, 178, 0.45);
+      --copper: #C8732A;
+      --copper2: #E08538;
+      --copper-glow: rgba(200, 115, 42, 0.25);
+      --copper-light: #F0DBC4;
+      --navy: #152238;
+      --navy2: #243554;
+      --text-main: #2A241C;
+      --text-muted: #6B6255;
+      --text-dim: #2A241C;
+      --accent-green: #2B8A3E;
+      --accent-red: #D9383A;
+      --accent-blue: #1E66B0;
+      --accent-yellow: #B8860B;
+      --accent-purple: #7B3294;
+      --fa: 'IBM Plex Sans Arabic', sans-serif;
+      --fm: 'IBM Plex Mono', monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--navy-bg);
+      color: var(--text-main);
+      font-family: var(--fa);
+      line-height: 1.85;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-top: 64px;
+    }
+
+    /* Fixed Navigation Bar */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: rgba(10, 15, 29, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--navy-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      z-index: 1000;
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--copper2);
+      letter-spacing: 0.04em;
+    }
+
+    .topbar-diamond {
+      width: 10px;
+      height: 10px;
+      background: var(--copper);
+      transform: rotate(45deg);
+      box-shadow: 0 0 10px var(--copper);
+    }
+
+    .topbar-menu {
+      display: flex;
+      gap: 6px;
+    }
+
+    .topbar-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .topbar-link:hover, .topbar-link.active {
+      color: #FFF;
+      background: rgba(200, 115, 42, 0.18);
+      border-color: var(--copper);
+    }
+
+    .topbar-badge {
+      font-family: var(--fm);
+      font-size: 11px;
+      background: rgba(200, 115, 42, 0.15);
+      border: 1px solid var(--copper);
+      color: var(--copper2);
+      padding: 4px 10px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 40px 24px 120px;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, rgba(21, 31, 56, 0.85) 0%, rgba(16, 23, 43, 0.98) 100%);
+      border: 1px solid var(--navy-border);
+      border-top: 3px solid var(--copper);
+      border-radius: 8px;
+      padding: 48px;
+      margin-bottom: 54px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      left: -80px;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, var(--copper-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-meta {
+      font-family: var(--fm);
+      font-size: 12px;
+      color: var(--copper2);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-title {
+      font-size: 36px;
+      font-weight: 700;
+      color: #FFF;
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      color: #CAD5E8;
+      max-width: 980px;
+      line-height: 1.85;
+      margin-bottom: 28px;
+    }
+
+    /* Pipeline Mini Map */
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .pipe-step {
+      background: rgba(10, 15, 29, 0.7);
+      border: 1px solid var(--navy-border);
+      padding: 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .pipe-step:hover {
+      border-color: var(--copper);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(200, 115, 42, 0.18);
+    }
+
+    .pipe-num {
+      font-family: var(--fm);
+      font-size: 11px;
+      color: var(--copper2);
+      font-weight: 700;
+    }
+
+    .pipe-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    .pipe-sub {
+      font-family: var(--fm);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Station Card Style (Warm Light Slide Theme) */
+    .station-section {
+      margin-bottom: 72px;
+      scroll-margin-top: 84px;
+    }
+
+    .station-card {
+      background: var(--slide-bg);
+      border: 1px solid var(--slide-border);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 14px 45px rgba(0, 0, 0, 0.45);
+      color: var(--text-main);
+    }
+
+    .station-header {
+      background: linear-gradient(90deg, #152238 0%, #243554 100%);
+      border-bottom: 3px solid var(--copper);
+      padding: 24px 38px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .station-header::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      right: 0;
+      width: 260px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--copper2), transparent);
+    }
+
+    .station-badge {
+      display: inline-block;
+      font-family: var(--fm);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--copper2);
+      background: rgba(200, 115, 42, 0.15);
+      border: 1px solid rgba(200, 115, 42, 0.35);
+      padding: 3px 12px;
+      border-radius: 3px;
+      margin-bottom: 8px;
+      letter-spacing: 0.1em;
+    }
+
+    .station-title {
+      font-size: 25px;
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    .station-tag {
+      font-family: var(--fm);
+      font-size: 12px;
+      color: #D4C7B2;
+      background: rgba(10, 15, 29, 0.5);
+      padding: 6px 14px;
+      border-radius: 4px;
+      border: 1px solid rgba(230, 221, 207, 0.25);
+    }
+
+    .station-body {
+      padding: 40px;
+    }
+
+    /* Content Subsections */
+    .content-block {
+      margin-bottom: 42px;
+    }
+
+    .block-h3 {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--copper);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .block-h3::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 19px;
+      background: var(--copper);
+      border-radius: 2px;
+    }
+
+    .prose {
+      font-size: 15.5px;
+      color: var(--text-main);
+      line-height: 1.9;
+      margin-bottom: 16px;
+    }
+
+    /* Theory Callouts */
+    .theory-box {
+      background: rgba(200, 115, 42, 0.08);
+      border: 1px solid rgba(200, 115, 42, 0.25);
+      border-right: 4px solid var(--copper);
+      border-radius: 0 6px 6px 0;
+      padding: 20px 26px;
+      margin: 22px 0;
+    }
+
+    .theory-box-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--copper);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theory-box-desc {
+      font-size: 14.5px;
+      color: #382A1B;
+      line-height: 1.85;
+    }
+
+    /* Why & Justification Cards */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+      margin: 22px 0;
+    }
+
+    .why-card {
+      background: var(--slide-card);
+      border: 1px solid var(--slide-border);
+      border-radius: 6px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+      transition: all 0.25s ease;
+    }
+
+    .why-card:hover {
+      border-color: var(--copper);
+      box-shadow: 0 8px 20px rgba(200, 115, 42, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .why-card-icon {
+      font-size: 22px;
+      color: var(--copper);
+    }
+
+    .why-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .why-card-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    /* Code & Comparison Blocks (Dark Console for sharp contrast) */
+    .code-window {
+      background: #0D1322;
+      border: 1px solid #1E2840;
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 20px 0;
+      font-family: var(--fm);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .code-window-header {
+      background: #141C30;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1E2840;
+      font-size: 11.5px;
+      color: #8E9BB5;
+    }
+
+    .code-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .code-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .code-dot.red { background: #FF5A5F; }
+    .code-dot.yellow { background: #F1C40F; }
+    .code-dot.green { background: #2ECC71; }
+
+    .code-content {
+      padding: 20px 24px;
+      font-size: 13.5px;
+      line-height: 1.85;
+      overflow-x: auto;
+      direction: rtl;
+      text-align: right;
+      color: #E2DDD5;
+    }
+
+    .code-content.ltr {
+      direction: ltr;
+      text-align: left;
+    }
+
+    /* Syntax Highlighting */
+    .c-kw { color: #E88338; font-weight: 600; }
+    .c-id { color: #9ABFE0; }
+    .c-num { color: #A6E22E; }
+    .c-str { color: #E6DB74; }
+    .c-comment { color: #7B8B9E; font-style: italic; }
+    .c-err { color: #FF5A5F; font-weight: 700; text-decoration: underline wavy #FF5A5F; }
+    .c-op { color: #F8F8F2; }
+    .c-type { color: #4FA3FF; font-weight: 600; }
+
+    /* Interactive Errors Section */
+    .errors-container {
+      margin-top: 36px;
+      background: #F4EFEB;
+      border: 1px solid var(--slide-border);
+      border-radius: 8px;
+      padding: 28px;
+    }
+
+    .error-card {
+      background: #FFFFFF;
+      border: 1px solid #F5C6CB;
+      border-right: 4px solid var(--accent-red);
+      border-radius: 6px;
+      padding: 20px 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 12px rgba(217, 56, 58, 0.05);
+    }
+
+    .error-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #C52224;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .error-meta {
+      font-family: var(--fm), var(--fa);
+      font-size: 12px;
+      color: #6B6255;
+      margin-bottom: 14px;
+    }
+
+    .error-msg-box {
+      background: #FFF5F5;
+      border: 1px solid #FEB2B2;
+      padding: 12px 16px;
+      border-radius: 4px;
+      font-family: var(--fm), var(--fa);
+      font-size: 13px;
+      color: #9B2C2C;
+      margin-top: 12px;
+      direction: rtl;
+    }
+
+    /* Comparison Table */
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 22px 0;
+      font-size: 13.5px;
+    }
+
+    .comp-table th {
+      background: #152238;
+      color: #FFF;
+      font-weight: 700;
+      padding: 13px 16px;
+      border: 1px solid #243554;
+      text-align: right;
+    }
+
+    .comp-table td {
+      padding: 13px 16px;
+      border: 1px solid var(--slide-border);
+      background: #FFFFFF;
+      color: var(--text-main);
+    }
+
+    .comp-table tr:hover td {
+      background: rgba(200, 115, 42, 0.05);
+    }
+
+    /* Architecture Visual Block */
+    .arch-diagram {
+      background: #FFFFFF;
+      border: 1px solid var(--slide-border);
+      border-radius: 6px;
+      padding: 20px 24px;
+      margin: 20px 0;
+      font-family: var(--fm), var(--fa);
+      font-size: 13.5px;
+      line-height: 1.9;
+      color: var(--text-main);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    /* Viva Q&A Box */
+    .viva-card {
+      background: #FFFFFF;
+      border: 1px solid var(--copper);
+      border-radius: 6px;
+      padding: 24px;
+      margin: 20px 0;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    .viva-q {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .viva-badge {
+      background: var(--copper);
+      color: #FFF;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 2px;
+      font-family: var(--fm);
+    }
+
+    .viva-a {
+      font-size: 14.5px;
+      color: var(--text-main);
+      line-height: 1.85;
+      padding-right: 32px;
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--navy-border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13.5px;
+    }
+
+    .footer strong {
+      color: var(--copper2);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-diamond"></div>
+      <span>مترجم لغة بيان — الدليل الشامل لفهم المشروع والمناقشة</span>
+    </div>
+    <nav class="topbar-menu">
+      <a href="#hero" class="topbar-link active">الرئيسية</a>
+      <a href="#station1" class="topbar-link">1. المعجمي</a>
+      <a href="#station2" class="topbar-link">2. النحوي</a>
+      <a href="#station3" class="topbar-link">3. الدلالي</a>
+      <a href="#station4" class="topbar-link">4. الكود الوسيط</a>
+      <a href="#station5" class="topbar-link">5. توليد الهدف</a>
+      <a href="#viva" class="topbar-link">بنك الأسئلة</a>
+    </nav>
+    <div class="topbar-badge">COMPILER MASTERCLASS</div>
+  </header>
+
+  <main class="container">
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="hero">
+      <div class="hero-meta">
+        <span>جامعة إب &bull; كلية الحاسوب وتكنولوجيا المعلومات &bull; مقرر بناء المترجمات</span>
+      </div>
+      <h1 class="hero-title">الدليل الموسوعي الأكاديمي والعملي لفهم مترجم «بيان» (BayanCompiler)</h1>
+      <p class="hero-desc">
+        هذا الدليل أُعد بعناية فائقة ليشرح <strong>جميع محطات المترجم الخمس بالتساوي</strong> من الألف إلى الياء.
+        لكل محطة ستجد: <strong>الأساس النظري والرياضي</strong>، <strong>تفسير القرارات التصميمية (لماذا استخدمنا هذه التقنية تحديداً؟)</strong>، <strong>مقارنات الجداول والشاشات</strong>، و<strong>سجلاً حياً للأخطاء بالأكواد المسببة والرسائل التنبيهية الحقيقية</strong>، لتكون قادراً على تفكيك المشروع ومناقشة أي دكتور بثقة مطلقة.
+      </p>
+
+      <!-- Mini Pipeline -->
+      <div class="pipeline-grid">
+        <a href="#station1" class="pipe-step">
+          <span class="pipe-num">PHASE 01</span>
+          <span class="pipe-title">التحليل المعجمي</span>
+          <span class="pipe-sub">Lexer &amp; DFA (94 صنف)</span>
+        </a>
+        <a href="#station2" class="pipe-step">
+          <span class="pipe-num">PHASE 02</span>
+          <span class="pipe-title">التحليل النحوي</span>
+          <span class="pipe-sub">LL(1) Parser &amp; AST</span>
+        </a>
+        <a href="#station3" class="pipe-step">
+          <span class="pipe-num">PHASE 03</span>
+          <span class="pipe-title">التحليل الدلالي</span>
+          <span class="pipe-sub">Symbol Table &amp; Scopes</span>
+        </a>
+        <a href="#station4" class="pipe-step">
+          <span class="pipe-num">PHASE 04</span>
+          <span class="pipe-title">الكود الوسيط</span>
+          <span class="pipe-sub">Three-Address Code (TAC)</span>
+        </a>
+        <a href="#station5" class="pipe-step">
+          <span class="pipe-num">PHASE 05</span>
+          <span class="pipe-title">توليد الهدف</span>
+          <span class="pipe-sub">MIPS (.asm) &amp; CIL (.exe)</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STATION 1: LEXICAL ANALYSIS -->
+    <!-- ========================================== -->
+    <section class="station-section" id="station1">
+      <div class="station-card">
+        <div class="station-header">
+          <div>
+            <span class="station-badge">المحطة الأولى &bull; PHASE 01</span>
+            <h2 class="station-title">🏷️ التحليل المعجمي (Lexical Analysis) — الدليل الشامل</h2>
+          </div>
+          <div class="station-tag">Lexer.cs &bull; TokenType.cs &bull; Token.cs</div>
+        </div>
+
+        <div class="station-body">
+          <!-- 1. المفهوم النظري والهدف الأساسي -->
+          <div class="content-block">
+            <h3 class="block-h3">1. المفهوم النظري والهدف الأساسي (The Concept &amp; Core Goal)</h3>
+            <p class="prose">
+              المحلل المعجمي (<strong>Lexer</strong> أو <strong>Scanner</strong>) هو خط الدفاع الأول وبوابة الدخول في أي مترجم. عندما يقوم المبرمج بكتابة كود في لغة «بيان»، فإن نظام التشغيل يرى الملف مجرد سلسلة أحادية البُعد من المحارف الخام (Stream of Characters) أو بايتات متراصة وراء بعضها:
+            </p>
+
+            <div class="code-window">
+              <div class="code-window-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span>شكل الكود الخام كما يراه الحاسوب في الذاكرة قبل المعالجة</span>
+              </div>
+              <div class="code-content" style="letter-spacing: 0.15em; font-size: 15px; color: #E0A96D;">
+                ب | ر | ن | ا | م | ج | &nbsp; | ح | س | ا | ب | &nbsp; | { | \n | &nbsp; | &nbsp; | م | ت | غ | ي | ر | ...
+              </div>
+            </div>
+
+            <p class="prose">
+              <strong>المهمة المركزية للمحلل المعجمي:</strong> قراءة هذا السيل الحرفي وتجميعه في وحدات دلالية صغرى تسمى <strong>الرموز المعجمية (Tokens)</strong>، مع تنظيف الكود من كل الحشو الذي لا فائدة منه في الترجمة (مثل: المسافات الزائدة، علامات الجدولة <code class="c-kw">Tabs</code>، الانتقال لسطر جديد <code class="c-kw">\n</code>، والتعليقات التوضيحية).
+            </p>
+          </div>
+
+          <!-- 2. أسئلة تصميمية وفلسفية -->
+          <div class="content-block">
+            <h3 class="block-h3">2. أسئلة تصميمية وفلسفية: لماذا صُممت هذه المرحلة هكذا؟</h3>
+            
+            <div class="why-card" style="margin-bottom: 20px;">
+              <div class="why-card-title" style="color: var(--copper2); font-size: 16px;">س1: لماذا لا نجعل المحلل النحوي (Parser) يقرأ الحروف مباشرة من الملف؟ (لماذا فصلنا الـ Lexer عنه؟)</div>
+              <p class="why-card-desc" style="color: var(--text-main); margin-top: 6px;">
+                هذا السؤال يُطرح دائماً في لجان التحكيم والمناقشات، والإجابة عنه تعتمد على <strong>3 أسباب علمية:</strong>
+              </p>
+              <ul style="padding-right: 24px; color: var(--text-main); font-size: 14px; line-height: 1.85; margin-top: 10px;">
+                <li><strong style="color: var(--navy);">بساطة التصميم النظري (Separation of Concerns):</strong> قواعد اللغة النحوية (Grammar) تختص بترتيب الجمل وبنائها الهرمي. لو جعلنا الـ Parser يقرأ الحروف، لاضطررنا في كل قاعدة نحوية (مثل قاعدة الإسناد أو التكرار) أن نكتب احتمالات المسافات والفراغات وبدايات الكلمات ونهاياتها، مما يؤدي إلى <strong>انفجار حجم القواعد (Grammar Explosion)</strong> وصعوبة صيانتها.</li>
+                <li><strong style="color: var(--navy);">الكفاءة وسرعة المعالجة (Compiler Performance):</strong> قراءة الحروف ومطابقتها عملية مسح خطي بسيطة وسريعة جداً. عزلها في ماسح معجمي خفيف يجعل المترجم يستغل الذاكرة وقدرات المعالج بأقصى كفاءة، دون إشغال خوارزميات الـ Parsing المعقدة بهذه التفاصيل الأولية.</li>
+                <li><strong style="color: var(--navy);">عزل تفاصيل الإدخال والترميز (I/O &amp; Encoding Portability):</strong> الـ Lexer هو الجزء الوحيد الذي يتعامل مع قضايا الترميز المعقدة (مثل ملفات UTF-8 ونظام الـ Unicode ومحارف نهاية السطر CRLF في Windows مقابل LF في Linux). بقية مراحل الكومبايلر لا تشغل بالها بأي من هذه التفاصيل.</li>
+              </ul>
+            </div>
+
+            <div class="why-card">
+              <div class="why-card-title" style="color: var(--copper2); font-size: 16px;">س2: لماذا قمنا ببناء الماسح يدوياً (Hand-crafted Lexer) بدلاً من استخدام أدوات التوليد الآلي (مثل Flex أو Lex)؟</div>
+              <ul style="padding-right: 24px; color: var(--text-main); font-size: 14px; line-height: 1.85; margin-top: 10px;">
+                <li><strong style="color: var(--navy);">الخصوصية التامة للغة العربية والـ Unicode:</strong> أدوات مثل Flex صُممت تاريخياً لترميز ASCII الإنجليزي (حروف A-Z فقط). التعامل مع الحروف العربية والهمزات والياء المنقوطة عبر أدوات أوتوماتيكية قد يسبب مشاكل في الترميز متعدد البايتات.</li>
+                <li><strong style="color: var(--navy);">رسائل خطأ دقيقة وواضحة للمستخدم العربي:</strong> الماسح اليدوي يسمح لنا بكتابة رسائل تشخيصية دقيقة بالعربية تحدد رقم السطر ورقم العمود بدقة تامة وتخبر الطالب تحديداً أين أخطأ.</li>
+                <li><strong style="color: var(--navy);">أداء خارق بدون مكتبات خارجية:</strong> الماسح اليدوي المكتوب بلغة C# يقرأ النص في الذاكرة عبر مؤشرات خفيفة، مما يجعل زمن التحليل المعجمي يقاس بأجزاء من الثانية.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 3. الأساس الرياضي: DFA -->
+          <div class="content-block">
+            <h3 class="block-h3">3. الأساس الرياضي: كيف يعمل الـ Lexer كـ "آلة حالات منتهية" (DFA)؟</h3>
+            <p class="prose">
+              في نظرية الحوسبة واللغات الصورية (Formal Languages):
+            </p>
+            <ul style="padding-right: 24px; color: var(--text-main); font-size: 14px; line-height: 1.85; margin-bottom: 16px;">
+              <li>الألفاظ المعجمية تُصنف كـ <strong>لغات منتظمة (Regular Languages)</strong> (المستوى 3 في هرم تشومسكي).</li>
+              <li>يتم توصيف كل نوع رمز بواسطة <strong>تعبير نمطي (Regular Expression - Regex)</strong>.</li>
+              <li>المترجم يُنفذ هذه التعابير عملياً على هيئة <strong>آلة حالات منتهية محددة (Deterministic Finite Automaton - DFA)</strong>:</li>
+            </ul>
+
+            <div class="arch-diagram" style="direction: rtl; text-align: right; line-height: 1.9; font-size: 13.5px;">
+              <span style="color: var(--copper2); font-weight: 700;">[مخطط حالات DFA في المحلل المعجمي]:</span><br>
+              &bull; <strong>الحالة الابتدائية</strong> &larr; قراءة حرف عربي [أ-ي] &larr; قراءة حروف أو أرقام &larr; فحص القاموس (فراغ أو فاصلة) &larr; <span style="color: var(--accent-green);">(قبول: كلمة مفتاحية أو معرف)</span><br>
+              &bull; <strong>الحالة الابتدائية</strong> &larr; قراءة رقم [0-9] &larr; أرقام متتالية &larr; فحص النقطة العشرية (.) &larr; قراءة الكسر &larr; <span style="color: var(--accent-green);">(قبول: عدد صحيح أو عدد حقيقي)</span><br>
+              &bull; <strong>الحالة الابتدائية</strong> &larr; محرف غير معروف (@, $) &larr; خطأ معجمي &larr; <span style="color: var(--accent-red);">(رفض: BadToken)</span>
+            </div>
+          </div>
+
+          <!-- 4. الثالوث المعجمي -->
+          <div class="content-block">
+            <h3 class="block-h3">4. الثالوث المعجمي: (Token مقابل Lexeme مقابل Pattern)</h3>
+            <p class="prose">هذه من أهم نقاط التمييز النظري:</p>
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>المصطلح</th>
+                  <th>المعنى النظري</th>
+                  <th>مثال حي من لغة «بيان»</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>الصنف المعجمي (Token)</strong></td>
+                  <td>هو التصنيف المجرد للرمز والذي يتعامل معه المحلل النحوي.</td>
+                  <td><code class="c-kw">Identifier</code>, <code class="c-kw">IntegerLiteral</code>, <code class="c-kw">WhileKeyword</code></td>
+                </tr>
+                <tr>
+                  <td><strong>اللفظ الفعلي (Lexeme)</strong></td>
+                  <td>النص الحرفي الدقيق كما كتبه المبرمج في الكود المصدري.</td>
+                  <td><code class="c-str">"س"</code>, <code class="c-str">"العداد"</code>, <code class="c-str">"150"</code>, <code class="c-str">"طالما"</code></td>
+                </tr>
+                <tr>
+                  <td><strong>النمط (Pattern)</strong></td>
+                  <td>القاعدة الوصفية أو التعبير النمطي الذي يحدد شروط الرمز.</td>
+                  <td>المعرف: يبدأ بحرف، ويتبعه أي عدد من الحروف أو الأرقام</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 5. كيف نفذ داخل المشروع -->
+          <div class="content-block">
+            <h3 class="block-h3">5. كيف نُفّذ التحليل المعجمي داخل مشروع BayanCompiler؟</h3>
+            <p class="prose">
+              يتكون المجلد <code class="c-id">src/Bayan.Compiler.Core/Lexing/</code> من:
+            </p>
+
+            <div style="margin-bottom: 22px;">
+              <h4 style="color: var(--navy); font-size: 15px; margin-bottom: 8px;">1) قائمة الرموز (<code class="c-id">TokenType.cs</code>):</h4>
+              <p class="prose">يحتوي على <strong>94 نوعاً</strong>، تنقسم إلى:</p>
+              <ul style="padding-right: 24px; color: var(--text-main); font-size: 14px; line-height: 1.8;">
+                <li><strong>كلمات مفتاحية (Keywords):</strong> برنامج, ثابت, متغير, إجراء, إذا, فإن, طالما, كرر, صحيح, حقيقي, منطقي, اطبع.</li>
+                <li><strong>معاملات (Operators):</strong> +, -, *, /, ==, !=, &gt;, &lt;, &amp;&amp;, ||.</li>
+                <li><strong>محددات (Delimiters):</strong> {, }, (, ), ;, :.</li>
+                <li><strong>رموز تحكم:</strong> EndOfFile (نهاية الملف)، و Bad (رمز غير صالح).</li>
+              </ul>
+            </div>
+
+            <div style="margin-bottom: 22px;">
+              <h4 style="color: var(--navy); font-size: 15px; margin-bottom: 8px;">2) كائن الرمز المكتمل (<code class="c-id">Token.cs</code>):</h4>
+              <p class="prose">يخزن كل معلومة عن الرمز لاستخدامها لاحقاً في الـ Parser وشاشات الأخطاء:</p>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود C# الفعلي لكائن الرمز</span>
+                </div>
+                <div class="code-content ltr" style="font-family: var(--fm); font-size: 13px;">
+public sealed class Token
+{
+    public TokenType Type { get; }      // نوع الرمز
+    public string Lexeme { get; }       // النص كما كُتب
+    public object? Value { get; }       // القيمة المحولة (مثلاً: 25 كرقم حقيقي في الذاكرة)
+    public SourceSpan Span { get; }     // الموقع: رقم السطر، رقم العمود، البداية والنهاية
+}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 style="color: var(--navy); font-size: 15px; margin-bottom: 8px;">3) تقنية فحص الكلمات المفتاحية بالـ Hash Table:</h4>
+              <p class="prose">بدلاً من عمل حلقات بحث بطيئة، يقرأ الـ Lexer المعرف كأنه اسم عادي، ثم يبحث عنه في جدول تجزئة سريع:</p>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>جدول التجزئة لفحص الكلمات المفتاحية</span>
+                </div>
+                <div class="code-content ltr" style="font-family: var(--fm); font-size: 13px;">
+Dictionary&lt;string, TokenType&gt; Keywords = new() {
+    ["برنامج"] = TokenType.ProgramKeyword,
+    ["طالما"]  = TokenType.WhileKeyword,
+    ["متغير"]  = TokenType.VariableKeyword,
+    // ... بقية الكلمات
+};
+                </div>
+              </div>
+              <p class="prose">
+                <strong>الفائدة النظرية:</strong> البحث يتم في زمن ثابت <strong>$O(1)$</strong>، فإذا وُجدت الكلمة في الجدول أخذت نوعها الخاص، وإلا اعتُبرت اسماً لمتغير (<code class="c-id">Identifier</code>).
+              </p>
+            </div>
+          </div>
+
+          <!-- 6. سجل أخطاء المحطة الأولى -->
+          <div class="errors-container">
+            <h3 class="block-h3" style="color: var(--accent-red);">6. سجل أخطاء المحطة الأولى (Lexical Errors) مع أمثلة حية</h3>
+            <p class="prose">
+              الخطأ المعجمي يقع فقط عندما <strong>يعجز الـ Lexer عن تكوين رمز صالح وفق أبجدية اللغة وقواعد كتابة أعدادها ونصوصها:</strong>
+            </p>
+
+            <!-- Error 1 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الأول: محرف غير معروف / غير صالح (Unexpected Character)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> محرف لا ينتمي لأبجدية اللغة العربية، وليس رقماً، وليس عاملاً مسجلاً في لغة بيان.</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-kw">متغير</span> <span class="c-id">س</span> <span class="c-err">@</span>: <span class="c-kw">صحيح</span> = <span class="c-num">10</span>;
+                </div>
+              </div>
+              <p class="prose" style="font-size: 13.5px; margin-top: 8px;">
+                <strong>ماذا حدث في الكواليس؟</strong> وصل مؤشر القراءة إلى المحرف <code class="c-err">@</code>. قام الماسح بفحص كل القواعد: هل هو حرف؟ لا. رقم؟ لا. معامل رياضي؟ لا.
+              </p>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: خطأ معجمي [سطر 1، عمود 9]: محرف غير متوقع في لغة بيان: '@'
+              </div>
+            </div>
+
+            <!-- Error 2 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الثاني: نص غير مغلق (Unterminated String Literal)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> كتابة علامة تنصيص " لبداية جملة نصية، ثم انتهاء السطر أو نهاية الملف دون وضع علامة التنصيص المغلقة.</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-kw">متغير</span> <span class="c-id">رسالة</span>: <span class="c-kw">خيط رمزي</span>(<span class="c-num">20</span>) = <span class="c-err">"أهلاً بالعالم</span>;<br>
+                  <span class="c-kw">اطبع</span>(<span class="c-id">رسالة</span>);
+                </div>
+              </div>
+              <p class="prose" style="font-size: 13.5px; margin-top: 8px;">
+                <strong>ماذا حدث في الكواليس؟</strong> دخل الماسح في حالة قراءة محارف السلسلة النصية وظل يجمعها منتظراً علامة <code class="c-kw">"</code>. فجأة واجه محرف الانتقال لسطر جديد <code class="c-kw">\n</code> أو علامة <code class="c-kw">;</code> دون إغلاق النص.
+              </p>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: خطأ معجمي [سطر 1، عمود 29]: السلسلة النصية لم تُغلق بعلامة تنصيص قبل نهاية السطر.
+              </div>
+            </div>
+
+            <!-- Error 3 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الثالث: محرف غير مغلق (Unterminated Character Literal)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> فتح علامة اقتباس مفردة لتعريف حرف ' دون إغلاقها بمحرف مطابق.</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-kw">متغير</span> <span class="c-id">ر</span>: <span class="c-kw">حرفي</span> = <span class="c-err">'أ</span>;
+                </div>
+              </div>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: خطأ معجمي [سطر 1، عمود 17]: الثابت الحرفي غير مغلق بعلامة اقتباس.
+              </div>
+            </div>
+
+            <!-- Error 4 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الرابع: رقم ذو صياغة مشوهة (Malformed Float / Number)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> كتابة رقم يحتوي على أكثر من نقطة عشرية واحدة في نفس القيمة.</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-kw">متغير</span> <span class="c-id">س</span>: <span class="c-kw">حقيقي</span> = <span class="c-err">45.12.9</span>;
+                </div>
+              </div>
+              <p class="prose" style="font-size: 13.5px; margin-top: 8px;">
+                <strong>ماذا حدث في الكواليس؟</strong> قرأ الماسح 45.12 وتحول إلى حالة "العدد الحقيقي"، وعندما واجه النقطة الثانية <code class="c-err">.</code> أدرك فوراً أن هذا ليس رقماً صالحاً رياضياً في علوم الحوسبة.
+              </p>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: خطأ معجمي [سطر 1، عمود 23]: تنسيق غير صالح للعدد؛ لا يمكن احتواء أكثر من نقطة عشرية واحدة.
+              </div>
+            </div>
+
+            <!-- Error 5 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الخامس: تعليق متعدد الأسطر غير مغلق (Unterminated Block Comment)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> فتح تعليق كتلوي بـ /* والوصول إلى نهاية الملف بالكامل دون إغلاقه بـ */.</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-comment">/* هذا تعليق لشرح البرنامج<br>
+                  &nbsp;&nbsp;&nbsp;ولكن نسيت إغلاقه</span><br>
+                  <span class="c-kw">برنامج</span> <span class="c-id">تجربة</span> { }
+                </div>
+              </div>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: خطأ معجمي [سطر 1، عمود 1]: تعليق متعدد الأسطر لم يتم إغلاقه (وصل المترجم لنهاية الملف).
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. آلية التعافي من الأخطاء المعجمية -->
+          <div class="content-block" style="margin-top: 32px;">
+            <h3 class="block-h3">7. آلية التعافي من الأخطاء المعجمية (Lexical Error Recovery)</h3>
+            <p class="prose">
+              إذا واجه المترجم كوداً يحتوي على <code class="c-err">@</code>، هل ينهار البرنامج ويتوقف فجأة (Crash)؟<br>
+              <strong>بالتأكيد لا!</strong> يطبق ماسح «بيان» تقنية ذكية:
+            </p>
+            <ul style="padding-right: 24px; color: var(--text-dim); font-size: 14.5px; line-height: 1.85;">
+              <li>يقوم بإنشاء كائن رمز خاص اسمه <code class="c-kw">BadToken</code>.</li>
+              <li>يسجل تفاصيل الخطأ (نوعه، السطر، والعمود) في حقيبة تشخيصية تسمى <code class="c-id">DiagnosticBag</code>.</li>
+              <li><strong>يتخطى المحرف الخاطئ خطوة واحدة للأمام</strong> ويواصل قراءة باقي الكود كالمعتاد!</li>
+            </ul>
+            <p class="prose" style="margin-top: 10px;">
+              <strong style="color: var(--copper2);">الهدف:</strong> تمكين المبرمج من رؤية <strong>جميع أخطاء الكود في شاشة واحدة دفعة واحدة</strong> بدلاً من إزعاجه بإيقاف الترجمة عند أول حرف خاطئ.
+            </p>
+          </div>
+
+          <!-- 8. المخرج النهائي للمحطة الأولى -->
+          <div class="content-block">
+            <h3 class="block-h3">8. المخرج النهائي للمحطة الأولى</h3>
+            <p class="prose">
+              بانتهاء عمل الـ Lexer بنجاح، يتم إنتاج:
+            </p>
+            <ul style="padding-right: 24px; color: var(--text-dim); font-size: 14.5px; line-height: 1.85;">
+              <li><code class="c-kw">List&lt;Token&gt;</code>: مصفوفة نظيفة من الرموز المرتبة تسلسلياً ومنتهية برمز خاص اسمه <code class="c-id">EndOfFileToken</code>.</li>
+              <li>تظهر هذه الرموز مباشرة في واجهة التطبيق داخل تبويب <strong>"جدول الرموز الصرفية (Tokens Grid)"</strong>.</li>
+              <li>تُسلَّم هذه القائمة كمدخل رسمي للمرحلة التالية: <strong>المحلل النحوي (Syntax Analyzer - LL(1) Parser)</strong>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STATION 2: SYNTAX ANALYSIS & AST -->
+    <!-- ========================================== -->
+    <section class="station-section" id="station2">
+      <div class="station-card">
+        <div class="station-header">
+          <div>
+            <span class="station-badge">المحطة الثانية &bull; PHASE 02</span>
+            <h2 class="station-title">🌳 التحليل النحوي وشجرة الإعراب (Syntax Analysis &amp; AST) — الدليل الشامل</h2>
+          </div>
+          <div class="station-tag">DoctorLl1Parser.cs &bull; DoctorAstBuilder.cs &bull; Syntax/</div>
+        </div>
+
+        <div class="station-body">
+          <!-- 1. المفهوم النظري والهدف الأساسي -->
+          <div class="content-block">
+            <h3 class="block-h3">1. المفهوم النظري والهدف الأساسي (The Concept &amp; Core Goal)</h3>
+            <p class="prose">
+              إذا كان المحلل المعجمي يفحص <strong>"إملاء الكلمات المفردة"</strong>، فإن <strong>المحلل النحوي (Syntax Analyzer أو Parser)</strong> يفحص <strong>"قواعد تركيب الجمل وهيكلها المنطقي"</strong>.
+            </p>
+            <ul style="padding-right: 24px; color: var(--text-main); font-size: 14.5px; line-height: 1.85; margin-bottom: 16px;">
+              <li><strong>المدخل:</strong> تسلسل مسطح وخطي من الرموز المعجمية (<code class="c-kw">List&lt;Token&gt;</code>) القادمة من الـ Lexer.</li>
+              <li><strong>المهمة المركزية:</strong> التحقق من أن تسلسل هذه الرموز يتبع القواعد البنائية الرسمية للغة (Grammar Rules)، ثم تحويل هذا التسلسل المسطح إلى هيكل شجري هرمي يُعرف بـ <strong>شجرة الإعراب المجردة (Abstract Syntax Tree - AST)</strong>.</li>
+            </ul>
+
+            <div class="code-window">
+              <div class="code-window-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span>التحول البنيوي من الرموز المسطحة إلى الشجرة الهرمية</span>
+              </div>
+              <div class="code-content ltr" style="font-family: var(--fm); font-size: 13px;">
+[رموز مسطحة متتالية]               ===>             [هيكل شجري هرمي AST]
+Token(متغير), Token(س), Token(=)...                  AssignmentNode
+                                                    ├── Variable: س
+                                                    └── BinaryOp (+)
+                                                         ├── 5
+                                                         └── 3
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. الأساس الرياضي -->
+          <div class="content-block">
+            <h3 class="block-h3">2. الأساس الرياضي: القواعد الخالية من السياق (CFG) وصيغة BNF</h3>
+            <p class="prose">
+              في نظرية اللغات الصورية وهرم تشومسكي:
+              تنتمي قواعد تركيب لغات البرمجة إلى <strong>اللغات الخالية من السياق (Context-Free Languages - CFL)</strong> (المستوى 2).
+              تُعرّف قواعدها رياضياً برباعية رسمية:
+              $$G = (V, \Sigma, R, S)$$
+            </p>
+            <ul style="padding-right: 24px; color: var(--text-main); font-size: 14px; line-height: 1.85; margin-bottom: 16px;">
+              <li><strong>$V$ (المتغيرات غير الطرفية Non-terminals):</strong> مثل <code class="c-id">Statement</code>, <code class="c-id">Expression</code>, <code class="c-id">Block</code>.</li>
+              <li><strong>$\Sigma$ (الرموز الطرفية Terminals):</strong> هي الرموز المعجمية الفعلية (<code class="c-kw">Tokens</code>) القادمة من الماسح.</li>
+              <li><strong>$R$ (قواعد الإنتاج Production Rules):</strong> قواعد التحويل والتوليد.</li>
+              <li><strong>$S$ (رمز البداية Start Symbol):</strong> قاعدة انطلاق البرنامج (<code class="c-kw">برنامج</code>).</li>
+            </ul>
+
+            <div class="code-window">
+              <div class="code-window-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span>مقتطف من قواعد لغة بيان بصيغة BNF / EBNF</span>
+              </div>
+              <div class="code-content ltr" style="font-family: var(--fm); font-size: 13px;">
+Program        ::= "برنامج" Identifier "{" Declarations Statements "}"
+Declaration    ::= VarDecl | ConstDecl | ProcDecl
+VarDecl        ::= "متغير" Identifier ":" Type ( "=" Expression )? ";"
+IfStatement    ::= "إذا" "(" Expression ")" "فإن" Block ( "وإلا" Block )?
+WhileStatement ::= "طالما" "(" Expression ")" Block
+Expression     ::= LogicalOr
+LogicalOr      ::= LogicalAnd ( "||" LogicalAnd )*
+Additive       ::= Multiplicative ( ( "+" | "-" ) Multiplicative )*
+Multiplicative ::= Primary ( ( "*" | "/" | "%" ) Primary )*
+Primary        ::= Identifier | Literal | "(" Expression ")"
+              </div>
+            </div>
+
+            <div class="theory-box">
+              <div class="theory-box-title">ملاحظة تصميمية حول أسبقية العمليات (Operator Precedence)</div>
+              <div class="theory-box-desc">
+                لاحظ كيف تم تصميم قواعد التعبيرات الرياضية على مستويات متدرجة (<code class="c-kw">Additive</code> ثم <code class="c-kw">Multiplicative</code>) لفرض <strong>أسبقية العمليات تلقائياً</strong>، بحيث ينزل الضرب والقسمة في أسفل الشجرة ويُحسب أولاً قبل الجمع والطرح.
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. أسئلة تصميمية وفلسفية -->
+          <div class="content-block">
+            <h3 class="block-h3">3. أسئلة تصميمية وفلسفية: لماذا صُممت هذه المرحلة هكذا؟</h3>
+            
+            <div class="why-card" style="margin-bottom: 18px;">
+              <div class="why-card-title">س1: ماذا يعني LL(1)؟ وما الفرق بين Top-Down و Bottom-Up؟</div>
+              <div class="why-card-desc">
+                <strong>Top-Down (من القمة للقاعدة):</strong> يبدأ التحليل من رمز البداية العام للبرنامج ويشتق نزولاً حتى يصل لأصغر رمز.<br>
+                <strong>تفكيك اسم LL(1):</strong><br>
+                &bull; <strong>L الأولى:</strong> قراءة الرموز وفحصها من اليسار إلى اليمين (Left-to-right scan).<br>
+                &bull; <strong>L الثانية:</strong> بناء الاشتقاق من أقصى الطرف الأيسر أولاً (Leftmost derivation).<br>
+                &bull; <strong>(1):</strong> النظر لرمز واحد فقط للأمام (1 Token Lookahead) لحسم مسار القاعدة.
+              </div>
+            </div>
+
+            <div class="why-card" style="margin-bottom: 18px;">
+              <div class="why-card-title">س2: لماذا اخترنا خوارزمية LL(1) بدلاً من LR(1) أو LALR؟</div>
+              <div class="why-card-desc">
+                <strong>1. الوضوح والارتباط الأكاديمي الشفاف (Predictive Recursive-Descent):</strong><br>
+                في محلل LL(1)، تقابل كل قاعدة نحوية <strong>دالة برمجية صريحة في C#</strong> (مثل <code class="c-id">ParseIfStatement()</code>, <code class="c-id">ParseWhileStatement()</code>). هذا يجعل تتبع كود المترجم مقروءاً بنسبة 100% مقارنة بمحللات LR(1) التي تعتمد على مصفوفات وجداول إزاحة وتقليص عملاقة وغامضة.<br>
+                <strong>2. السرعة والكفاءة العالية:</strong> يعمل المحلل بزمن خطي <strong>$O(N)$</strong> مباشر بالنسبة لحجم الملف.<br>
+                <strong>3. الدقة في إرسال رسائل الخطأ والتعافي:</strong> بما أن المحلل يعلم بدقة ما هو الرمز المتوقع في كل خطوة، فإنه يقدم رسائل توجيهية ممتازة بالعربية ويحدد مكان الخطأ بدقة.
+              </div>
+            </div>
+
+            <div class="why-card" style="margin-bottom: 18px;">
+              <div class="why-card-title">س3: كيف قمنا بحل مشكلة "التكرار اليساري" (Left Recursion Elimination)؟</div>
+              <div class="why-card-desc">
+                <strong>المشكلة:</strong> قواعد التعبير التقليدية مثل: $E \to E + T \mid T$ تتسبب في انهيار محللات LL(1) الهابطة؛ لأن الدالة <code class="c-id">ParseExpression()</code> ستستدعي نفسها في أول سطر قبل قراءة أي رمز من الملف، مما يؤدي إلى حلقة مفرغة وانهيار الذاكرة (<strong>Stack Overflow</strong>).<br>
+                <strong>الحل الرياضي في المشروع:</strong> استبدلنا التكرار اليساري بصياغة تكرارية مكافئة عبر المعادلة:
+                $$A \to A\alpha \mid \beta \implies A \to \beta A', \quad A' \to \alpha A' \mid \epsilon$$
+                وبرمجياً، حُول هذا في <code class="c-id">DoctorLl1Parser.cs</code> إلى حلقة <code class="c-kw">while</code> خفيفة تقرأ المعامل الأول ثم تلتهم أي معاملات جمع أو طرح لاحقة بسلاسة تامة.
+              </div>
+            </div>
+
+            <div class="why-card">
+              <div class="why-card-title">س4: ما هو دور مجموعات FIRST و FOLLOW؟</div>
+              <div class="why-card-desc">
+                <strong>مجموعة البداية (FIRST):</strong> هي قائمة الرموز الطرفية التي يمكن أن تبدأ بها قاعدة معينة. مثلاً: قاعدة الجملة الشرطية تبدأ حصراً بالرمز <code class="c-kw">إذا</code>.<br>
+                <strong>مجموعة المتابعة (FOLLOW):</strong> هي قائمة الرموز التي يمكن أن تظهر مباشرة بعد انتهاء القاعدة.<br>
+                <strong>الفائدة للمترجم:</strong> يعتمد المحلل التنبئي على هذه المجموعات لينظر لرمز واحد للأمام (<code class="c-id">Peek()</code>)؛ فإذا رأى رمز <code class="c-kw">إذا</code> علم فوراً ودون تردد أنه يجب أن يستدعي دالة <code class="c-id">ParseIfStatement()</code>.
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. التمييز الأكاديمي الحاسم -->
+          <div class="content-block">
+            <h3 class="block-h3">4. التمييز الأكاديمي الحاسم: شجرة الاشتقاق (Parse Tree) مقابل شجرة (AST)</h3>
+            <p class="prose">هذا السؤال يطرحه الدكاترة باستمرار للتأكد من فهمك للفرق الجوهري بين الشجرتين:</p>
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>وجه المقارنة</th>
+                  <th>شجرة الاشتقاق الكاملة (Parse Tree / CST)</th>
+                  <th>شجرة الإعراب المجردة (Abstract Syntax Tree - AST)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>طبيعة المحتوى</strong></td>
+                  <td>تحتوي على <strong>كل رمز حرفي</strong> قرأه المترجم، بما في ذلك الأقواس <code class="c-kw">( )</code>، الفواصل المنقوطة <code class="c-kw">;</code>، والعقد الإعرابية الوسيطة.</td>
+                  <td>تحتوي فقط على <strong>المعنى الوظيفي والمنطقي الصافي</strong> للبرنامج دون حشو الرموز التنسيقية.</td>
+                </tr>
+                <tr>
+                  <td><strong>الحجم والتعقيد</strong></td>
+                  <td>ضخمة جداً، كثيرة التفرعات، وتستهلك مساحة ذاكرة كبيرة.</td>
+                  <td>مضغوطة، خفيفة، وتمثل العلاقات الإعرابية بأقل عدد ممكن من العقد.</td>
+                </tr>
+                <tr>
+                  <td><strong>دورها في المترجم</strong></td>
+                  <td>وسيلة إيضاح أكاديمية لمسار الاشتقاق النحوي الكامل (تظهر في تبويب خاص في الـ IDE).</td>
+                  <td><strong>العمود الفقري</strong> للمترجم؛ هي الشجرة التي تُمرر فعلياً للتحليل الدلالي وتوليد الكود.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="code-window">
+              <div class="code-window-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span>مثال مقارنة لتعبير: س = 5 + 3;</span>
+              </div>
+              <div class="code-content ltr" style="font-family: var(--fm); font-size: 13px;">
+[شجرة الاشتقاق الكاملة Parse Tree]:
+AssignmentStatement
+├── Identifier (س)
+├── EqualsToken (=)
+├── Expression
+│   └── AdditiveExpression
+│       ├── PrimaryExpression (5)
+│       ├── PlusToken (+)
+│       └── PrimaryExpression (3)
+└── SemicolonToken (;)
+
+[شجرة الإعراب المجردة AST]:
+AssignmentNode (=)
+├── Target: Identifier (س)
+└── Value: BinaryOpNode (+)
+     ├── Left: 5
+     └── Right: 3
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. كيف نفذ داخل المشروع -->
+          <div class="content-block">
+            <h3 class="block-h3">5. كيف نُفّذ التحليل النحوي داخل مشروع BayanCompiler؟</h3>
+            <p class="prose">
+              يتكون المجلد <code class="c-id">src/Bayan.Compiler.Core/Parsing/</code> ومجلد <code class="c-id">Syntax/</code> من:
+            </p>
+
+            <div style="margin-bottom: 20px;">
+              <h4 style="color: var(--navy); font-size: 15.5px; margin-bottom: 6px;">1) المحلل النحوي (<code class="c-id">DoctorLl1Parser.cs</code>):</h4>
+              <p class="prose">يحتوي على دوال الإعراب المتسلسلة (Recursive-Descent)، مثل:</p>
+              <ul style="padding-right: 24px; color: var(--text-main); font-size: 14px; line-height: 1.8;">
+                <li><code class="c-id">ParseProgram()</code>: تبدأ بقراءة اسم البرنامج وفتح القوس المعقوص <code class="c-kw">{</code>.</li>
+                <li><code class="c-id">ParseStatement()</code>: تفحص نوع الجملة (تصريح، إسناد، شرط، تكرار، طباعة) وتوجه التنفيذ للدالة المناسبة.</li>
+                <li><code class="c-id">ParseExpression()</code>: تطبق أسبقية العمليات الحسابية والمنطقية.</li>
+              </ul>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <h4 style="color: var(--navy); font-size: 15.5px; margin-bottom: 6px;">2) باني الشجرة (<code class="c-id">DoctorAstBuilder.cs</code>):</h4>
+              <p class="prose">يقوم بإنشاء وربط عقد الـ AST وتحويل مخرجات الإعراب إلى كائنات متصلة.</p>
+            </div>
+
+            <div>
+              <h4 style="color: var(--navy); font-size: 15.5px; margin-bottom: 6px;">3) شجرة عقد النحو (Syntax Nodes Hierarchy):</h4>
+              <p class="prose">تنقسم جميع العقد في المشروع إلى صنفين رئيسيين:</p>
+              <ul style="padding-right: 24px; color: var(--text-main); font-size: 14px; line-height: 1.8;">
+                <li><strong>عقد الجمل (Statements):</strong> وحدات أمرية لا تُرجع قيمة، مثل: <code class="c-id">IfStatementNode</code>, <code class="c-id">WhileStatementNode</code>, <code class="c-id">AssignmentNode</code>, <code class="c-id">PrintStatementNode</code>, <code class="c-id">VariableDeclarationNode</code>.</li>
+                <li><strong>عقد التعبيرات (Expressions):</strong> وحدات حسابية أو منطقية تُرجع قيمة، مثل: <code class="c-id">BinaryExpressionNode</code>, <code class="c-id">LiteralExpressionNode</code>, <code class="c-id">IdentifierExpressionNode</code>, <code class="c-id">UnaryExpressionNode</code>.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 6. سجل أخطاء النحو -->
+          <div class="errors-container">
+            <h3 class="block-h3" style="color: var(--accent-red);">6. سجل أخطاء المحطة الثانية (Syntax Errors) مع أمثلة حية</h3>
+            <p class="prose">
+              تحدث الأخطاء النحوية عندما <strong>تأتي الرموز بتسلسل غير متوقع يخالف قواعد اللغة الرسمية (Grammar Rules):</strong>
+            </p>
+
+            <!-- Error 1 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الأول: نسيان الفاصلة المنقوطة (Missing Semicolon)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> تنص قواعد لغة بيان على أن كل جملة تصريح أو إسناد يجب أن تُختم برمز ';'.</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-kw">متغير</span> <span class="c-id">س</span>: <span class="c-kw">صحيح</span> = <span class="c-num">10</span> <span class="c-comment">// نسي الفاصلة المنقوطة</span><br>
+                  <span class="c-kw">متغير</span> <span class="c-id">ص</span>: <span class="c-kw">صحيح</span> = <span class="c-num">20</span>;
+                </div>
+              </div>
+              <p class="prose" style="font-size: 13.5px; margin-top: 8px;">
+                <strong>ماذا حدث في الكواليس؟</strong> بعد قراءة العدد 10، كانت دالة <code class="c-id">ParseDeclaration()</code> تنتظر رمز <code class="c-kw">TokenType.Semicolon</code>، لكن الرمز التالي في الملف كان الكلمة المفتاحية <code class="c-kw">متغير</code>.
+              </p>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: ❌ خطأ نحوي [سطر 2، عمود 1]: كان المتوقع ';' بعد نهاية جملة التصريح، ولكن وجد الرمز 'متغير'.
+              </div>
+            </div>
+
+            <!-- Error 2 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الثاني: عدم توازن الأقواس (Unbalanced Parentheses)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> فتح قوس دائر لشخصية أو تعبير شرطي دون إغلاقه قبل بداية الكتلة.</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-kw">إذا</span> (<span class="c-id">س</span> &gt; <span class="c-num">5</span> <span class="c-err">{</span><br>
+                  &nbsp;&nbsp;<span class="c-kw">اطبع</span>(<span class="c-id">س</span>);<br>
+                  }
+                </div>
+              </div>
+              <p class="prose" style="font-size: 13.5px; margin-top: 8px;">
+                <strong>ماذا حدث في الكواليس؟</strong> قاعدة جملة <code class="c-kw">إذا</code> تشترط البنية: <code class="c-kw">إذا ( تعبير ) فإن { ... }</code>. بعد قراءة الشرط <code class="c-id">س &gt; 5</code>، توقع المحلل القوس المغلق <code class="c-kw">)</code>، ولكنه صدم بالقوس المعقوص <code class="c-kw">{</code>.
+              </p>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: ❌ خطأ نحوي [سطر 1، عمود 11]: الرمز المتوقع ')' غير موجود بعد شرط جملة 'إذا'.
+              </div>
+            </div>
+
+            <!-- Error 3 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الثالث: تعبير رياضي غير مكتمل (Incomplete Expression)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> وضع معامل ثنائي (مثل + أو *) دون توفير الطرف الأيمن للعملية قبل نهاية الجملة.</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-id">س</span> = <span class="c-num">15</span> + <span class="c-err">;</span>
+                </div>
+              </div>
+              <p class="prose" style="font-size: 13.5px; margin-top: 8px;">
+                <strong>ماذا حدث في الكواليس؟</strong> عندما قرأ المحلل المعامل <code class="c-op">+</code>، استدعى دالة التعبير الأيمن <code class="c-id">ParseExpression()</code>، لكن أول رمز واجهه كان <code class="c-kw">;</code> وهي ليست قيمة صالحة.
+              </p>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: ❌ خطأ نحوي [سطر 1، عمود 10]: تعبير غير مكتمل؛ كان المتوقع وجود قيمة أو معرف بعد المعامل '+'.
+              </div>
+            </div>
+
+            <!-- Error 4 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الرابع: إسقاط ركن رئيسي في الجملة (Missing Mandatory Clause)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> إهمال كلمة إلزامية تفرضها قواعد النحو (مثل كتابة 'إذا' بدون 'فإن').</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-kw">إذا</span> (<span class="c-id">س</span> == <span class="c-num">0</span>)<br>
+                  <span class="c-err">{</span><br>
+                  &nbsp;&nbsp;<span class="c-kw">اطبع</span>(<span class="c-id">س</span>);<br>
+                  }
+                </div>
+              </div>
+              <p class="prose" style="font-size: 13.5px; margin-top: 8px;">
+                <strong>ماذا حدث في الكواليس؟</strong> في لغة بيان، كلمة <code class="c-kw">فإن</code> ركن نحوي إلزامي يفصل بين الشرط والكتلة التنفيذية. غيابها يعتبر خرقاً لقاعدة <code class="c-id">IfStatement</code>.
+              </p>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: ❌ خطأ نحوي [سطر 2، عمود 1]: كان المتوقع الكلمة المفتاحية 'فإن' بعد شرط 'إذا'.
+              </div>
+            </div>
+
+            <!-- Error 5 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الخامس: استخدام كلمة مفتاحية كاسم متغير (Keyword as Identifier)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> استخدام كلمة من الكلمات المحجوزة في لغة بيان كاسم للمتغير في جملة التصريح.</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-kw">متغير</span> <span class="c-err">طالما</span>: <span class="c-kw">صحيح</span> = <span class="c-num">5</span>;
+                </div>
+              </div>
+              <p class="prose" style="font-size: 13.5px; margin-top: 8px;">
+                <strong>ماذا حدث في الكواليس؟</strong> قاعدة التصريح تشترط: <code class="c-kw">متغير Identifier : Type</code>. المحلل قرأ <code class="c-kw">متغير</code> ثم وجد الرمز من نوع <code class="c-kw">WhileKeyword</code> وليس <code class="c-id">Identifier</code>.
+              </p>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: ❌ خطأ نحوي [سطر 1، عمود 8]: لا يمكن استخدام الكلمة المفتاحية 'طالما' كاسم للمتغير.
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. آلية التعافي من الأخطاء النحوية -->
+          <div class="content-block" style="margin-top: 32px;">
+            <h3 class="block-h3">7. آلية التعافي من الأخطاء النحوية (Panic-Mode Recovery)</h3>
+            <p class="prose">
+              لو توقف المترجم وأغلق نفسه عند أول فاصلة منقوطة مفقودة لكانت تجربة الاستخدام سيئة جداً! لذلك يطبق <code class="c-id">DoctorLl1Parser.cs</code> استراتيجية <strong>نمط الذعر (Panic Mode Recovery)</strong>:
+            </p>
+            <ol style="padding-right: 24px; color: var(--text-main); font-size: 14.5px; line-height: 1.85;">
+              <li>عند اكتشاف الخطأ، يُسجل فوراً في حقيبة التشخيصات <code class="c-id">DiagnosticBag</code>.</li>
+              <li>يبدأ المحلل بتخطي الرموز القادمة بسرعة (Discarding Tokens) حتى يصل إلى <strong>رمز مزامنة (Synchronizing Token)</strong>.</li>
+              <li><strong>أشهر رموز المزامنة في لغة بيان:</strong>
+                <ul style="margin-top: 6px; padding-right: 20px;">
+                  <li>الفاصلة المنقوطة <code class="c-kw">;</code> (نهاية الجملة الحالية).</li>
+                  <li>القوس المغلق <code class="c-kw">}</code> (نهاية الكتلة الحالية).</li>
+                  <li>الكلمات المفتاحية الكبرى (<code class="c-kw">متغير</code>, <code class="c-kw">إذا</code>, <code class="c-kw">طالما</code>, <code class="c-kw">إجراء</code>).</li>
+                </ul>
+              </li>
+              <li>بمجرد الوصول لرمز المزامنة، يستأنف المحلل الإعراب الطبيعي للجملة التالية باحثاً عن بقية أخطاء الكود.</li>
+            </ol>
+          </div>
+
+          <!-- 8. المخرج النهائي للمحطة الثانية -->
+          <div class="content-block">
+            <h3 class="block-h3">8. المخرج النهائي للمحطة الثانية</h3>
+            <p class="prose">
+              بانتهاء عمل المحلل النحوي بنجاح:
+            </p>
+            <ul style="padding-right: 24px; color: var(--text-main); font-size: 14.5px; line-height: 1.85;">
+              <li>ينتج كائن شجرة الإعراب المجردة الجذرية: <strong><code class="c-kw">ProgramNode</code> (AST)</strong>.</li>
+              <li>تُعرض الشجرة بيانياً في تبويب <strong>"شجرة الإعراب المجردة (AST Grid / Tree)"</strong> داخل الـ IDE.</li>
+              <li>تُسلَّم هذه الشجرة كمدخل وحيد وأساسي للمرحلة التالية: <strong>المحلل الدلالي (Semantic Analyzer)</strong>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STATION 3: SEMANTIC ANALYSIS & SYMBOL TABLE -->
+    <!-- ========================================== -->
+    <section class="station-section" id="station3">
+      <div class="station-card">
+        <div class="station-header">
+          <div>
+            <span class="station-badge">المحطة الثالثة &bull; PHASE 03</span>
+            <h2 class="station-title">🧠 التحليل الدلالي وجدول الرموز (Semantic Analysis &amp; Symbol Table) — الدليل الشامل</h2>
+          </div>
+          <div class="station-tag">DoctorSemanticAnalyzer.cs &bull; SymbolTable.cs &bull; LanguageType.cs</div>
+        </div>
+
+        <div class="station-body">
+          <!-- 1. المفهوم النظري والهدف الأساسي -->
+          <div class="content-block">
+            <h3 class="block-h3">1. المفهوم النظري والهدف الأساسي (The Concept &amp; Core Goal)</h3>
+            <p class="prose">
+              إذا كان المحلل المعجمي يفحص <strong>"إملاء الكلمات"</strong>، والمحلل النحوي يفحص <strong>"صحة تراكيب الجمل"</strong>، فإن <strong>المحلل الدلالي (Semantic Analyzer)</strong> هو <strong>"عقل وحكمة المترجم"</strong> الذي يفحص <strong>"معنى الكود ومنطقه الرياضي والبرمجي"</strong>.
+            </p>
+            <p class="prose">
+              <strong>لماذا لا تكفي المراحل السابقة؟</strong><br>
+              القواعد الخالية من السياق (CFG) في المحلل النحوي عمياء تماماً عن السياق الزمني والمنطقي؛ فهي تقبل الجملة طالما أنها تطابق القالب الظاهري، حتى لو كانت مستحيلة التنفيذ حاسوبياً!
+            </p>
+            <ul style="padding-right: 24px; color: var(--text-main); font-size: 14.5px; line-height: 1.85; margin-bottom: 16px;">
+              <li><strong>المهام المركزية للمحلل الدلالي:</strong></li>
+              <li>1. التحقق من مطابقة المعنى لقواعد لغة «بيان» (Context-Sensitive Rules).</li>
+              <li>2. إدارة دورة حياة المتغيرات ونطاقاتها عبر <strong>جدول الرموز (Symbol Table)</strong>.</li>
+              <li>3. فحص تطابق الأنواع (Type Checking) في العمليات الحسابية والمنطقية والإسنادات.</li>
+              <li>4. التحقق من سلامة استدعاء الإجراءات والمعاملات (بالقيمة مقابل بالمرجع).</li>
+            </ul>
+          </div>
+
+          <!-- 2. الأساس الرياضي -->
+          <div class="content-block">
+            <h3 class="block-h3">2. الأساس الرياضي: القواعد الحساسة للسياق ونظرية السمات (Attribute Grammars)</h3>
+            <p class="prose">
+              في هرم تشومسكي للغات الصورية:
+              تنتمي متطلبات التحليل الدلالي إلى <strong>اللغات الحساسة للسياق (Context-Sensitive Languages)</strong> (المستوى 1 في الهرم).
+              ويتم التعبير عن القواعد الدلالية أكاديمياً بواسطة <strong>قواعد السمة (Attribute Grammars)</strong>، حيث تُعطى كل عقدة في شجرة الـ AST خصائص وسمات إضافية تُحسب أثناء اجتياز الشجرة:
+            </p>
+            <ul style="padding-right: 24px; color: var(--text-main); font-size: 14px; line-height: 1.85; margin-bottom: 16px;">
+              <li><strong>السمات المشتقة (Synthesized Attributes):</strong> تُحسب من أسفل الشجرة إلى أعلاها (Bottom-Up)؛ مثل حساب النوع الناتج لتعبير رياضي: نوع العقدة <code class="c-op">+</code> يُشتق من نوع معاملها الأيسر ومعاملها الأيمن.</li>
+              <li><strong>السمات الموروثة (Inherited Attributes):</strong> تُمرر من أعلى الشجرة إلى أسفلها (Top-Down)؛ مثل تمرير النطاق ومستوى الوصول من عقدة البرنامج أو الإجراء إلى الجمل الداخلية.</li>
+            </ul>
+
+            <div class="code-window">
+              <div class="code-window-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span>المثال الأكاديمي الحاسم: الفرق بين النحو والدلالة</span>
+              </div>
+              <div class="code-content" style="font-size: 14px;">
+                <span class="c-id">س</span> = <span class="c-num">10</span> + <span class="c-str">"علي"</span>;
+              </div>
+            </div>
+
+            <div class="theory-box">
+              <div class="theory-box-title">تحليل الجملة بين النحو والدلالة</div>
+              <div class="theory-box-desc">
+                &bull; <strong>رأي المحلل النحوي (Parser):</strong> <span style="color: var(--accent-green); font-weight: 700;">✅ صحيح 100%</span>؛ لأن التركيب يطابق تماماً قاعدة: <code>معرف = تعبير + تعبير;</code>.<br>
+                &bull; <strong>رأي المحلل الدلالي (Semantic):</strong> <span style="color: var(--accent-red); font-weight: 700;">❌ خطأ دلالي فادح</span>؛ لأن جمع عدد صحيح مع نص غير معرّف في نظام الأنواع للغة بيان!
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. أسئلة تصميمية وفلسفية -->
+          <div class="content-block">
+            <h3 class="block-h3">3. أسئلة تصميمية وفلسفية: لماذا صُممت هذه المرحلة هكذا؟</h3>
+            
+            <div class="why-card" style="margin-bottom: 18px;">
+              <div class="why-card-title">س1: لماذا نعتمد على "شجرة نطاقات هرمية" (Scope Tree) بدلاً من جدول خطي مسطح؟</div>
+              <div class="why-card-desc">
+                <strong>1. دعم النطاقات المتداخلة (Lexical / Block Scoping):</strong><br>
+                في لغة «بيان»، المتغيرات المعلنة داخل دالة أو حلقة لا يجب أن يراها الكود الخارجي. إدارة جدول الرموز كشجرة هرمية تضمن أن كل نطاق يعرف أباه (<code class="c-id">ParentScope</code>) ولا يرى أبناءه.<br>
+                <strong>2. تطبيق مبدأ حجب المتغيرات (Variable Shadowing):</strong><br>
+                إذا أعلن المبرمج عن متغير عام اسمه <code class="c-id">س</code>، ثم أعلن داخل دالة عن متغير محلي اسمه <code class="c-id">س</code>، فإن المترجم يسمح بذلك ويجعل المتغير المحلي يحجب العام مؤقتاً أثناء التواجد داخل الدالة دون مسح المتغير العام من الذاكرة.
+              </div>
+            </div>
+
+            <div class="why-card" style="margin-bottom: 18px;">
+              <div class="why-card-title">س2: كيف يعامل المترجم التمرير "بالقيمة" مقابل "بالمرجع" دلالياً؟</div>
+              <div class="why-card-desc">
+                &bull; <strong>بالقيمة (By Value):</strong> يقبل المترجم أي تعبير حسابي أو ثابت أو متغير؛ لأن المعالج سينسخ القيمة الناتجة فقط.<br>
+                &bull; <strong>بالمرجع (By Reference):</strong> يفرض المحلل الدلالي شرطاً صارماً: يجب أن يكون المعامل الممرر <strong>موقع ذاكرة قابلاً للتعديل (L-Value / Variable)</strong>؛ فإذا مرر المبرمج ثابتاً مثل <code class="c-num">5</code> أو تعبيراً مثل <code class="c-id">س + 1</code>، يُرفض الكود فوراً بخطأ دلالي صريح لأن الدالة لا تستطيع تعديل عنوان رقم ثابت!
+              </div>
+            </div>
+
+            <div class="why-card" style="margin-bottom: 18px;">
+              <div class="why-card-title">س3: ما الفائدة من فصل جدول الرموز في كائن مستقل وعدم الاكتفاء ببيانات الـ AST؟</div>
+              <div class="why-card-desc">
+                جدول الرموز ليس مجرد أداة فحص، بل هو <strong>خريطة الذاكرة</strong> التي ستعتمد عليها المحطات اللاحقة:
+                مولد الكود الوسيط (TAC) ومولد أسمبلي MIPS يحتاجان لجدول الرموز لمعرفة: هل المتغير عام أم محلي؟ وما هو عنوانه في قطاع البيانات (<code class="c-kw">.data</code>)؟ وكم بايت يحتاج في الذاكرة؟
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. بنية جدول الرموز وسجلات الرموز -->
+          <div class="content-block">
+            <h3 class="block-h3">4. بنية جدول الرموز وسجلات الرموز في لغة «بيان»</h3>
+            <p class="prose">
+              يتكون النظام الدلالي في المجلد <code class="c-id">src/Bayan.Compiler.Core/Semantics/</code> من:
+            </p>
+
+            <div style="margin-bottom: 20px;">
+              <h4 style="color: var(--navy); font-size: 15.5px; margin-bottom: 6px;">1) بنية سجل الرمز (<code class="c-id">Symbol.cs</code>):</h4>
+              <p class="prose">يخزن المترجم لكل كائن يُعلن عنه سجلاً يحتوي على:</p>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>Symbol.cs — كائن الرمز الدلالي</span>
+                </div>
+                <div class="code-content ltr" style="font-family: var(--fm); font-size: 13px;">
+public class Symbol
+{
+    public string Name { get; }              <span class="c-comment">// اسم المعرف (مثل: "العداد" أو "س")</span>
+    public SymbolKind Kind { get; }          <span class="c-comment">// الصنف: Variable, Constant, Procedure, Parameter</span>
+    public LanguageType Type { get; }        <span class="c-comment">// النوع: Int, Real, Bool, Char, String, List, Record</span>
+    public bool IsReadOnly { get; }          <span class="c-comment">// هل هو للقراءة فقط؟ (true للثوابت)</span>
+    public int ScopeLevel { get; }           <span class="c-comment">// رقم مستوى النطاق (0 = Global, 1 = Local, ...)</span>
+    public SourceSpan DeclarationSpan { get; } <span class="c-comment">// موقع السطر والعمود للإبلاغ عن الأخطاء</span>
+}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 style="color: var(--navy); font-size: 15.5px; margin-bottom: 6px;">2) هيكل شجرة النطاقات (<code class="c-id">SymbolTable.cs</code>):</h4>
+              <p class="prose">يدير النطاقات عبر علاقة هرمية:</p>
+              <ul style="padding-right: 24px; color: var(--text-main); font-size: 14px; line-height: 1.8;">
+                <li><code class="c-id">Dictionary&lt;string, Symbol&gt; _symbols</code>: قاموس سريع لتخزين رموز النطاق الحالي.</li>
+                <li><code class="c-id">SymbolTable? Parent</code>: مؤشر للنطاق الأب.</li>
+                <li><strong>خوارزمية البحث (<code class="c-id">Lookup</code>):</strong>
+                  ابحث في القاموس المحلي للنطاق الحالي ($O(1)$) &larr; إذا وُجد أرجع الرمز &larr; إذا لم يوجد وكان له <code class="c-id">Parent</code> استدعِ البحث في الأب عودياً &larr; إذا وصلنا للقمة ولم نجده، أطلق خطأ: <em>المتغير غير مصرح به</em>.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 5. مصفوفة فحص وتوافق الأنواع -->
+          <div class="content-block">
+            <h3 class="block-h3">5. مصفوفة فحص وتوافق الأنواع (Type Compatibility Matrix)</h3>
+            <p class="prose">يطبق ملف <code class="c-id">LanguageType.cs</code> القواعد الصارمة لنظام أنواع لغة بيان:</p>
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>العملية في الكود</th>
+                  <th>المعامل الأيسر</th>
+                  <th>المعامل الأيمن</th>
+                  <th>هل العملية مقبولة دلالياً؟</th>
+                  <th>النوع الناتج</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>جمع / طرح / ضرب / قسمة</strong></td>
+                  <td><code class="c-type">صحيح</code></td>
+                  <td><code class="c-type">صحيح</code></td>
+                  <td><span style="color: var(--accent-green); font-weight: 700;">✅ مقبولة</span></td>
+                  <td><code class="c-type">صحيح</code></td>
+                </tr>
+                <tr>
+                  <td><strong>جمع / طرح / ضرب / قسمة</strong></td>
+                  <td><code class="c-type">حقيقي</code></td>
+                  <td><code class="c-type">حقيقي</code></td>
+                  <td><span style="color: var(--accent-green); font-weight: 700;">✅ مقبولة</span></td>
+                  <td><code class="c-type">حقيقي</code></td>
+                </tr>
+                <tr>
+                  <td><strong>خلط حسابي دون تحويل</strong></td>
+                  <td><code class="c-type">صحيح</code></td>
+                  <td><code class="c-type">حقيقي</code></td>
+                  <td><span style="color: var(--accent-red); font-weight: 700;">❌ مرفوضة (تشترط بيان تطابق النوع الصريح)</span></td>
+                  <td>خطأ نوع</td>
+                </tr>
+                <tr>
+                  <td><strong>المقارنات الحسابية (&gt;, &lt;, &gt;=, &lt;=)</strong></td>
+                  <td>أرقام (<code class="c-type">صحيح</code>/<code class="c-type">حقيقي</code>)</td>
+                  <td>نفس النوع الرقمي</td>
+                  <td><span style="color: var(--accent-green); font-weight: 700;">✅ مقبولة</span></td>
+                  <td><code class="c-type">منطقي</code></td>
+                </tr>
+                <tr>
+                  <td><strong>المعاملات المنطقية (&amp;&amp;, ||, !)</strong></td>
+                  <td><code class="c-type">منطقي</code></td>
+                  <td><code class="c-type">منطقي</code></td>
+                  <td><span style="color: var(--accent-green); font-weight: 700;">✅ مقبولة</span></td>
+                  <td><code class="c-type">منطقي</code></td>
+                </tr>
+                <tr>
+                  <td><strong>شروط التحكم (إذا، طالما، أعد)</strong></td>
+                  <td>تعبير شرطي</td>
+                  <td>-</td>
+                  <td><span style="color: var(--accent-green); font-weight: 700;">✅ يُشترط أن ينتج التعبير نوع 'منطقي' حتماً</span></td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><strong>الإسناد (=)</strong></td>
+                  <td>متغير من نوع $T$</td>
+                  <td>قيمة من نوع $T$</td>
+                  <td><span style="color: var(--accent-green); font-weight: 700;">✅ مقبولة عند تطابق الأنواع فقط</span></td>
+                  <td>-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 6. سجل أخطاء المحطة الثالثة -->
+          <div class="errors-container">
+            <h3 class="block-h3" style="color: var(--accent-red);">6. سجل أخطاء المحطة الثالثة (Semantic Errors) مع أمثلة حية</h3>
+            <p class="prose">
+              تحدث الأخطاء الدلالية عند <strong>مخالفة المنطق، القواعد الحساسة للسياق، أو نظام الأنواع:</strong>
+            </p>
+
+            <!-- Error 1 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الأول: استخدام متغير غير مصرح به (Undeclared Identifier)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> محاولة قراءة أو إسناد قيمة لمتغير لم يسبق تعريفه بكلمة 'متغير' في النطاق الحالي أو أي نطاق أب.</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-id">ص</span> = <span class="c-num">50</span>; <span class="c-comment">// لم يسبق كتابة: متغير ص: صحيح;</span>
+                </div>
+              </div>
+              <p class="prose" style="font-size: 13.5px; margin-top: 8px;">
+                <strong>ماذا حدث في الكواليس؟</strong> استدعى المحلل الدلالي دالة <code class="c-id">SymbolTable.Lookup("ص")</code>. بحث في النطاق الحالي وصعد للنطاق العام، فلم يجد أي قيد يحمل اسم "ص".
+              </p>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: ❌ خطأ دلالي [سطر 1، عمود 1]: المعرف 'ص' غير مصرح به في النطاق الحالي أو النطاقات الأبوية.
+              </div>
+            </div>
+
+            <!-- Error 2 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الثاني: عدم تطابق الأنواع في الإسناد (Type Mismatch)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> محاولة إسناد قيمة من نوع بياني إلى متغير مصرح به بنوع مختلف تماماً.</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-kw">متغير</span> <span class="c-id">العمر</span>: <span class="c-kw">صحيح</span>;<br>
+                  <span class="c-id">العمر</span> = <span class="c-err">"عشرون"</span>;
+                </div>
+              </div>
+              <p class="prose" style="font-size: 13.5px; margin-top: 8px;">
+                <strong>ماذا حدث في الكواليس؟</strong> استرجع المحلل الدلالي نوع المتغير <code class="c-id">العمر</code> فوجده <code class="c-type">LanguageType.Int</code>. ثم فحص التعبير الأيمن فوجده من نوع <code class="c-type">LanguageType.String</code>. قارن النوعين فوجد عدم تطابق، فرفض الإسناد.
+              </p>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: ❌ خطأ دلالي [سطر 2، عمود 1]: لا يمكن إسناد قيمة من النوع 'خيط رمزي' إلى متغير من النوع 'صحيح'.
+              </div>
+            </div>
+
+            <!-- Error 3 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الثالث: التعديل على ثابت للقراءة فقط (Modification of Constant)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> محاولة تغيير قيمة معرّفة بالكلمة المفتاحية 'ثابت'.</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-kw">ثابت</span> <span class="c-id">النسبة</span>: <span class="c-kw">حقيقي</span> = <span class="c-num">3.14</span>;<br>
+                  <span class="c-id">النسبة</span> = <span class="c-err">3.15</span>;
+                </div>
+              </div>
+              <p class="prose" style="font-size: 13.5px; margin-top: 8px;">
+                <strong>ماذا حدث في الكواليس؟</strong> قام المحلل بالبحث عن <code class="c-id">النسبة</code> في جدول الرموز، فوجد أن خاصية <code class="c-kw">IsReadOnly == true</code> وحقل <code class="c-kw">Kind == SymbolKind.Constant</code>. أطلق المترجم خطأ يمنع الكتابة على الثوابت.
+              </p>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: ❌ خطأ دلالي [سطر 2، عمود 1]: المعرف 'النسبة' ثابت للقراءة فقط ولا يمكن إعادة إسناد قيمة جديدة له.
+              </div>
+            </div>
+
+            <!-- Error 4 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الرابع: إعادة تعريف المعرف في نفس النطاق (Duplicate Declaration)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> الإعلان عن متغيرين بنفس الاسم داخل نفس النطاق المحلي.</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-kw">متغير</span> <span class="c-id">س</span>: <span class="c-kw">صحيح</span> = <span class="c-num">1</span>;<br>
+                  <span class="c-kw">متغير</span> <span class="c-err">س</span>: <span class="c-kw">حقيقي</span> = <span class="c-num">2.5</span>;
+                </div>
+              </div>
+              <p class="prose" style="font-size: 13.5px; margin-top: 8px;">
+                <strong>ماذا حدث في الكواليس؟</strong> عند محاولة إضافة المتغير الثاني عبر <code class="c-id">SymbolTable.Define(symbol)</code>، استدعى الجدول فحص <code class="c-id">LookupLocal("س")</code>، فوجد أن الاسم مسجل مسبقاً في نفس النطاق.
+              </p>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: ❌ خطأ دلالي [سطر 2، عمود 8]: تم الإعلان عن المعرف 'س' مسبقاً في هذا النطاق.
+              </div>
+            </div>
+
+            <!-- Error 5 -->
+            <div class="error-card">
+              <div class="error-card-title">الخطأ الخامس: تمرير قيمة ثابتة لمعامل بالمرجع (Invalid ByRef Argument)</div>
+              <div class="error-meta"><strong>المفهوم:</strong> تمرير رقم ثابت أو تعبير حسابي لمعامل دالة معرف بأنه ممرر 'بالمرجع'.</div>
+              <div class="code-window">
+                <div class="code-window-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span>كود المثال:</span>
+                </div>
+                <div class="code-content">
+                  <span class="c-kw">إجراء</span> <span class="c-id">تعديل</span>(<span class="c-kw">بالمرجع</span> <span class="c-id">ن</span>: <span class="c-kw">صحيح</span>) { <br>
+                  &nbsp;&nbsp;<span class="c-id">ن</span> = <span class="c-id">ن</span> + <span class="c-num">1</span>; <br>
+                  }<br>
+                  <span class="c-id">تعديل</span>(<span class="c-err">10</span>); <span class="c-comment">// خطأ: 10 قيمة وليست متغيراً في الذاكرة!</span>
+                </div>
+              </div>
+              <p class="prose" style="font-size: 13.5px; margin-top: 8px;">
+                <strong>ماذا حدث في الكواليس؟</strong> فحص المحلل الدلالي نوع المعامل فوجد أنه <code class="c-kw">ByRefParameter</code>. تفحص المعطى المقابل (<code class="c-id">Argument</code>) فوجده عقدة ثابت (<code class="c-id">LiteralExpressionNode</code>) وليس معرف متغير (<code class="c-id">VariableExpressionNode</code>).
+              </p>
+              <div class="error-msg-box">
+                رسالة المترجم في IDE: ❌ خطأ دلالي [سطر 4، عمود 7]: المعامل 'ن' ممرر بالمرجع ويجب أن يكون متغيراً قابلاً للإسناد (L-Value)، ولا يمكن تمرير قيمة ثابتة.
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. آلية التعافي من الأخطاء الدلالية -->
+          <div class="content-block" style="margin-top: 32px;">
+            <h3 class="block-h3">7. آلية التعافي من الأخطاء الدلالية وتفادي الانهيار المتسلسل (Cascading Errors)</h3>
+            <p class="prose">
+              من أخطر مشاكل المحلل الدلالي الضعيف ظاهرة <strong>تتالي الأخطاء (Error Cascading)</strong>:
+              لو أخطأ المبرمج وكتب: <code class="c-id">س = غير_معروف + 5;</code>، فلو أرجع المترجم قيمة فارغة (<code class="c-kw">null</code>)، ستنهار عملية فحص الجمع <code class="c-op">+</code>، ثم ستنهار عملية فحص الإسناد <code class="c-op">=</code>، فيرى المبرمج 10 أخطاء بسبب خطأ واحد فقط!
+            </p>
+            <div class="theory-box">
+              <div class="theory-box-title">حل لغة «بيان» الذكي: النوع الوهمي الخاص (LanguageType.Error)</div>
+              <div class="theory-box-desc">
+                1. عند وجود متغير غير معروف، يسجل المترجم رسالة الخطأ الوحيدة المطلوبة في <code class="c-id">DiagnosticBag</code>.<br>
+                2. يعطي التعبير نوعاً مؤقتاً هو <code class="c-type">LanguageType.Error</code>.<br>
+                3. القواعد اللاحقة عندما ترى <code class="c-type">LanguageType.Error</code> تصمت ولا تطلق أخطاء إضافية؛ مما يمنع إزعاج المبرمج برسائل متكررة لا داعي لها!
+              </div>
+            </div>
+          </div>
+
+          <!-- 8. المخرج النهائي للمحطة الثالثة -->
+          <div class="content-block">
+            <h3 class="block-h3">8. المخرج النهائي للمحطة الثالثة</h3>
+            <p class="prose">
+              بانتهاء مرحلة التحليل الدلالي بنجاح:
+            </p>
+            <ul style="padding-right: 24px; color: var(--text-main); font-size: 14.5px; line-height: 1.85;">
+              <li><strong>جدول الرموز الكامل (<code class="c-id">SymbolTable</code>):</strong> جاهز بكافة تفاصيل المتغيرات، الأنواع، النطاقات، والإزاحات الذاكرية (يُعرض في تبويب <strong>"جدول الرموز"</strong> في الـ IDE).</li>
+              <li><strong>شجرة إعراب مزينة ومحققة دلالياً (Type-Decorated AST):</strong> تم ربط كل متغير بركيزته في الجدول، والتأكد من صحة كل عملية حسابية ومنطقية.</li>
+              <li><strong>الضوء الأخضر للواجهة الخلفية (Backend):</strong> تُسلّم هذه المخرجات رسمياً للمحطة الرابعة: <strong>توليد الكود الوسيط (TAC - IrGenerator)</strong>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STATION 4: INTERMEDIATE CODE GENERATION (TAC) -->
+    <!-- ========================================== -->
+    <!-- ========================================== -->
+    <!-- STATION 4: INTERMEDIATE CODE GENERATION (TAC) -->
+    <!-- ========================================== -->
+    <section class="station-section" id="station4">
+      <div class="station-card">
+        <div class="station-header">
+          <div>
+            <span class="station-badge">المحطة الرابعة &bull; PHASE 04</span>
+            <h2 class="station-title">الكود الوسيط ثلاثي العناوين (Three-Address Code — TAC)</h2>
+          </div>
+          <div class="station-tag">IrGenerator.cs &bull; IrInstruction.cs &bull; IrOpcode.cs &bull; IrPrinter.cs</div>
+        </div>
+
+        <div class="station-body">
+          <!-- 1. Concept & Goal -->
+          <div class="content-block">
+            <h3 class="block-h3">1. المفهوم النظري والهدف الأساسي (Intermediate Representation)</h3>
+            <p class="prose">
+              بعد اجتياز مرحلة التحليل الدلالي والتأكد من خلو شجرة الإعراب المجردة (AST) من أي أخطاء دلالية أو تناقضات في الأنواع، ينتقل المترجم من <strong>الواجهة الأمامية (Frontend)</strong> إلى مرحلة وسيطة حاسمة: تحويل الشجرة الشجرية المعقدة إلى تسلسل خطي مبسط ومجرد يسمى <strong>الكود الوسيط ثلاثي العناوين (Three-Address Code — TAC)</strong>.
+            </p>
+            <p class="prose">
+              التعريف الأكاديمي الصارم لـ TAC هو: <em>تمثيل برمجـي خطي لا تحتوي أي تعليمة فيه على أكثر من ثلاثة عناوين (عنوانان للمدخلات وعنوان واحد للمخرجات) وعملية واحدة كحد أقصى</em>:
+            </p>
+            <div class="code-window">
+              <div class="code-content ltr" style="font-family: var(--fm); font-size: 13.5px; text-align: center; color: var(--gold);">
+                Result := Argument_1 &nbsp; [Operator] &nbsp; Argument_2
+              </div>
+            </div>
+            <p class="prose">
+              إذا كان التعبير البرمجي الأصلي طويلاً ومعقداً مثل <code>س = (أ + ب) * (ج - د) / هـ;</code>، فإن المترجم يفككه قسراً إلى متتالية من العمليات الثنائية الذرية مستحدثاً <strong>متغيرات مؤقتة (Temporary Variables: $t_0, t_1, t_2 \dots$)</strong> لا وجود لها في كود المبرمج الأصلي لحفظ النتائج البينية.
+            </p>
+          </div>
+
+          <!-- 2. Formal Models: Quadruples vs Triples -->
+          <div class="content-block">
+            <h3 class="block-h3">2. النموذج الرياضي والتمثيلات الهيكلية للـ TAC (Quadruples vs Triples)</h3>
+            <p class="prose">
+              في علوم المترجمات، توجد ثلاثة هياكل بيانات قياسية لتمثيل الكود ثلاثي العناوين في الذاكرة:
+            </p>
+
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>الهيكل (Data Structure)</th>
+                  <th>الحقول المخزنة</th>
+                  <th>كيف يتم الإشارة للنتائج؟</th>
+                  <th>الميزات والعيوب الأكاديمية</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>الرباعيات (Quadruples)<br><span style="color:var(--copper); font-size:11px;">(المتبع في مشروع بيان)</span></strong></td>
+                  <td><code>(Op, Arg1, Arg2, Result)</code></td>
+                  <td>صراحة عبر حقل <code class="c-id">Result</code> باسم المتغير أو المؤقت (<code class="c-kw">t0</code>).</td>
+                  <td><strong>ميزة:</strong> مرونة تامة في إعادة ترتيب التعليمات وتحسين الكود (Optimization) دون كسر الروابط.<br><strong>عيب:</strong> تستهلك مساحة إضافية لحفظ أسماء المؤقتات.</td>
+                </tr>
+                <tr>
+                  <td><strong>الثلاثيات (Triples)</strong></td>
+                  <td><code>(Op, Arg1, Arg2)</code></td>
+                  <td>ضمنياً عبر رقم السطر أو فهرس المصفوفة <code>(i)</code>.</td>
+                  <td><strong>ميزة:</strong> اقتصاد فائق في استهلاك الذاكرة.<br><strong>عيب:</strong> إعادة ترتيب الكود أو حذف تعليمة أثناء التحسين يتطلب تعديل جميع مؤشرات الفهارس في البرنامج بأكمله!</td>
+                </tr>
+                <tr>
+                  <td><strong>الثلاثيات غير المباشرة (Indirect Triples)</strong></td>
+                  <td>مصفوفة فهارس تؤشر على جدول ثلاثيات ثابت.</td>
+                  <td>فهرس المصفوفة الوسيطة.</td>
+                  <td>تجمع بين اقتصاد الثلاثيات وسهولة إعادة الترتيب عبر تبديل عناصر مصفوفة المؤشرات فقط.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="code-window" style="margin-top: 15px;">
+              <div class="code-window-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span>التمثيل الفعلي للرباعيات (Quadruples) في كود بيان: IrInstruction.cs</span>
+              </div>
+              <div class="code-content ltr" style="font-family: var(--fm); font-size: 13px;">
+<span class="c-comment">// السجل الفعلي في BayanCompiler/Intermediate/IrInstruction.cs:</span>
+<span class="c-kw">public sealed record</span> <span class="c-id">IrInstruction</span>(
+    <span class="c-id">IrOpcode</span> <span class="c-id">Opcode</span>,          <span class="c-comment">// نوع العملية: Assign, Binary, Unary, Goto, IfZeroGoto...</span>
+    <span class="c-id">IrValue?</span> <span class="c-id">Result</span>,          <span class="c-comment">// عنوان النتيجة (المتغير الأصلي أو المؤقت t0)</span>
+    <span class="c-id">IrValue?</span> <span class="c-id">Left</span>,            <span class="c-comment">// المعامل الأول (Arg1)</span>
+    <span class="c-id">IrValue?</span> <span class="c-id">Right</span>,           <span class="c-comment">// المعامل الثاني (Arg2)</span>
+    <span class="c-id">TokenType?</span> <span class="c-id">Operator</span>,      <span class="c-comment">// الرمز الحسابي (+, -, *, ==, &lt;=)</span>
+    <span class="c-kw">string?</span> <span class="c-id">TargetLabel</span>,      <span class="c-comment">// عنوان القفز للتعليمات المتفرعة (L1, L_end)</span>
+    <span class="c-id">SourceSpan</span> <span class="c-id">Span</span>);         <span class="c-comment">// موقع السطر والعمود للربط مع الكود المصدر</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Why Cards -->
+          <div class="content-block">
+            <h3 class="block-h3">3. القرارات المعمارية في تصميم TAC في لغة بيان (3 ركائز هندسية)</h3>
+            <div class="why-grid">
+              <div class="why-card">
+                <div class="why-card-icon">📐</div>
+                <div class="why-card-title">1. تسطيح الشجرة وتجريد التدفق (Linearization)</div>
+                <div class="why-card-desc">
+                  شجرة الإعراب الهرمية يصعب على المعالجات الفيزيائية فهمها لأن المعالج ينفذ متتالية مسطحة من البايتات. يحول الـ TAC الهياكل المتداخلة كالحلقات والجمل الشرطية إلى مجرد قفزات (<code class="c-kw">Goto</code> و <code class="c-kw">IfZeroGoto</code>) ومسميات (<code class="c-kw">Labels</code>) تقابل تماماً أوامر التفرع في عتاد الحاسوب.
+                </div>
+              </div>
+
+              <div class="why-card">
+                <div class="why-card-icon">♾️</div>
+                <div class="why-card-title">2. نموذج السجلات الافتراضية اللانهائية (Infinite Temps)</div>
+                <div class="why-card-desc">
+                  معالجات MIPS تمتلك 32 مسجلاً فقط، ومعالجات x86 تمتلك 16 مسجلاً! في مرحلة TAC، نتجاهل تماماً قيود العتاد ونفترض توفر عدد لا نهائي من المسجلات الافتراضية ($t_0, t_1, t_2 \dots$). هذا التجريد يجعل خوارزميات التوليد والتحسين بسيطة وأنيقة، ونترك مشكلة تعيين المسجلات الحقيقية (Register Allocation) للمحطة الخامسة.
+                </div>
+              </div>
+
+              <div class="why-card">
+                <div class="why-card-icon">🔌</div>
+                <div class="why-card-title">3. خفض تكلفة بناء المترجمات ($N \times M \to N + M$)</div>
+                <div class="why-card-desc">
+                  إذا أردنا دعم $N$ لغات برمجة على $M$ معمارية، فإن المترجم المباشر يتطلب كتابة $N \times M$ مترجماً! بفضل الكود الوسيط، نكتب $N$ واجهات أمامية لإنتاج TAC، و $M$ واجهات خلفية لقراءة TAC. في مشروع بيان، مكّننا الـ TAC من دعم مسارين مختلفين كلياً: أسمبلي MIPS وملف تنفيذي حقيقي .exe بجهد إضافي طفيف!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Translation Algorithms -->
+          <div class="content-block">
+            <h3 class="block-h3">4. خوارزميات ترجمة البنى البرمجية من AST إلى TAC (Lowering Patterns)</h3>
+            <p class="prose">
+              يوضح الجدول التالي كيف يقوم فحص العقد الزائرة في <code class="c-id">IrGenerator.cs</code> بتحويل الهياكل النحوية العربية إلى كود وسيط معياري:
+            </p>
+
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>البنية البرمجية في بيان</th>
+                  <th>قالب التحويل في الكود الوسيط (TAC Lowering Pattern)</th>
+                  <th>التعليمات المولدة (<code class="c-id">IrOpcode</code>)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>التعبير الحسابي:</strong><br><code>س = أ + ب * ج;</code></td>
+                  <td>
+                    <code>t0 = ب * ج</code><br>
+                    <code>t1 = أ + t0</code><br>
+                    <code>س = t1</code>
+                  </td>
+                  <td><code class="c-kw">Binary</code> (Mul)<br><code class="c-kw">Binary</code> (Add)<br><code class="c-kw">Assign</code></td>
+                </tr>
+                <tr>
+                  <td><strong>الجملة الشرطية:</strong><br><code>إذا (الشرط) { ج1 } وإلا { ج2 }</code></td>
+                  <td>
+                    <code>t0 = تقييم الشرط</code><br>
+                    <code>IfZeroGoto t0, L_ELSE</code><br>
+                    <code>[كود جمل ج1]</code><br>
+                    <code>Goto L_END</code><br>
+                    <code>L_ELSE:</code><br>
+                    <code>[كود جمل ج2]</code><br>
+                    <code>L_END:</code>
+                  </td>
+                  <td><code class="c-kw">IfZeroGoto</code><br><code class="c-kw">Goto</code><br><code class="c-kw">Label</code></td>
+                </tr>
+                <tr>
+                  <td><strong>حلقة التكرار «طالما»:</strong><br><code>طالما (الشرط) { الجسم }</code></td>
+                  <td>
+                    <code>L_START:</code><br>
+                    <code>t0 = تقييم الشرط</code><br>
+                    <code>IfZeroGoto t0, L_END</code><br>
+                    <code>[كود جسم الحلقة]</code><br>
+                    <code>Goto L_START</code><br>
+                    <code>L_END:</code>
+                  </td>
+                  <td><code class="c-kw">Label</code><br><code class="c-kw">IfZeroGoto</code><br><code class="c-kw">Goto</code></td>
+                </tr>
+                <tr>
+                  <td><strong>حلقة التكرار «كرر_حتى»:</strong><br><code>كرر { الجسم } حتى (الشرط);</code></td>
+                  <td>
+                    <code>L_BODY:</code><br>
+                    <code>[كود جسم الحلقة]</code><br>
+                    <code>t0 = تقييم الشرط</code><br>
+                    <code>IfZeroGoto t0, L_BODY</code>
+                  </td>
+                  <td>تنفيذ الجسم أولاً ثم فحص الشرط والقفز العكسي طالما الشرط لم يتحقق.</td>
+                </tr>
+                <tr>
+                  <td><strong>استدعاء الإجراء:</strong><br><code>احسب(س, 10);</code></td>
+                  <td>
+                    <code>[تحميل المعاملات إلى إزاحات الإجراء]</code><br>
+                    <code>Call proc_احسب</code>
+                  </td>
+                  <td><code class="c-kw">StoreIndexed</code> أو <code class="c-kw">Assign</code> ثم <code class="c-kw">Call</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 5. Basic Blocks & CFG -->
+          <div class="content-block">
+            <h3 class="block-h3">5. الكتل الأساسية ومخطط تدفق التحكم (Basic Blocks &amp; Control Flow Graph)</h3>
+            <p class="prose">
+              بعد توليد قائمة تعليمات الـ TAC المسطحة، يقوم المترجم بتقسيمها إلى <strong>كتل أساسية (Basic Blocks)</strong> لبناء <strong>مخطط تدفق التحكم (Control Flow Graph — CFG)</strong> تمهيداً لتحسين الكود وتوزيع السجلات.
+            </p>
+
+            <div class="theory-box">
+              <div class="theory-box-title">
+                <span>ما هي الكتلة الأساسية (Basic Block)؟</span>
+              </div>
+              <div class="theory-box-desc">
+                هي متتالية مستمرة من التعليمات المتتالية التي تمتاز بخاصية هندسية صارمة: <strong>نقطة دخول وحيدة ونقطة خروج وحيدة</strong> (Single Entry, Single Exit). إذا نُفذت التعليمة الأولى في الكتلة، فمن المؤكد حتماً أن باقي تعليمات الكتلة ستنفذ بالترتيب دون أي انقطاع أو قفز خارجي!
+              </div>
+            </div>
+
+            <p class="prose" style="margin-top: 12px;">
+              <strong>خوارزمية تحديد القادة (Leaders Algorithm):</strong> لتحديد بداية كل كتلة أساسية، نحدد أسطر التعليمات التي تسمى "قادة" (Leaders) وفق 3 قواعد أكاديمية:
+            </p>
+            <ol style="padding-right: 24px; color: var(--text-main); font-size: 14px; line-height: 1.85;">
+              <li>التعليمة الأولى في البرنامج هي دائماً <strong>قائد (Leader)</strong>.</li>
+              <li>أي تعليمة تكون هدفاً لقفز مشروط أو غير مشروط (Target of Goto / IfZeroGoto) تعتبر <strong>قائداً</strong> (أي السطر الذي يلي <code class="c-kw">Label</code> مباشرة).</li>
+              <li>أي تعليمة تلي تعليمة قفز مباشرة (<code class="c-kw">Goto</code> أو <code class="c-kw">IfZeroGoto</code> أو <code class="c-kw">Return</code>) تعتبر <strong>قائداً</strong>.</li>
+            </ol>
+            <p class="prose">
+              تتكون كل كتلة أساسية من القائد وجميع التعليمات التي تليه حتى نصل إلى القائد التالي. يُرسم المخطط بربط الكتل بأسهم موجهة (Directed Edges) تمثل مسارات التنفيذ المحتملة.
+            </p>
+          </div>
+
+          <!-- 6. Machine-Independent Optimizations -->
+          <div class="content-block">
+            <h3 class="block-h3">6. تقنيات التحسين المستقلة عن العتاد (Machine-Independent Optimizations)</h3>
+            <p class="prose">
+              مرحلة الكود الوسيط هي البيئة المثالية لإجراء تحسينات تسرع زمن التنفيذ وتصغر حجم البرنامج قبل النزول لمعمارية المعالج:
+            </p>
+
+            <div class="why-grid">
+              <div class="why-card">
+                <div class="why-card-icon">⚡</div>
+                <div class="why-card-title">1. طي الثوابت (Constant Folding)</div>
+                <div class="why-card-desc">
+                  إذا احتوت تعليمة TAC على معاملات معلومة مسبقاً وقت الترجمة، يتم حسابها مسبقاً وتفادي تنفيذ العملية في المعالج:<br>
+                  <code>t0 = 4 * 1024</code> &nbsp;&rarr;&nbsp; يتم استبدالها بـ: <code>t0 = 4096</code>.
+                </div>
+              </div>
+
+              <div class="why-card">
+                <div class="why-card-icon">🗑️</div>
+                <div class="why-card-title">2. حذف الكود الميت (Dead Code Elimination)</div>
+                <div class="why-card-desc">
+                  حذف أي تعليمة تحسب قيمة لمتغير مؤقت لا يُقرأ لاحقاً في أي مكان في البرنامج، أو حذف جميع التعليمات الواقعة بعد أمر قفز حتمي (<code class="c-kw">Goto</code>) دون وجود مسمى (Label) يؤشر إليها.
+                </div>
+              </div>
+
+              <div class="why-card">
+                <div class="why-card-icon">🔀</div>
+                <div class="why-card-title">3. خيوط القفز المختصرة (Jump Threading)</div>
+                <div class="why-card-desc">
+                  إذا كانت تعليمة القفز تقفز إلى علامة لا تحتوي سوى على قفز آخر:<br>
+                  <code>Goto L1</code> مع وجود <code>L1: Goto L2</code><br>
+                  يقوم المحسن باختصار المسار مباشرة ليصبح <code>Goto L2</code> موفراً دورة ساعة في العتاد.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. Real Errors & Edge Cases -->
+          <div class="content-block">
+            <h3 class="block-h3">7. معالجة الحالات الحرجة وأخطاء التوليد الوسيط في لغة بيان</h3>
+            <p class="prose">
+              رغم أن معظم الأخطاء البرمجية يتم اصطيادها في المحطات السابقة (المعجمي، النحوي، الدلالي)، إلا أن مرحلة توليد الكود الوسيط تواجه تحديات تصميمية وحالات حرجة يجب ضبطها:
+            </p>
+
+            <!-- Case 1 -->
+            <div class="error-item">
+              <div class="error-item-header">
+                <span class="error-code">الحالة 1 &bull; الكود غير القابل للوصول (Unreachable Statements)</span>
+                <span class="error-stage">تحذير تدفق التحكم (Control Flow Warning)</span>
+              </div>
+              <div class="code-window">
+                <div class="code-window-header"><div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div><span>كود يحتوي تعليمة بعد العودة الحتمية:</span></div>
+                <div class="code-content ltr" style="font-family: var(--fm); font-size: 13px;">
+إجراء فحص() {
+    ارجع;
+    س = 10; <span class="c-comment">// تعليمة ميتة تلي الـ Return مباشرة دون مسمى</span>
+}
+                </div>
+              </div>
+              <div class="error-expl">
+                <strong>ماذا يحدث في الكواليس؟</strong> يولد المترجم تعليمة <code class="c-kw">Return</code>، ويكتشف فاحص الكتل أن التعليمة التالية ليس لها أي مسار تدفق يؤدي إليها (In-Degree = 0 في الـ CFG). يتم وسم هذا الكود ككود ميت يمكن لمولد الـ TAC تجاوزه أو إطلاق تحذير بشأنه.
+              </div>
+            </div>
+
+            <!-- Case 2 -->
+            <div class="error-item">
+              <div class="error-item-header">
+                <span class="error-code">الحالة 2 &bull; تصادم المسميات الفريدة (Label Collisions across Scopes)</span>
+                <span class="error-stage">سلامة المولد (Generator Safety)</span>
+              </div>
+              <div class="code-window">
+                <div class="code-window-header"><div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div><span>برنامج يحتوي على عدة جمل شرطية وحلقات مكررة:</span></div>
+                <div class="code-content ltr" style="font-family: var(--fm); font-size: 13px;">
+إذا (س &gt; 0) { ... }
+إذا (ص &gt; 0) { ... }
+طالما (ع &lt; 5) { ... }
+                </div>
+              </div>
+              <div class="error-expl">
+                <strong>ماذا يحدث في الكواليس؟</strong> إذا استخدم المترجم مسميات ثابتة مثل <code>L_IF_TRUE</code> أو <code>L_END</code>، فسيحدث تصادم كارثي وتداخل في القفزات! لحل ذلك، يستخدم <code class="c-id">IrGenerator.cs</code> عدادات ذرية مستقلة (<code class="c-kw">_labelCounter++</code>) لتوليد مسميات وحيدة فريدة مضمونة عالمياً مثل <code>L_0_cond</code>, <code>L_1_else</code>, <code>L_2_end</code>.
+              </div>
+            </div>
+
+            <!-- Case 3 -->
+            <div class="error-item">
+              <div class="error-item-header">
+                <span class="error-code">الحالة 3 &bull; إدارة إزاحات حقول السجلات والمصفوفات (Offset Calculation)</span>
+                <span class="error-stage">التحويل الذاكري (Memory Layout)</span>
+              </div>
+              <div class="code-window">
+                <div class="code-window-header"><div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div><span>الوصول لعنصر في مصفوفة أو حقل سجل:</span></div>
+                <div class="code-content ltr" style="font-family: var(--fm); font-size: 13px;">
+قائمة درجات[5] من صحيح;
+درجات[2] = 95;
+                </div>
+              </div>
+              <div class="error-expl">
+                <strong>ماذا يحدث في الكواليس؟</strong> لغة بيان لا تملك وصولاً مباشراً للعتاد في TAC. يقوم المولد بحساب الإزاحة الخطية بالبايتات: <code>الإزاحة = الفهرس * حجم_النوع = 2 * 4 = 8 بايت</code>. ثم يولد تعليمة <code class="c-kw">StoreIndexed</code> أو <code class="c-kw">LoadIndexed</code> بالقاعدة والإزاحة المحسوبة.
+              </div>
+            </div>
+
+            <!-- Case 4 -->
+            <div class="error-item">
+              <div class="error-item-header">
+                <span class="error-code">الحالة 4 &bull; تعريب النصوص وسلاسل الطباعة (String Interning &amp; Data Section)</span>
+                <span class="error-stage">فصل قطاع البيانات (Data Segregation)</span>
+              </div>
+              <div class="code-window">
+                <div class="code-window-header"><div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div><span>طباعة نصوص عربية متعددة:</span></div>
+                <div class="code-content ltr" style="font-family: var(--fm); font-size: 13px;">
+اطبع_سطر("مرحبا بكم في لغة بيان");
+                </div>
+              </div>
+              <div class="error-expl">
+                <strong>ماذا يحدث في الكواليس؟</strong> النصوص الثابتة لا يمكن دمجها كأرقام في العمليات الرياضية. يقوم المولد باقتطاع النص ووضعه في جدول نصوص خاص بقطاع البيانات، ويمنحه اسماً فريداً مثل <code>str_0</code>، ثم يولد تعليمة <code>PrintString str_0</code> التي تشير لعنوان النص فقط.
+              </div>
+            </div>
+          </div>
+
+          <!-- 8. Final Output & Handoff -->
+          <div class="content-block">
+            <h3 class="block-h3">8. المخرج النهائي للمحطة الرابعة والتسليم للواجهة الخلفية</h3>
+            <p class="prose">
+              بانتهاء عمل <code class="c-id">IrGenerator.cs</code>، ينتج المترجم كائناً شاملاً يسمى <strong>برنامج التمثيل الوسيط (<code class="c-id">IrProgram</code>)</strong>:
+            </p>
+            <ul style="padding-right: 24px; color: var(--text-main); font-size: 14.5px; line-height: 1.85;">
+              <li><strong>متتالية التعليمات (<code class="c-id">Instructions</code>):</strong> قائمة مرتبة من كائنات <code class="c-id">IrInstruction</code> ثلاثية العناوين تمثل مسار التنفيذ الخطي للبرنامج.</li>
+              <li><strong>جدول النصوص العامة (<code class="c-id">StringLiterals</code>):</strong> مصفوفة النصوص المعرفة للاستخدام في قطاع <code class="c-kw">.data</code> في الأسمبلي.</li>
+              <li><strong>مخططات المتغيرات والسجلات (<code class="c-id">StorageLayouts</code>):</strong> حجوزات الذاكرة وحجم كل سجل أو مصفوفة بالكلمات (Words).</li>
+              <li><strong>محددات الإجراءات (<code class="c-id">Procedures</code>):</strong> إزاحات ونقاط الدخول لكل إجراء أو دالة فرعية.</li>
+            </ul>
+            <div class="theory-box" style="margin-top: 15px;">
+              <div class="theory-box-title">
+                <span>التسليم إلى المحطة الخامسة (Backend Handover)</span>
+              </div>
+              <div class="theory-box-desc">
+                يُعرض هذا الكود الوسيط بوضوح في تبويب <strong>"الكود الوسيط (IR)"</strong> في بيئة التطوير IDE. بعد ذلك، يُسلّم كائن <code class="c-id">IrProgram</code> للواجهة الخلفية للمفاضلة بين مسارين:
+                <strong>1. مولد أسمبلي MIPS (<code class="c-id">MipsCodeGenerator.cs</code>)</strong> لتوليد كود المعمارية الأكاديمية.
+                <strong>2. مولد CIL التنفيذي (<code class="c-id">CilExecutableGenerator.cs</code>)</strong> لإنتاج ملف Windows تنفيذي مباشر (<code class="c-str">output.exe</code>).
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STATION 5: TARGET CODE GENERATION -->
+    <!-- ========================================== -->
+    <!-- ========================================== -->
+    <!-- STATION 5: TARGET CODE GENERATION -->
+    <!-- ========================================== -->
+    <section class="station-section" id="station5">
+      <div class="station-card">
+        <div class="station-header">
+          <div>
+            <span class="station-badge">المحطة الخامسة &bull; PHASE 05</span>
+            <h2 class="station-title">توليد الكود الهدف والتشغيل (MIPS &amp; CIL Executable)</h2>
+          </div>
+          <div class="station-tag">MipsCodeGenerator.cs &bull; CilExecutableGenerator.cs</div>
+        </div>
+
+        <div class="station-body">
+          <!-- 1. Concept & Core Goal -->
+          <div class="content-block">
+            <h3 class="block-h3">1. المفهوم النظري لمرحلة الواجهة الخلفية (Backend &amp; Instruction Selection)</h3>
+            <p class="prose">
+              هذه هي المحطة التتويجية الأخيرة في رحلة المترجم: تحويل الكود الوسيط ثلاثي العناوين (المجرد والمستقل عن العتاد) إلى <strong>تعليمات فعلية يفهمها المعالج وتنفذها الذاكرة</strong>.
+            </p>
+            <p class="prose">
+              المهمة الأساسية لمولد الكود الهدف تنقسم إلى ثلاث عمليات هندسية متزامنة:
+            </p>
+            <ol style="padding-right: 24px; color: var(--text-main); font-size: 14px; line-height: 1.85;">
+              <li><strong>اختيار التعليمات (Instruction Selection):</strong> تعيين كل تعليمة TAC مجردة إلى نمط من تعليمات المعالج الهدف (مثلاً: تحويل <code class="c-kw">Binary Add</code> إلى <code class="c-kw">add</code> أو <code class="c-kw">addi</code> في MIPS).</li>
+              <li><strong>توزيع السجلات (Register Allocation):</strong> نقل المتغيرات المؤقتة اللانهائية ($t_0, t_1 \dots$) إلى عدد محدود من السجلات الفيزيائية (<code class="c-kw">$t0 - $t9</code>) أو حجز مواقع لها في الذاكرة.</li>
+              <li><strong>إدارة استدعاءات النظام (Syscalls) والذاكرة:</strong> ربط أوامر الإدخال والإخراج القياسية ببروتوكولات نظام التشغيل أو المحاكي.</li>
+            </ol>
+            <p class="prose">
+              يتميز مشروع «بيان» بتقديم <strong>واجهة خلفية مزدوجة فريدة (Dual-Target Backend)</strong>:
+              <strong>مسار أكاديمي</strong> لأسمبلي معمارية MIPS 32-bit للتشغيل على محاكي MARS، و<strong>مسار صناعي حقيقي</strong> لتوليد ملف Windows تنفيذي مباشر (<code class="c-str">.exe</code>) عبر تجميع كود CIL بواسطة <code class="c-kw">ilasm.exe</code>!
+            </p>
+          </div>
+
+          <!-- 2. MIPS Architecture & Registers -->
+          <div class="content-block">
+            <h3 class="block-h3">2. معمارية MIPS 32-bit: تنظيم السجلات وهيكل الذاكرة</h3>
+            <p class="prose">
+              تعتمد معمارية MIPS على فلسفة <strong>الحواسب ذات طاقم التعليمات المصغر (RISC)</strong>، حيث تمتاز جميع تعليماتها بطول ثابت (32 بت = 4 بايت)، وتعتمد مبدأ <em>Load/Store Architecture</em> (العمليات الحسابية لا تتم إلا بين السجلات، ولا يمكن إجراء جمع أو ضرب مباشر على الذاكرة دون تحميل القيم أولاً).
+            </p>
+
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>اسم السجل في MIPS</th>
+                  <th>رقمه الفيزيائي</th>
+                  <th>الاستخدام الوظيفي الأكاديمي</th>
+                  <th>دوره في مشروع بيان</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code class="c-kw">$zero</code></td>
+                  <td>0</td>
+                  <td>ثابت بقيمة صفر دوماً (لا يمكن التعديل عليه).</td>
+                  <td>يُستخدم لمقارنة الشروط وتصفير السجلات والقفزات.</td>
+                </tr>
+                <tr>
+                  <td><code class="c-kw">$v0 - $v1</code></td>
+                  <td>2 - 3</td>
+                  <td>قيم العودة من الدوال وكود استدعاء النظام (<code class="c-kw">syscall</code>).</td>
+                  <td>تحديد رقم أمر الطباعة أو القراءة واستلام المدخلات.</td>
+                </tr>
+                <tr>
+                  <td><code class="c-kw">$a0 - $a3</code></td>
+                  <td>4 - 7</td>
+                  <td>تمرير المعاملات إلى الدوال واستدعاءات النظام.</td>
+                  <td>وضع قيمة الرقم أو عنوان النص المراد طباعته في <code class="c-kw">$a0</code>.</td>
+                </tr>
+                <tr>
+                  <td><code class="c-kw">$t0 - $t9</code></td>
+                  <td>8 - 15, 24 - 25</td>
+                  <td>سجلات مؤقتة للمحاسبة السريعة (Temporary Registers).</td>
+                  <td>تحميل معاملات الـ TAC وإجراء العمليات الحسابية والمنطقية.</td>
+                </tr>
+                <tr>
+                  <td><code class="c-kw">$s0 - $s7</code></td>
+                  <td>16 - 23</td>
+                  <td>سجلات محفوظة عبر استدعاءات الدوال (Saved Registers).</td>
+                  <td>حفظ قيم المتغيرات العامة أثناء تنفيذ الإجراءات.</td>
+                </tr>
+                <tr>
+                  <td><code class="c-kw">$sp</code></td>
+                  <td>29</td>
+                  <td>مؤشر المكدس (Stack Pointer).</td>
+                  <td>إدارة إطار تنشيط الدوال (Activation Record) عند الاستدعاء.</td>
+                </tr>
+                <tr>
+                  <td><code class="c-kw">$ra</code></td>
+                  <td>31</td>
+                  <td>عنوان العودة (Return Address).</td>
+                  <td>يخزن نقطة العودة عند تنفيذ أمر القفز والربط <code class="c-kw">jal</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="theory-box" style="margin-top: 15px;">
+              <div class="theory-box-title">
+                <span>هيكل الذاكرة في MIPS: قطاع البيانات (.data) وقطاع النص (.text)</span>
+              </div>
+              <div class="theory-box-desc">
+                ينقسم ملف الأسمبلي المولد في <code class="c-id">MipsCodeGenerator.cs</code> إلى قطاعين رئيسيين:
+                <br><strong>1. قطاع البيانات (<code class="c-kw">.data</code>):</strong> يُحجز فيه حيز ثابت لكل متغير (<code class="c-kw">var: .word 0</code> للأعداد الصحيحة والمنطقية، و <code class="c-kw">.float 0.0</code> للأعداد الحقيقية، و <code class="c-kw">.space N</code> للمصفوفات والسجلات). كما تُخزن فيه النصوص العربية المشفرة كبايتات UTF-8 صريحة.
+                <br><strong>2. قطاع التعليمات (<code class="c-kw">.text</code>):</strong> يحتوي على الكود التنفيذي ويبدأ بالتوجيه <code class="c-kw">.globl main</code> الذي يعرّف نقطة انطلاق البرنامج لدى محاكي MARS.
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Syscalls in MARS -->
+          <div class="content-block">
+            <h3 class="block-h3">3. جدول استدعاءات النظام (Syscalls) المعتمدة في مشروع بيان</h3>
+            <p class="prose">
+              في معمارية MIPS، لا يوجد وصول مباشر للشاشة أو لوحة المفاتيح عبر تعليمات المعالج الأساسية، بل يتم ذلك عبر <strong>نداء النظام (System Call)</strong> بوضع كود العملية في السجل <code class="c-kw">$v0</code>، ووضع المعاملات في <code class="c-kw">$a0</code>، ثم إطلاق تعليمة <code class="c-kw">syscall</code>:
+            </p>
+
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>الخدمة المطلوبة</th>
+                  <th>كود الخدمة في <code class="c-kw">$v0</code></th>
+                  <th>المدخلات (Arguments)</th>
+                  <th>المخرجات (Results)</th>
+                  <th>التعليمة المولدة في بيان</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>طباعة عدد صحيح (print_int)</strong></td>
+                  <td><code class="c-kw">1</code></td>
+                  <td><code>$a0 = العدد المراد طباعته</code></td>
+                  <td>طباعة الرقم في شاشة الكونسول.</td>
+                  <td><code>li $v0, 1</code> &rarr; <code>syscall</code></td>
+                </tr>
+                <tr>
+                  <td><strong>طباعة نص (print_string)</strong></td>
+                  <td><code class="c-kw">4</code></td>
+                  <td><code>$a0 = عنوان بداية النص في .data</code></td>
+                  <td>طباعة المحارف حتى مصادفة البايت الفارغ <code>\0</code>.</td>
+                  <td><code>la $a0, str_0</code> &rarr; <code>li $v0, 4</code> &rarr; <code>syscall</code></td>
+                </tr>
+                <tr>
+                  <td><strong>قراءة عدد صحيح (read_int)</strong></td>
+                  <td><code class="c-kw">5</code></td>
+                  <td>لا يوجد.</td>
+                  <td><code>$v0 = العدد الصحيح المقروء</code></td>
+                  <td><code>li $v0, 5</code> &rarr; <code>syscall</code> &rarr; <code>sw $v0, x</code></td>
+                </tr>
+                <tr>
+                  <td><strong>طباعة محرف واحد (print_char)</strong></td>
+                  <td><code class="c-kw">11</code></td>
+                  <td><code>$a0 = كود الآسكي للمحرف</code></td>
+                  <td>طباعة المحرف الواحد.</td>
+                  <td><code>li $v0, 11</code> &rarr; <code>syscall</code></td>
+                </tr>
+                <tr>
+                  <td><strong>قراءة محرف واحد (read_char)</strong></td>
+                  <td><code class="c-kw">12</code></td>
+                  <td>لا يوجد.</td>
+                  <td><code>$v0 = المحرف المقروء</code></td>
+                  <td><code>li $v0, 12</code> &rarr; <code>syscall</code></td>
+                </tr>
+                <tr>
+                  <td><strong>طباعة عدد حقيقي (print_float)</strong></td>
+                  <td><code class="c-kw">2</code></td>
+                  <td><code>$f12 = القيمة الحقيقية</code></td>
+                  <td>طباعة الكسر العشري.</td>
+                  <td><code>li $v0, 2</code> &rarr; <code>syscall</code></td>
+                </tr>
+                <tr>
+                  <td><strong>إنهاء البرنامج بأمان (exit)</strong></td>
+                  <td><code class="c-kw">10</code></td>
+                  <td>لا يوجد.</td>
+                  <td>إيقاف المعالج وإرجاع التحكم للمحاكي.</td>
+                  <td><code>li $v0, 10</code> &rarr; <code>syscall</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 4. Deep Dive Code Sample MIPS -->
+          <div class="content-block">
+            <h3 class="block-h3">4. تتبع تفصيلي لتوليد كود MIPS الكامل لبرنامج بلغة بيان</h3>
+            
+            <div class="code-window">
+              <div class="code-window-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span>كود المصدر بلغة «بيان» &larr; الكود الوسيط TAC &larr; أسمبلي MIPS النهائي</span>
+              </div>
+              <div class="code-content ltr" style="font-family: var(--fm); font-size: 13px;">
+<span class="c-comment"># -------------------------------------------------------------
+# 1. كود المصدر بلغة بيان:
+# برنامج حساب_المربع {
+#     متغير س: صحيح = 5;
+#     متغير الناتج: صحيح;
+#     الناتج = س * س;
+#     اطبع(الناتج);
+# }
+# -------------------------------------------------------------</span>
+
+<span class="c-kw">.data</span>
+    # حجز مواقع المتغيرات العامة والقيم المؤقتة
+    var_س:        <span class="c-kw">.word</span> 5
+    var_الناتج:   <span class="c-kw">.word</span> 0
+    t0:           <span class="c-kw">.word</span> 0
+    newline:      <span class="c-kw">.byte</span> 10, 0
+
+<span class="c-kw">.text</span>
+<span class="c-kw">.globl</span> main
+<span class="c-id">main:</span>
+    <span class="c-comment"># ---------------------------------------------
+    # حساب: t0 = س * س
+    # ---------------------------------------------</span>
+    lw   $t0, var_س          <span class="c-comment"># تحميل قيمة المتغير س من الذاكرة إلى مسجل t0</span>
+    lw   $t1, var_س          <span class="c-comment"># تحميل قيمة المتغير س من الذاكرة إلى مسجل t1</span>
+    mul  $t2, $t0, $t1       <span class="c-comment"># ضرب المسجلين وتخزين الناتج في t2</span>
+    sw   $t2, t0             <span class="c-comment"># حفظ القيمة المؤقتة في الذاكرة</span>
+
+    <span class="c-comment"># ---------------------------------------------
+    # إسناد: الناتج = t0
+    # ---------------------------------------------</span>
+    lw   $t0, t0
+    sw   $t0, var_الناتج     <span class="c-comment"># تخزين النتيجة النهائية في المتغير الأصلي الناتج</span>
+
+    <span class="c-comment"># ---------------------------------------------
+    # طباعة: اطبع(الناتج)
+    # ---------------------------------------------</span>
+    lw   $a0, var_الناتج     <span class="c-comment"># تحميل القيمة المراد طباعتها في مسجل المعاملات a0</span>
+    li   $v0, 1              <span class="c-comment"># كود خدمة طباعة عدد صحيح</span>
+    syscall                  <span class="c-comment"># إطلاق نداء النظام</span>
+
+    <span class="c-comment"># ---------------------------------------------
+    # طباعة سطر جديد وإنهاء البرنامج
+    # ---------------------------------------------</span>
+    la   $a0, newline        <span class="c-comment"># تحميل عنوان بايت نهاية السطر</span>
+    li   $v0, 4              <span class="c-comment"># كود خدمة طباعة نص</span>
+    syscall
+
+    li   $v0, 10             <span class="c-comment"># كود خدمة إنهاء البرنامج بأمان</span>
+    syscall
+              </div>
+            </div>
+
+            <div class="theory-box" style="margin-top: 15px;">
+              <div class="theory-box-title">
+                <span>سر هندسي مميز: كيف دعم مشروع بيان طباعة الحروف العربية في محاكي MARS؟</span>
+              </div>
+              <div class="theory-box-desc">
+                محاكي MARS القديم لا يدعم محارف النصوص المباشرة بالترميز العربي داخل التوجيه <code>.asciiz "مرحبا"</code> ويحدث انهياراً أو يطبع رموزاً مشوهة!
+                ابتكر فريق تطوير مترجم بيان حلاً هندسياً أنيقاً في دالة <code class="c-kw">EncodeUtf8Bytes()</code> داخل <code class="c-id">MipsCodeGenerator.cs</code>:
+                يقوم المترجم بتحويل النص العربي إلى <strong>متتالية من بايتات UTF-8 الرقمية الصريحة</strong>:
+                <br><code>str_0: .byte 217, 133, 216, 177, 216, 173, 216, 168, 216, 167, 0</code>
+                بهذه الطريقة، أصبح بالإمكان طباعة النصوص العربية بدقة تامة على محاكيات SPIM و MARS و JsSpim دون أي خلل!
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Dual Target: CIL Executable (.exe) -->
+          <div class="content-block">
+            <h3 class="block-h3">5. المسار الصناعي المزدوج: إنتاج ملف تنفيذي حقيقي (.exe) عبر CIL</h3>
+            <p class="prose">
+              لإثبات مرونة وقوة معمارية المترجم وتجاوز قيود المحاكيات الأكاديمية، يتضمن المشروع ملف <code class="c-id">CilExecutableGenerator.cs</code> الذي يترجم نفس الـ TAC إلى <strong>اللغة الوسيطة المشتركة (Common Intermediate Language - CIL)</strong> لمنصة .NET.
+            </p>
+
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>المعيار</th>
+                  <th>مسار أسمبلي MIPS 32-bit</th>
+                  <th>مسار الملف التنفيذي CIL (.exe)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>طريقة التنفيذ</strong></td>
+                  <td>محاكاة برمجية عبر برنامج MARS أو SPIM.</td>
+                  <td><strong>تنفيذ حقيقي مباشر</strong> على نظام التشغيل Windows عبر النقر المزدوج على <code class="c-str">.exe</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong>معمارية التنفيذ</strong></td>
+                  <td>معمارية مبنية على السجلات (Register-based: 32 Registers).</td>
+                  <td>معمارية مبنية على المكدس (Stack-based Virtual Machine).</td>
+                </tr>
+                <tr>
+                  <td><strong>الأداة المساعدة</strong></td>
+                  <td>محاكي MARS 4.5.</td>
+                  <td>المجمع الرسمي لمايكروسوفت <code class="c-kw">ilasm.exe</code> المدمج في بيئة التطوير.</td>
+                </tr>
+                <tr>
+                  <td><strong>التكامل البرمجي</strong></td>
+                  <td>استدعاءات نظام عتادية (<code class="c-kw">syscall</code>).</td>
+                  <td>مكتبات منصة .NET القياسية (<code class="c-kw">System.Console::WriteLine</code>).</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="code-window" style="margin-top: 15px;">
+              <div class="code-window-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span>كود CIL المتولد فعلياً في ملف output.il الموجه لمجمع ilasm.exe</span>
+              </div>
+              <div class="code-content ltr" style="font-family: var(--fm); font-size: 13px;">
+.assembly extern mscorlib {}
+.assembly BayanOutput {}
+.module BayanOutput.exe
+
+.class public auto ansi beforefieldinit Program extends [mscorlib]System.Object
+{
+  .method public static void Main() cil managed
+  {
+    .entrypoint
+    .locals init (int32 var_س, int32 var_الناتج, int32 t0)
+
+    <span class="c-comment">// س = 5</span>
+    ldc.i4.5
+    stloc.0
+
+    <span class="c-comment">// t0 = س * س</span>
+    ldloc.0
+    ldloc.0
+    mul
+    stloc.2
+
+    <span class="c-comment">// الناتج = t0</span>
+    ldloc.2
+    stloc.1
+
+    <span class="c-comment">// اطبع(الناتج)</span>
+    ldloc.1
+    call void [mscorlib]System.Console::WriteLine(int32)
+
+    ret
+  }
+}
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. Runtime Errors -->
+          <div class="content-block">
+            <h3 class="block-h3">6. أخطاء وقت التشغيل (Runtime Errors vs Compile-Time Errors)</h3>
+            <p class="prose">
+              تمثل أخطاء وقت التشغيل الفئة الوحيدة من الأخطاء التي لا يستطيع المترجم اكتشافها أثناء الترجمة، لأن الكود سليم 100% معجمياً ونحوياً ودلالياً، وتحدث حصراً أثناء التنفيذ الفعلي في المحطة الخامسة:
+            </p>
+
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>خطأ وقت التشغيل (Runtime Error)</th>
+                  <th>السبب الرياضي / البرمجي</th>
+                  <th>كيف تعامل معه مترجم بيان؟</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>القسمة على الصفر (Division by Zero)</strong></td>
+                  <td>محاولة قسمة متغير على قيمة أصبحت صفراً أثناء التشغيل (مثلاً إدخال المستخدم للرقم 0).</td>
+                  <td>في MIPS: تعليمة <code class="c-kw">teq $t1, $zero, 7</code> تطلق استثناء معالج فوري، أو توليد فحص شرطي يطبع رسالة خطأ صريحة.</td>
+                </tr>
+                <tr>
+                  <td><strong>تجاوز حدود المصفوفة (Index Out of Bounds)</strong></td>
+                  <td>محاولة قراءة فهرس سالب أو أكبر من حجم المصفوفة المحدد في مرحلة التصريح.</td>
+                  <td>يتم فحص الفهرس بالمقارنة مع طول المصفوفة قبل حساب الإزاحة لتفادي الكتابة العشوائية في الذاكرة.</td>
+                </tr>
+                <tr>
+                  <td><strong>طوفان المكدس (Stack Overflow)</strong></td>
+                  <td>استدعاء إجراء لنفسه بشكل عودي لانهائي دون شرط توقف.</td>
+                  <td>تجاوز حدود الذاكرة المخصصة للـ Stack يؤدي إلى Trap عتادي من المحاكي لإيقاف البرنامج.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 7. Final Output & Execution -->
+          <div class="content-block">
+            <h3 class="block-h3">7. المخرج النهائي لمشروع بيان ودورة التشغيل الكاملة</h3>
+            <p class="prose">
+              بانتهاء المحطة الخامسة، يكون المترجم قد أتم دورته الكاملة بنجاح 100%:
+            </p>
+            <ul style="padding-right: 24px; color: var(--text-main); font-size: 14.5px; line-height: 1.85;">
+              <li><strong>ملف الأسمبلي (<code class="c-str">output.asm</code>):</strong> جاهز للعرض والنسخ، وقابل للتشغيل الفوري بنقرة واحدة داخل محاكي MARS المدمج في واجهة IDE.</li>
+              <li><strong>الملف التنفيذي (<code class="c-str">output.exe</code>):</strong> تم بناؤه وتجميعه حقيقياً، ويمكن تشغيله من موجه الأوامر (CMD/PowerShell) أو بالنقر عليه كأي برنامج ويندوز مستقل.</li>
+              <li><strong>لوحة نتائج متكاملة في الـ IDE:</strong> توفر معاينة فورية لرموز الـ Tokens، وشجرة الـ AST، وجدول الرموز، والكود الوسيط TAC، وأسمبلي MIPS مع شاشة تشغيل حية (Console Output).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIVA / DEFENSE QUESTION BANK (10 QUESTIONS) -->
+    <!-- ========================================== -->
+    <section class="station-section" id="viva">
+      <div class="station-card" style="border-color: var(--copper);">
+        <div class="station-header" style="background: linear-gradient(90deg, #1C243B 0%, #2A1F38 100%);">
+          <div>
+            <span class="station-badge">بنك أسئلة المناقشة الشامل &bull; VIVA DEFENSE</span>
+            <h2 class="station-title">أهم 10 أسئلة متوقعة من لجنة التحكيم وإجاباتها النموذجية الدقيقة</h2>
+          </div>
+          <div class="station-tag">جاهز للمناقشة 100%</div>
+        </div>
+
+        <div class="station-body">
+          <!-- Q1 -->
+          <div class="viva-card">
+            <div class="viva-q">
+              <span class="viva-badge">سؤال 1</span>
+              <span>س: ما الفرق الدقيق بين خطأ «س = 5 + ;» وخطأ «س = 5 + "نص";»؟ في أي مرحلة يكتشف كل منهما ولماذا؟</span>
+            </div>
+            <div class="viva-a">
+              <strong>الإجابة النموذجية:</strong><br>
+              - الخطأ الأول (<code class="c-id">س = 5 + ;</code>) هو <strong>خطأ نحوي (Syntax Error)</strong> يُكتشف في المحطة الثانية (المحلل النحوي - Parser). السبب: قواعد النحو الخالية من السياق (CFG) تنص على أن العامل الثنائي <code>+</code> يجب أن يتبعه تعبير (Expression)، ومصادفة الفاصلة المنقوطة تمثل انتهاكاً لهيكل القواعد.<br>
+              - الخطأ الثاني (<code class="c-id">س = 5 + "نص";</code>) هو <strong>خطأ دلالي (Semantic Error)</strong> يُكتشف في المحطة الثالثة (المحلل الدلالي - Semantics). السبب: الجملة سليمة نحوياً ومطابقة لقواعد الهيكل، ولكن نوع المعامل الأيمن (نص) غير متوافق مع المعامل الأيسر (صحيح) في مصفوفة توافق الأنواع لعملية الجمع الحسابي.
+            </div>
+          </div>
+
+          <!-- Q2 -->
+          <div class="viva-card">
+            <div class="viva-q">
+              <span class="viva-badge">سؤال 2</span>
+              <span>س: لماذا اخترتم خوارزمية LL(1) بدلاً من LR(1) في المحلل النحوي لمشروع بيان؟</span>
+            </div>
+            <div class="viva-a">
+              <strong>الإجابة النموذجية:</strong><br>
+              لثلاثة أسباب هندسية رئيسية:
+              <br>1. <strong>الهبوط العودي التنبئي المباشر (Predictive Recursive-Descent):</strong> تتيح خوارزمية LL(1) كتابة دوال برمجية واضحة ومقروءة تقابل قواعد النحو مباشرة، مما يسهل تتبع الأخطاء البرمجية وصيانتها دون الاعتماد على جداول انتقال ضخمة ومعتمة كما في LR(1).
+              <br>2. <strong>السرعة والأداء الخطي:</strong> تمتلك الخوارزمية تعقيداً زمنياً خطياً $O(N)$ مع استهلاك ذاكرة فائق الكفاءة.
+              <br>3. <strong>جودة رسائل الخطأ بالعربية والتعافي السريع:</strong> وفرت لنا LL(1) قدرة لا تضاهى على صياغة رسائل خطأ دقيقة جداً باللغة العربية مع تطبيق استراتيجية الهلع (Panic-Mode Recovery) لتخطي الخطأ والبحث عن الرموز المتزامنة لمواصلة الفحص.
+            </div>
+          </div>
+
+          <!-- Q3 -->
+          <div class="viva-card">
+            <div class="viva-q">
+              <span class="viva-badge">سؤال 3</span>
+              <span>س: كيف حلت خوارزمية LL(1) مشكلة العودية اليسارية (Left Recursion) وأسبقية العمليات في لغة بيان؟</span>
+            </div>
+            <div class="viva-a">
+              <strong>الإجابة النموذجية:</strong><br>
+              العودية اليسارية (مثل $E \to E + T$) تؤدي إلى حلقة تكرار لانهائية في محللات LL(1). قمنا بحلها رياضياً عبر <strong>تقنية حذف العودية اليسارية (Elimination of Left Recursion)</strong> بتحويل القاعدة إلى $E \to T E'$ و $E' \to + T E' \mid \epsilon$. كما قمنا بتضمين أسبقية العمليات (Operator Precedence) داخل القواعد النحوية نفسها، حيث جعلنا قواعد الضرب والقسمة في مستوى شجري أعمق من قواعد الجمع والطرح لتضمن الشجرة دائماً أسبقية الضرب تلقائياً.
+            </div>
+          </div>
+
+          <!-- Q4 -->
+          <div class="viva-card">
+            <div class="viva-q">
+              <span class="viva-badge">سؤال 4</span>
+              <span>س: كيف يدير المترجم جدول الرموز (Symbol Table) للتعامل مع النطاقات المتداخلة (Nested Scopes) ومبدأ الحجب (Shadowing)؟</span>
+            </div>
+            <div class="viva-a">
+              <strong>الإجابة النموذجية:</strong><br>
+              تم تصميم جدول الرموز كهيكل <strong>شجري (Scope Tree)</strong> حيث يرتبط كل نطاق فرعي بنطاقه الأب عبر مؤشر <code class="c-kw">Parent</code>. عند الإعلان عن متغير، يفحص المترجم النطاق الحالي فقط؛ إذا تكرر نفس الاسم في النطاق الحالي يطلق خطأ <code class="c-err">Duplicate Declaration</code>. أما إذا عُرف نفس الاسم في نطاق فرعي، يقبله المترجم ويطبق مبدأ <strong>حجب المتغير (Variable Shadowing)</strong>. وعند البحث عن متغير (Lookup)، يبدأ البحث عودياً من النطاق الحالي صعوداً إلى النطاق العام (Global Scope).
+            </div>
+          </div>
+
+          <!-- Q5 -->
+          <div class="viva-card">
+            <div class="viva-q">
+              <span class="viva-badge">سؤال 5</span>
+              <span>س: ما الفائدة الأكاديمية والهندسية من توليد الكود الوسيط (TAC) بدلاً من توليد لغة الآلة مباشرة من الشجرة (AST)؟</span>
+            </div>
+            <div class="viva-a">
+              <strong>الإجابة النموذجية:</strong><br>
+              1. <strong>تطبيق مبدأ فصل الواجهة الأمامية عن الخلفية (Decoupling):</strong> يحول معضلة بناء المترجمات من $N \times M$ إلى $N + M$. الواجهة الأمامية تفهم لغة بيان فقط وتنتج TAC، والواجهة الخلفية تقرأ TAC وتولد الكود الهدف. هذا ما مكننا من توفير مخرجين (MIPS أسمبلي + CIL Executable) بنفس الواجهة الأمامية تماماً.
+              <br>2. <strong>إجراء التحسينات المستقلة عن العتاد (Machine-Independent Optimizations):</strong> مثل طي الثوابت وحذف الكود الميت وتسطيح الهياكل المتداخلة قبل الدخول في قيود السجلات والذاكرة العتادية.
+            </div>
+          </div>
+
+          <!-- Q6 -->
+          <div class="viva-card">
+            <div class="viva-q">
+              <span class="viva-badge">سؤال 6</span>
+              <span>س: ما الفرق الجوهري بين شجرة الإعراب الكاملة (Parse Tree) وشجرة الإعراب المجردة (AST)؟ ولماذا نفضل AST؟</span>
+            </div>
+            <div class="viva-a">
+              <strong>الإجابة النموذجية:</strong><br>
+              - <strong>شجرة الإعراب الكاملة (Parse Tree / Concrete Syntax Tree):</strong> تمثل التطبيق الحرفي الصارم لكل قاعدة في قواعد النحو، وتحتوي على جميع الرموز الصرفية بما فيها الأقواس، الفواصل المنقوطة، والعقد الوسيطة الناتجة من حذف العودية اليسارية ($E', T'$)، مما يجعلها ضخمة ومهدرة للذاكرة.
+              <br>- <strong>شجرة الإعراب المجردة (AST):</strong> شجرة نظيفة ومكثفة تحتفظ بالمعنى الدلالي والجوهر الحسابي فقط (العمليات كعقد جذرية والمعاملات كأبناء)، وتستبعد كافة الرموز النحوية التجميلية (Syntactic Sugar)، مما يجعل التحليل الدلالي وتوليد الكود أسرع بنسبة 80% وأقل استهلاكاً للذاكرة.
+            </div>
+          </div>
+
+          <!-- Q7 -->
+          <div class="viva-card">
+            <div class="viva-q">
+              <span class="viva-badge">سؤال 7</span>
+              <span>س: كيف تفرق لغة بيان بين التمرير بالقيمة (ByVal) والتمرير بالمرجع (ByRef) دلالياً وعند توليد الكود؟</span>
+            </div>
+            <div class="viva-a">
+              <strong>الإجابة النموذجية:</strong><br>
+              - <strong>في التحليل الدلالي:</strong> يشترط المترجم أن يكون المعامل الممرر <code class="c-kw">بالمرجع</code> متغيراً حقيقياً في الذاكرة يحمل قيمة مكانية (L-Value) ويرفض تمرير الثوابت العددية أو التعبيرات الحسابية (مثل تمرير <code>5 + 2</code> بالمرجع).
+              <br>- <strong>في توليد الكود:</strong> التمرير بالقيمة يمرر نسخة من القيمة المخزنة. أما التمرير بالمرجع فيمرر عنوان موقع المتغير في الذاكرة (Memory Address) بحيث تنعكس أي تعديلات يجريها الإجراء مباشرة على المتغير الأصلي لدى المستدعي.
+            </div>
+          </div>
+
+          <!-- Q8 -->
+          <div class="viva-card">
+            <div class="viva-q">
+              <span class="viva-badge">سؤال 8</span>
+              <span>س: كيف تغلب مشروع بيان على مشكلة عدم دعم محاكي MARS القديم للغة العربية في النصوص المطبوعة؟</span>
+            </div>
+            <div class="viva-a">
+              <strong>الإجابة النموذجية:</strong><br>
+              ابتكرنا خوارزمية ذكية في ملف <code class="c-id">MipsCodeGenerator.cs</code> عبر دالة <code class="c-kw">EncodeUtf8Bytes()</code>. بدلاً من كتابة النصوص بالتوجيه <code>.asciiz "مرحبا"</code> الذي ينهار في MARS، يقوم المترجم بتحويل السلسلة العربية إلى بايتات رقمية صريحة بنظام UTF-8:
+              <br><code>.byte 217, 133, 216, 177, 216, 173, 216, 168, 216, 167, 0</code>
+              هذا التشفير الرقمي تقبله جميع المحاكيات القياسية (MARS, SPIM, JsSpim) وتطبعه كحروف عربية صحيحة دون أي أخطاء.
+            </div>
+          </div>
+
+          <!-- Q9 -->
+          <div class="viva-card">
+            <div class="viva-q">
+              <span class="viva-badge">سؤال 9</span>
+              <span>س: كيف يمنع المترجم ظاهرة انهيار الأخطاء المتتالية (Cascading Errors) في المحلل الدلالي؟</span>
+            </div>
+            <div class="viva-a">
+              <strong>الإجابة النموذجية:</strong><br>
+              باستخدام نمط <strong>كتم الأخطاء عبر النوع الخاص (<code class="c-id">LanguageType.Error</code>)</strong>. عندما يكتشف المترجم متغيراً غير معرف، يطلق خطأ دلالياً واحداً صريحاً في ذلك السطر، ويعيّن للمتغير نوعاً وهمياً هو <code class="c-id">Error</code>. وفي أي عملية حسابية لاحقة تستخدم هذا المتغير، يفحص المترجم إذا كان أحد الطرفين من نوع <code class="c-id">Error</code>، فإنه يكتم الخطأ ولا يطلق رسائل جديدة زائفة، مما يمنع إغراق المبرمج بعشرات الأخطاء الناتجة عن سبب واحد.
+            </div>
+          </div>
+
+          <!-- Q10 -->
+          <div class="viva-card">
+            <div class="viva-q">
+              <span class="viva-badge">سؤال 10</span>
+              <span>س: ما هي استراتيجيات تعافي الأخطاء في كل مرحلة من مراحل المترجم؟</span>
+            </div>
+            <div class="viva-a">
+              <strong>الإجابة النموذجية:</strong><br>
+              1. <strong>في المحلل المعجمي:</strong> استبدال المحرف غير الصالح برمز معجمي خاص (<code class="c-id">BadToken</code>) وإضافته إلى حقيبة التشخيص (<code class="c-id">DiagnosticBag</code>) مع مواصلة قراءة باقي المحارف.<br>
+              2. <strong>في المحلل النحوي:</strong> تطبيق استراتيجية الهلع (Panic-Mode Recovery) بالبحث عن رموز التزامن (Synchronizing Tokens مثل الفاصلة المنقوطة أو نهاية القوس) لتجاوز العبارة التالفة وبناء باقي الشجرة.<br>
+              3. <strong>في المحلل الدلالي:</strong> كتم التناقضات المشتقة عبر <code class="c-id">LanguageType.Error</code>.<br>
+              4. <strong>في الكود الهدف:</strong> التحقق المسبق من معاملات القسمة لحماية البرنامج من انهيارات القسمة على الصفر وقت التشغيل.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>مشروع مترجم لغة «بيان» &bull; مقرر بناء المترجمات (Compiler Construction)</p>
+    <p style="margin-top: 6px; font-size: 11.5px; opacity: 0.7;">تم إعداد هذا الدليل الشامل لضمان الفهم النظري والتطبيقي الكامل والمناقشة الأكاديمية المتميزة.</p>
+  </footer>
+
+</body>
+</html>
