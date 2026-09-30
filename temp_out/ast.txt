@@ -1,0 +1,173 @@
+ProgramNode: اختبار_المصفوفات
+    Declarations
+        TypeDeclarationNode: مصفوفة
+            ListTypeSyntaxNode
+                LiteralNode: 50
+                NamedTypeSyntaxNode: صحيح
+        VariableDeclarationGroupNode
+            IdentifierNode: أ
+            IdentifierNode: ب
+            NamedTypeSyntaxNode: مصفوفة
+        VariableDeclarationGroupNode
+            IdentifierNode: ن
+            NamedTypeSyntaxNode: صحيح
+        ProcedureDeclarationNode: ادخال
+            ParameterNode: ByReference م
+            ParameterNode: ByValue سعة
+            BlockNode:
+                AssignmentNode: ف
+                    LiteralNode: 0
+                WhileNode:
+                    Condition:
+                        BinaryExpressionNode: Less
+                            IdentifierNode: ف
+                            IdentifierNode: سعة
+                    Body:
+                        BlockNode:
+                            ReadNode
+                                IndexedAccessNode
+                                    IdentifierNode: م
+                                    IdentifierNode: ف
+                            AssignmentNode: ف
+                                BinaryExpressionNode: Plus
+                                    IdentifierNode: ف
+                                    LiteralNode: 1
+        ProcedureDeclarationNode: نسخ
+            ParameterNode: ByValue سعة
+            ParameterNode: ByReference مصدر
+            ParameterNode: ByReference هدف
+            BlockNode:
+                AssignmentNode: ف
+                    LiteralNode: 0
+                WhileNode:
+                    Condition:
+                        BinaryExpressionNode: Less
+                            IdentifierNode: ف
+                            IdentifierNode: سعة
+                    Body:
+                        BlockNode:
+                            AssignmentNode
+                                IndexedAccessNode
+                                    IdentifierNode: هدف
+                                    IdentifierNode: ف
+                                IndexedAccessNode
+                                    IdentifierNode: مصدر
+                                    IdentifierNode: ف
+                            AssignmentNode: ف
+                                BinaryExpressionNode: Plus
+                                    IdentifierNode: ف
+                                    LiteralNode: 1
+        ProcedureDeclarationNode: ترتيب
+            ParameterNode: ByReference م
+            ParameterNode: ByValue سعة
+            BlockNode:
+                AssignmentNode: ي
+                    LiteralNode: 0
+                WhileNode:
+                    Condition:
+                        BinaryExpressionNode: Less
+                            IdentifierNode: ي
+                            IdentifierNode: سعة
+                    Body:
+                        BlockNode:
+                            AssignmentNode: ز
+                                BinaryExpressionNode: Plus
+                                    IdentifierNode: ي
+                                    LiteralNode: 1
+                            WhileNode:
+                                Condition:
+                                    BinaryExpressionNode: Less
+                                        IdentifierNode: ز
+                                        IdentifierNode: سعة
+                                Body:
+                                    BlockNode:
+                                        IfNode:
+                                            Condition:
+                                                BinaryExpressionNode: Greater
+                                                    IndexedAccessNode
+                                                        IdentifierNode: م
+                                                        IdentifierNode: ي
+                                                    IndexedAccessNode
+                                                        IdentifierNode: م
+                                                        IdentifierNode: ز
+                                            Then:
+                                                BlockNode:
+                                                    AssignmentNode: مؤقت
+                                                        IndexedAccessNode
+                                                            IdentifierNode: م
+                                                            IdentifierNode: ي
+                                                    AssignmentNode
+                                                        IndexedAccessNode
+                                                            IdentifierNode: م
+                                                            IdentifierNode: ي
+                                                        IndexedAccessNode
+                                                            IdentifierNode: م
+                                                            IdentifierNode: ز
+                                                    AssignmentNode
+                                                        IndexedAccessNode
+                                                            IdentifierNode: م
+                                                            IdentifierNode: ز
+                                                        IdentifierNode: مؤقت
+                                        AssignmentNode: ز
+                                            BinaryExpressionNode: Plus
+                                                IdentifierNode: ز
+                                                LiteralNode: 1
+                            AssignmentNode: ي
+                                BinaryExpressionNode: Plus
+                                    IdentifierNode: ي
+                                    LiteralNode: 1
+        ProcedureDeclarationNode: طباعة
+            ParameterNode: ByReference م
+            ParameterNode: ByValue سعة
+            BlockNode:
+                AssignmentNode: ف
+                    LiteralNode: 0
+                WhileNode:
+                    Condition:
+                        BinaryExpressionNode: Less
+                            IdentifierNode: ف
+                            IdentifierNode: سعة
+                    Body:
+                        BlockNode:
+                            PrintNode
+                                IndexedAccessNode
+                                    IdentifierNode: م
+                                    IdentifierNode: ف
+                            AssignmentNode: ف
+                                BinaryExpressionNode: Plus
+                                    IdentifierNode: ف
+                                    LiteralNode: 1
+    AssignmentNode: ن
+        LiteralNode: 3
+    AssignmentNode
+        IndexedAccessNode
+            IdentifierNode: أ
+            LiteralNode: 0
+        LiteralNode: 50
+    AssignmentNode
+        IndexedAccessNode
+            IdentifierNode: أ
+            LiteralNode: 1
+        LiteralNode: 10
+    AssignmentNode
+        IndexedAccessNode
+            IdentifierNode: أ
+            LiteralNode: 2
+        LiteralNode: 30
+    CallExpressionNode: نسخ
+        IdentifierNode: ن
+        IdentifierNode: أ
+        IdentifierNode: ب
+    PrintNode
+        LiteralNode: قبل الترتيب:
+    CallExpressionNode: طباعة
+        IdentifierNode: ب
+        IdentifierNode: ن
+    CallExpressionNode: ترتيب
+        IdentifierNode: ب
+        IdentifierNode: ن
+    PrintNode
+        LiteralNode: بعد الترتيب:
+    CallExpressionNode: طباعة
+        IdentifierNode: ب
+        IdentifierNode: ن

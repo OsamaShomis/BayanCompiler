@@ -236,11 +236,17 @@ public sealed class IrGenerator
         var parameters = new List<ProcedureParameterBinding>();
         foreach (ParameterNode parameter in procedure.Parameters)
         {
-            LanguageType type = MapOfficialType(parameter.Type, parameter.Span);
+            BackendTypeLayout layout = ResolveBackendLayout(parameter.Type);
+            LanguageType type = layout.Kind;
             EnsureMipsStorageType(type, parameter.Span);
             string storageLabel = "param_" + _variableCounter++;
             var storage = new IrValue(IrValueKind.Variable, storageLabel, type, parameter.Name);
-            _program.AddStorage(storageLabel, type, parameter.Name);
+            int words = (type == LanguageType.List || type == LanguageType.Record) ? layout.WordCount : 1;
+            _program.AddStorage(storageLabel, type, parameter.Name, words);
+            if (type == LanguageType.List || type == LanguageType.Record)
+            {
+                _storageLayouts[storageLabel] = layout;
+            }
             parameters.Add(new ProcedureParameterBinding(parameter.Name, storage, parameter.PassingMode));
         }
 
@@ -471,9 +477,39 @@ public sealed class IrGenerator
     /// </summary>
     private void GenerateRead(ReadNode read)
     {
+        if (read.Target is IndexedAccessNode indexed)
+        {
+            CompositeLocation location = ResolveCompositeLocation(indexed);
+            IrValue temp = CreateTemporary(location.Layout.Kind);
+            IrOpcode op = temp.Type switch
+            {
+                LanguageType.Char => IrOpcode.ReadChar,
+                LanguageType.Real => IrOpcode.ReadReal,
+                _ => IrOpcode.ReadInt
+            };
+            _program.Emit(new IrInstruction(op, temp, null, null, null, null, read.Span));
+            _program.Emit(new IrInstruction(IrOpcode.StoreIndexed, location.Base, location.WordIndex, temp, null, null, read.Span));
+            return;
+        }
+
+        if (read.Target is FieldAccessNode field)
+        {
+            CompositeLocation location = ResolveCompositeLocation(field);
+            IrValue temp = CreateTemporary(location.Layout.Kind);
+            IrOpcode op = temp.Type switch
+            {
+                LanguageType.Char => IrOpcode.ReadChar,
+                LanguageType.Real => IrOpcode.ReadReal,
+                _ => IrOpcode.ReadInt
+            };
+            _program.Emit(new IrInstruction(op, temp, null, null, null, null, read.Span));
+            _program.Emit(new IrInstruction(IrOpcode.StoreIndexed, location.Base, location.WordIndex, temp, null, null, read.Span));
+            return;
+        }
+
         if (read.Target is not IdentifierNode identifier)
         {
-            throw new MipsGenerationException("MIPS004", "الإدخال إلى الفهرس أو الحقل لم يُحوّل إلى MIPS بعد.", read.Span);
+            throw new MipsGenerationException("MIPS004", "الإدخال إلى هذا الهدف غير مدعوم في مولد MIPS الحالي.", read.Span);
         }
 
         IrValue target = _scope.Lookup(identifier.Name, identifier.Span);
@@ -966,6 +1002,7 @@ public sealed class IrGenerator
                 TokenType.TypeString => new BackendTypeLayout(LanguageType.Text, 1),
                 TokenType.TypeReal => new BackendTypeLayout(LanguageType.Real, 1),
                 TokenType.Identifier when _namedTypeLayouts.TryGetValue(named.Name, out BackendTypeLayout? layout) => layout,
+                TokenType.Identifier when named.Name == "مصفوفة" => new BackendTypeLayout(LanguageType.List, 100, new BackendTypeLayout(LanguageType.Int, 1)),
                 _ => throw new MipsGenerationException("MIPS002", "نوع رسمي غير مدعوم بعد في مولد MIPS: " + named.Name, type.Span)
             };
         }
@@ -1007,8 +1044,10 @@ public sealed class IrGenerator
     /// </summary>
     private static void EnsureMipsStorageType(LanguageType type, SourceSpan span)
     {
-        // يسمح بكلمة 32-بت للعدد والمنطقي فقط.
-        if (type != LanguageType.Int && type != LanguageType.Bool && type != LanguageType.Char && type != LanguageType.Text && type != LanguageType.Real)
+        // يسمح بالأنواع الأساسية بالإضافة للقوائم والسجلات
+        if (type != LanguageType.Int && type != LanguageType.Bool && type != LanguageType.Char && 
+            type != LanguageType.Text && type != LanguageType.Real && type != LanguageType.List && 
+            type != LanguageType.Record)
         {
             throw new MipsGenerationException("MIPS002", "الإصدار الأول من مولد MIPS يدعم المتغيرات من النوع عدد أو منطقي فقط.", span);
         }

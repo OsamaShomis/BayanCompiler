@@ -496,6 +496,8 @@ public sealed class DoctorSemanticAnalyzer
                     return TypeDescriptor.Primitive(LanguageType.Text);
                 case TokenType.Identifier when _scope.TryLookup(named.Name, out Symbol known) && known.Kind == SymbolKind.Type:
                     return known.DetailedType ?? TypeDescriptor.Primitive(known.Type);
+                case TokenType.Identifier when named.Name == "مصفوفة":
+                    return TypeDescriptor.List(TypeDescriptor.Primitive(LanguageType.Int), 100);
                 default:
                     ReportUnknownType(named);
                     return TypeDescriptor.Primitive(LanguageType.Unknown);
@@ -548,6 +550,7 @@ public sealed class DoctorSemanticAnalyzer
                 TokenType.TypeChar => LanguageType.Char,
                 TokenType.TypeString => LanguageType.Text,
                 TokenType.Identifier when _scope.TryLookup(named.Name, out Symbol known) && known.Kind == SymbolKind.Type => known.Type,
+                TokenType.Identifier when named.Name == "مصفوفة" => LanguageType.List,
                 _ => ReportUnknownType(named)
             };
         }

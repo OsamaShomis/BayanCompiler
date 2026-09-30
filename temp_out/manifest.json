@@ -1,0 +1,11 @@
+{
+  "SourcePath": "E:\\BayanCompiler\\temp_array_test.bayan",
+  "Success": true,
+  "CompletedStage": "Assembly",
+  "DiagnosticCount": 0,
+  "ParseTreeAvailable": true,
+  "SymbolTableAvailable": true,
+  "WindowsExecutableAvailable": true,
+  "WindowsExecutablePath": "E:\\BayanCompiler\\temp_out\\output.exe",
+  "Diagnostics": []
+}

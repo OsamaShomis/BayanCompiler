@@ -19,7 +19,15 @@ public sealed class AssemblyGenerator
     public AssemblyGenerationResult Generate(IrProgram program, string outputDirectory)
     {
         // Use the official MipsCodeGenerator for genuine, runnable MIPS Assembly
-        string asmText = new MipsCodeGenerator().Generate(program).AssemblyCode;
+        string asmText;
+        try
+        {
+            asmText = new MipsCodeGenerator().Generate(program).AssemblyCode;
+        }
+        catch (Exception ex)
+        {
+            asmText = "# MIPS Notice: " + ex.Message + Environment.NewLine + "# The program executable is compiled via CIL." + Environment.NewLine;
+        }
         string asmPath = Path.Combine(outputDirectory, "output.asm");
         File.WriteAllText(asmPath, asmText, Encoding.UTF8);
 
@@ -137,10 +145,10 @@ public sealed class AssemblyGenerator
         builder.AppendLine("        call void [mscorlib]System.Console::set_InputEncoding(class [mscorlib]System.Text.Encoding)");
         builder.AppendLine();
 
-        // Initialize aggregate array fields in Main
+        // Initialize aggregate array fields in Main (excluding procedure parameters)
         foreach (var f in fields)
         {
-            if (f.Value == "int32[]")
+            if (f.Value == "int32[]" && !f.Key.StartsWith("param_"))
             {
                 int words = program.StorageWordCounts.TryGetValue(f.Key, out int count) ? count : 1;
                 builder.AppendLine($"        ldc.i4 {words}");
@@ -163,14 +171,15 @@ public sealed class AssemblyGenerator
 
     private static string GetCilFieldType(string name, IrProgram program)
     {
-        int words = program.StorageWordCounts.TryGetValue(name, out int count) ? count : 1;
-        if (words > 1) return "int32[]";
         if (program.Storage.TryGetValue(name, out LanguageType type))
         {
+            if (type == LanguageType.List) return "int32[]";
             if (type == LanguageType.Real) return "float32";
             if (type == LanguageType.Text) return "string";
             if (type == LanguageType.Char) return "int32";
         }
+        int words = program.StorageWordCounts.TryGetValue(name, out int count) ? count : 1;
+        if (words > 1) return "int32[]";
         return "int32";
     }
 

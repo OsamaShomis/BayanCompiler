@@ -1,0 +1,1226 @@
+Start
+  ProgramUnit
+    Program → برنامج
+    Identifier → اختبار_المصفوفات
+    Semicolon → ;
+    DefinitionList
+      Definition
+        TypeDeclaration
+          TypeDeclaration → نوع
+          Identifier → مصفوفة
+          Assign → =
+          CompositeType
+            ListType
+              List → قائمة
+              LeftBracket → [
+              Integer → 50
+              RightBracket → ]
+              From → من
+              DataType
+                TypeInt → صحيح
+          Semicolon → ;
+      DefinitionList
+        Definition
+          VariableDeclaration
+            Variable → متغير
+            NameList
+              Identifier → أ
+              NameListTail
+                Comma → ,
+                Identifier → ب
+                NameListTail
+            Colon → :
+            DataType
+              Identifier → مصفوفة
+            Semicolon → ;
+        DefinitionList
+          Definition
+            VariableDeclaration
+              Variable → متغير
+              NameList
+                Identifier → ن
+                NameListTail
+              Colon → :
+              DataType
+                TypeInt → صحيح
+              Semicolon → ;
+          DefinitionList
+            Definition
+              ProcedureDeclaration
+                Procedure → إجراء
+                Identifier → ادخال
+                LeftParen → (
+                FormalParametersOpt
+                  FormalParameter
+                    PassingMode
+                      ByReference → بالمرجع
+                    NameList
+                      Identifier → م
+                      NameListTail
+                    Colon → :
+                    DataType
+                      Identifier → مصفوفة
+                  FormalParametersTail
+                    Semicolon → ;
+                    FormalParameter
+                      PassingMode
+                        ByValue → بالقيمة
+                      NameList
+                        Identifier → سعة
+                        NameListTail
+                      Colon → :
+                      DataType
+                        TypeInt → صحيح
+                    FormalParametersTail
+                RightParen → )
+                Semicolon → ;
+                DefinitionList
+                  Definition
+                    VariableDeclaration
+                      Variable → متغير
+                      NameList
+                        Identifier → ف
+                        NameListTail
+                      Colon → :
+                      DataType
+                        TypeInt → صحيح
+                      Semicolon → ;
+                  DefinitionList
+                Block
+                  LeftBrace → {
+                  StatementList
+                    Statement
+                      IdentifierStatement
+                        Identifier → ف
+                        IdentifierStatementTail
+                          AccessTail
+                          Assign → =
+                          Expression
+                            SimpleExpression
+                              SignOpt
+                              Term
+                                Factor
+                                  Integer → 0
+                                MultiplicationTail
+                              AdditionTail
+                            RelationTail
+                          Semicolon → ;
+                    StatementList
+                      Statement
+                        WhileStatement
+                          While → طالما
+                          LeftParen → (
+                          Expression
+                            SimpleExpression
+                              SignOpt
+                              Term
+                                Factor
+                                  Access
+                                    Identifier → ف
+                                    AccessTail
+                                MultiplicationTail
+                              AdditionTail
+                            RelationTail
+                              RelationOperator
+                                Less → >
+                              SimpleExpression
+                                SignOpt
+                                Term
+                                  Factor
+                                    Access
+                                      Identifier → سعة
+                                      AccessTail
+                                  MultiplicationTail
+                                AdditionTail
+                          RightParen → )
+                          Continue → استمر
+                          Statement
+                            Block
+                              LeftBrace → {
+                              StatementList
+                                Statement
+                                  ReadStatement
+                                    Read → اقرأ
+                                    LeftParen → (
+                                    Access
+                                      Identifier → م
+                                      AccessTail
+                                        LeftBracket → [
+                                        Expression
+                                          SimpleExpression
+                                            SignOpt
+                                            Term
+                                              Factor
+                                                Access
+                                                  Identifier → ف
+                                                  AccessTail
+                                              MultiplicationTail
+                                            AdditionTail
+                                          RelationTail
+                                        RightBracket → ]
+                                        AccessTail
+                                    RightParen → )
+                                    Semicolon → ;
+                                StatementList
+                                  Statement
+                                    IdentifierStatement
+                                      Identifier → ف
+                                      IdentifierStatementTail
+                                        AccessTail
+                                        Assign → =
+                                        Expression
+                                          SimpleExpression
+                                            SignOpt
+                                            Term
+                                              Factor
+                                                Access
+                                                  Identifier → ف
+                                                  AccessTail
+                                              MultiplicationTail
+                                            AdditionTail
+                                              AdditionOperator
+                                                Plus → +
+                                              Term
+                                                Factor
+                                                  Integer → 1
+                                                MultiplicationTail
+                                              AdditionTail
+                                          RelationTail
+                                        Semicolon → ;
+                                  StatementList
+                              RightBrace → }
+                      StatementList
+                  RightBrace → }
+                Semicolon → ;
+            DefinitionList
+              Definition
+                ProcedureDeclaration
+                  Procedure → إجراء
+                  Identifier → نسخ
+                  LeftParen → (
+                  FormalParametersOpt
+                    FormalParameter
+                      PassingMode
+                        ByValue → بالقيمة
+                      NameList
+                        Identifier → سعة
+                        NameListTail
+                      Colon → :
+                      DataType
+                        TypeInt → صحيح
+                    FormalParametersTail
+                      Semicolon → ;
+                      FormalParameter
+                        PassingMode
+                          ByReference → بالمرجع
+                        NameList
+                          Identifier → مصدر
+                          NameListTail
+                        Colon → :
+                        DataType
+                          Identifier → مصفوفة
+                      FormalParametersTail
+                        Semicolon → ;
+                        FormalParameter
+                          PassingMode
+                            ByReference → بالمرجع
+                          NameList
+                            Identifier → هدف
+                            NameListTail
+                          Colon → :
+                          DataType
+                            Identifier → مصفوفة
+                        FormalParametersTail
+                  RightParen → )
+                  Semicolon → ;
+                  DefinitionList
+                    Definition
+                      VariableDeclaration
+                        Variable → متغير
+                        NameList
+                          Identifier → ف
+                          NameListTail
+                        Colon → :
+                        DataType
+                          TypeInt → صحيح
+                        Semicolon → ;
+                    DefinitionList
+                  Block
+                    LeftBrace → {
+                    StatementList
+                      Statement
+                        IdentifierStatement
+                          Identifier → ف
+                          IdentifierStatementTail
+                            AccessTail
+                            Assign → =
+                            Expression
+                              SimpleExpression
+                                SignOpt
+                                Term
+                                  Factor
+                                    Integer → 0
+                                  MultiplicationTail
+                                AdditionTail
+                              RelationTail
+                            Semicolon → ;
+                      StatementList
+                        Statement
+                          WhileStatement
+                            While → طالما
+                            LeftParen → (
+                            Expression
+                              SimpleExpression
+                                SignOpt
+                                Term
+                                  Factor
+                                    Access
+                                      Identifier → ف
+                                      AccessTail
+                                  MultiplicationTail
+                                AdditionTail
+                              RelationTail
+                                RelationOperator
+                                  Less → >
+                                SimpleExpression
+                                  SignOpt
+                                  Term
+                                    Factor
+                                      Access
+                                        Identifier → سعة
+                                        AccessTail
+                                    MultiplicationTail
+                                  AdditionTail
+                            RightParen → )
+                            Continue → استمر
+                            Statement
+                              Block
+                                LeftBrace → {
+                                StatementList
+                                  Statement
+                                    IdentifierStatement
+                                      Identifier → هدف
+                                      IdentifierStatementTail
+                                        AccessTail
+                                          LeftBracket → [
+                                          Expression
+                                            SimpleExpression
+                                              SignOpt
+                                              Term
+                                                Factor
+                                                  Access
+                                                    Identifier → ف
+                                                    AccessTail
+                                                MultiplicationTail
+                                              AdditionTail
+                                            RelationTail
+                                          RightBracket → ]
+                                          AccessTail
+                                        Assign → =
+                                        Expression
+                                          SimpleExpression
+                                            SignOpt
+                                            Term
+                                              Factor
+                                                Access
+                                                  Identifier → مصدر
+                                                  AccessTail
+                                                    LeftBracket → [
+                                                    Expression
+                                                      SimpleExpression
+                                                        SignOpt
+                                                        Term
+                                                          Factor
+                                                            Access
+                                                              Identifier → ف
+                                                              AccessTail
+                                                          MultiplicationTail
+                                                        AdditionTail
+                                                      RelationTail
+                                                    RightBracket → ]
+                                                    AccessTail
+                                              MultiplicationTail
+                                            AdditionTail
+                                          RelationTail
+                                        Semicolon → ;
+                                  StatementList
+                                    Statement
+                                      IdentifierStatement
+                                        Identifier → ف
+                                        IdentifierStatementTail
+                                          AccessTail
+                                          Assign → =
+                                          Expression
+                                            SimpleExpression
+                                              SignOpt
+                                              Term
+                                                Factor
+                                                  Access
+                                                    Identifier → ف
+                                                    AccessTail
+                                                MultiplicationTail
+                                              AdditionTail
+                                                AdditionOperator
+                                                  Plus → +
+                                                Term
+                                                  Factor
+                                                    Integer → 1
+                                                  MultiplicationTail
+                                                AdditionTail
+                                            RelationTail
+                                          Semicolon → ;
+                                    StatementList
+                                RightBrace → }
+                        StatementList
+                    RightBrace → }
+                  Semicolon → ;
+              DefinitionList
+                Definition
+                  ProcedureDeclaration
+                    Procedure → إجراء
+                    Identifier → ترتيب
+                    LeftParen → (
+                    FormalParametersOpt
+                      FormalParameter
+                        PassingMode
+                          ByReference → بالمرجع
+                        NameList
+                          Identifier → م
+                          NameListTail
+                        Colon → :
+                        DataType
+                          Identifier → مصفوفة
+                      FormalParametersTail
+                        Semicolon → ;
+                        FormalParameter
+                          PassingMode
+                            ByValue → بالقيمة
+                          NameList
+                            Identifier → سعة
+                            NameListTail
+                          Colon → :
+                          DataType
+                            TypeInt → صحيح
+                        FormalParametersTail
+                    RightParen → )
+                    Semicolon → ;
+                    DefinitionList
+                      Definition
+                        VariableDeclaration
+                          Variable → متغير
+                          NameList
+                            Identifier → ي
+                            NameListTail
+                              Comma → ,
+                              Identifier → ز
+                              NameListTail
+                                Comma → ,
+                                Identifier → مؤقت
+                                NameListTail
+                          Colon → :
+                          DataType
+                            TypeInt → صحيح
+                          Semicolon → ;
+                      DefinitionList
+                    Block
+                      LeftBrace → {
+                      StatementList
+                        Statement
+                          IdentifierStatement
+                            Identifier → ي
+                            IdentifierStatementTail
+                              AccessTail
+                              Assign → =
+                              Expression
+                                SimpleExpression
+                                  SignOpt
+                                  Term
+                                    Factor
+                                      Integer → 0
+                                    MultiplicationTail
+                                  AdditionTail
+                                RelationTail
+                              Semicolon → ;
+                        StatementList
+                          Statement
+                            WhileStatement
+                              While → طالما
+                              LeftParen → (
+                              Expression
+                                SimpleExpression
+                                  SignOpt
+                                  Term
+                                    Factor
+                                      Access
+                                        Identifier → ي
+                                        AccessTail
+                                    MultiplicationTail
+                                  AdditionTail
+                                RelationTail
+                                  RelationOperator
+                                    Less → >
+                                  SimpleExpression
+                                    SignOpt
+                                    Term
+                                      Factor
+                                        Access
+                                          Identifier → سعة
+                                          AccessTail
+                                      MultiplicationTail
+                                    AdditionTail
+                              RightParen → )
+                              Continue → استمر
+                              Statement
+                                Block
+                                  LeftBrace → {
+                                  StatementList
+                                    Statement
+                                      IdentifierStatement
+                                        Identifier → ز
+                                        IdentifierStatementTail
+                                          AccessTail
+                                          Assign → =
+                                          Expression
+                                            SimpleExpression
+                                              SignOpt
+                                              Term
+                                                Factor
+                                                  Access
+                                                    Identifier → ي
+                                                    AccessTail
+                                                MultiplicationTail
+                                              AdditionTail
+                                                AdditionOperator
+                                                  Plus → +
+                                                Term
+                                                  Factor
+                                                    Integer → 1
+                                                  MultiplicationTail
+                                                AdditionTail
+                                            RelationTail
+                                          Semicolon → ;
+                                    StatementList
+                                      Statement
+                                        WhileStatement
+                                          While → طالما
+                                          LeftParen → (
+                                          Expression
+                                            SimpleExpression
+                                              SignOpt
+                                              Term
+                                                Factor
+                                                  Access
+                                                    Identifier → ز
+                                                    AccessTail
+                                                MultiplicationTail
+                                              AdditionTail
+                                            RelationTail
+                                              RelationOperator
+                                                Less → >
+                                              SimpleExpression
+                                                SignOpt
+                                                Term
+                                                  Factor
+                                                    Access
+                                                      Identifier → سعة
+                                                      AccessTail
+                                                  MultiplicationTail
+                                                AdditionTail
+                                          RightParen → )
+                                          Continue → استمر
+                                          Statement
+                                            Block
+                                              LeftBrace → {
+                                              StatementList
+                                                Statement
+                                                  IfStatement
+                                                    If → إذا
+                                                    LeftParen → (
+                                                    Expression
+                                                      SimpleExpression
+                                                        SignOpt
+                                                        Term
+                                                          Factor
+                                                            Access
+                                                              Identifier → م
+                                                              AccessTail
+                                                                LeftBracket → [
+                                                                Expression
+                                                                  SimpleExpression
+                                                                    SignOpt
+                                                                    Term
+                                                                      Factor
+                                                                        Access
+                                                                          Identifier → ي
+                                                                          AccessTail
+                                                                      MultiplicationTail
+                                                                    AdditionTail
+                                                                  RelationTail
+                                                                RightBracket → ]
+                                                                AccessTail
+                                                          MultiplicationTail
+                                                        AdditionTail
+                                                      RelationTail
+                                                        RelationOperator
+                                                          Greater → <
+                                                        SimpleExpression
+                                                          SignOpt
+                                                          Term
+                                                            Factor
+                                                              Access
+                                                                Identifier → م
+                                                                AccessTail
+                                                                  LeftBracket → [
+                                                                  Expression
+                                                                    SimpleExpression
+                                                                      SignOpt
+                                                                      Term
+                                                                        Factor
+                                                                          Access
+                                                                            Identifier → ز
+                                                                            AccessTail
+                                                                        MultiplicationTail
+                                                                      AdditionTail
+                                                                    RelationTail
+                                                                  RightBracket → ]
+                                                                  AccessTail
+                                                            MultiplicationTail
+                                                          AdditionTail
+                                                    RightParen → )
+                                                    Then → فإن
+                                                    Statement
+                                                      Block
+                                                        LeftBrace → {
+                                                        StatementList
+                                                          Statement
+                                                            IdentifierStatement
+                                                              Identifier → مؤقت
+                                                              IdentifierStatementTail
+                                                                AccessTail
+                                                                Assign → =
+                                                                Expression
+                                                                  SimpleExpression
+                                                                    SignOpt
+                                                                    Term
+                                                                      Factor
+                                                                        Access
+                                                                          Identifier → م
+                                                                          AccessTail
+                                                                            LeftBracket → [
+                                                                            Expression
+                                                                              SimpleExpression
+                                                                                SignOpt
+                                                                                Term
+                                                                                  Factor
+                                                                                    Access
+                                                                                      Identifier → ي
+                                                                                      AccessTail
+                                                                                  MultiplicationTail
+                                                                                AdditionTail
+                                                                              RelationTail
+                                                                            RightBracket → ]
+                                                                            AccessTail
+                                                                      MultiplicationTail
+                                                                    AdditionTail
+                                                                  RelationTail
+                                                                Semicolon → ;
+                                                          StatementList
+                                                            Statement
+                                                              IdentifierStatement
+                                                                Identifier → م
+                                                                IdentifierStatementTail
+                                                                  AccessTail
+                                                                    LeftBracket → [
+                                                                    Expression
+                                                                      SimpleExpression
+                                                                        SignOpt
+                                                                        Term
+                                                                          Factor
+                                                                            Access
+                                                                              Identifier → ي
+                                                                              AccessTail
+                                                                          MultiplicationTail
+                                                                        AdditionTail
+                                                                      RelationTail
+                                                                    RightBracket → ]
+                                                                    AccessTail
+                                                                  Assign → =
+                                                                  Expression
+                                                                    SimpleExpression
+                                                                      SignOpt
+                                                                      Term
+                                                                        Factor
+                                                                          Access
+                                                                            Identifier → م
+                                                                            AccessTail
+                                                                              LeftBracket → [
+                                                                              Expression
+                                                                                SimpleExpression
+                                                                                  SignOpt
+                                                                                  Term
+                                                                                    Factor
+                                                                                      Access
+                                                                                        Identifier → ز
+                                                                                        AccessTail
+                                                                                    MultiplicationTail
+                                                                                  AdditionTail
+                                                                                RelationTail
+                                                                              RightBracket → ]
+                                                                              AccessTail
+                                                                        MultiplicationTail
+                                                                      AdditionTail
+                                                                    RelationTail
+                                                                  Semicolon → ;
+                                                            StatementList
+                                                              Statement
+                                                                IdentifierStatement
+                                                                  Identifier → م
+                                                                  IdentifierStatementTail
+                                                                    AccessTail
+                                                                      LeftBracket → [
+                                                                      Expression
+                                                                        SimpleExpression
+                                                                          SignOpt
+                                                                          Term
+                                                                            Factor
+                                                                              Access
+                                                                                Identifier → ز
+                                                                                AccessTail
+                                                                            MultiplicationTail
+                                                                          AdditionTail
+                                                                        RelationTail
+                                                                      RightBracket → ]
+                                                                      AccessTail
+                                                                    Assign → =
+                                                                    Expression
+                                                                      SimpleExpression
+                                                                        SignOpt
+                                                                        Term
+                                                                          Factor
+                                                                            Access
+                                                                              Identifier → مؤقت
+                                                                              AccessTail
+                                                                          MultiplicationTail
+                                                                        AdditionTail
+                                                                      RelationTail
+                                                                    Semicolon → ;
+                                                              StatementList
+                                                        RightBrace → }
+                                                    ElsePart
+                                                StatementList
+                                                  Statement
+                                                    IdentifierStatement
+                                                      Identifier → ز
+                                                      IdentifierStatementTail
+                                                        AccessTail
+                                                        Assign → =
+                                                        Expression
+                                                          SimpleExpression
+                                                            SignOpt
+                                                            Term
+                                                              Factor
+                                                                Access
+                                                                  Identifier → ز
+                                                                  AccessTail
+                                                              MultiplicationTail
+                                                            AdditionTail
+                                                              AdditionOperator
+                                                                Plus → +
+                                                              Term
+                                                                Factor
+                                                                  Integer → 1
+                                                                MultiplicationTail
+                                                              AdditionTail
+                                                          RelationTail
+                                                        Semicolon → ;
+                                                  StatementList
+                                              RightBrace → }
+                                      StatementList
+                                        Statement
+                                          IdentifierStatement
+                                            Identifier → ي
+                                            IdentifierStatementTail
+                                              AccessTail
+                                              Assign → =
+                                              Expression
+                                                SimpleExpression
+                                                  SignOpt
+                                                  Term
+                                                    Factor
+                                                      Access
+                                                        Identifier → ي
+                                                        AccessTail
+                                                    MultiplicationTail
+                                                  AdditionTail
+                                                    AdditionOperator
+                                                      Plus → +
+                                                    Term
+                                                      Factor
+                                                        Integer → 1
+                                                      MultiplicationTail
+                                                    AdditionTail
+                                                RelationTail
+                                              Semicolon → ;
+                                        StatementList
+                                  RightBrace → }
+                          StatementList
+                      RightBrace → }
+                    Semicolon → ;
+                DefinitionList
+                  Definition
+                    ProcedureDeclaration
+                      Procedure → إجراء
+                      Identifier → طباعة
+                      LeftParen → (
+                      FormalParametersOpt
+                        FormalParameter
+                          PassingMode
+                            ByReference → بالمرجع
+                          NameList
+                            Identifier → م
+                            NameListTail
+                          Colon → :
+                          DataType
+                            Identifier → مصفوفة
+                        FormalParametersTail
+                          Semicolon → ;
+                          FormalParameter
+                            PassingMode
+                              ByValue → بالقيمة
+                            NameList
+                              Identifier → سعة
+                              NameListTail
+                            Colon → :
+                            DataType
+                              TypeInt → صحيح
+                          FormalParametersTail
+                      RightParen → )
+                      Semicolon → ;
+                      DefinitionList
+                        Definition
+                          VariableDeclaration
+                            Variable → متغير
+                            NameList
+                              Identifier → ف
+                              NameListTail
+                            Colon → :
+                            DataType
+                              TypeInt → صحيح
+                            Semicolon → ;
+                        DefinitionList
+                      Block
+                        LeftBrace → {
+                        StatementList
+                          Statement
+                            IdentifierStatement
+                              Identifier → ف
+                              IdentifierStatementTail
+                                AccessTail
+                                Assign → =
+                                Expression
+                                  SimpleExpression
+                                    SignOpt
+                                    Term
+                                      Factor
+                                        Integer → 0
+                                      MultiplicationTail
+                                    AdditionTail
+                                  RelationTail
+                                Semicolon → ;
+                          StatementList
+                            Statement
+                              WhileStatement
+                                While → طالما
+                                LeftParen → (
+                                Expression
+                                  SimpleExpression
+                                    SignOpt
+                                    Term
+                                      Factor
+                                        Access
+                                          Identifier → ف
+                                          AccessTail
+                                      MultiplicationTail
+                                    AdditionTail
+                                  RelationTail
+                                    RelationOperator
+                                      Less → >
+                                    SimpleExpression
+                                      SignOpt
+                                      Term
+                                        Factor
+                                          Access
+                                            Identifier → سعة
+                                            AccessTail
+                                        MultiplicationTail
+                                      AdditionTail
+                                RightParen → )
+                                Continue → استمر
+                                Statement
+                                  Block
+                                    LeftBrace → {
+                                    StatementList
+                                      Statement
+                                        PrintStatement
+                                          Print → اطبع
+                                          LeftParen → (
+                                          PrintItems
+                                            Expression
+                                              SimpleExpression
+                                                SignOpt
+                                                Term
+                                                  Factor
+                                                    Access
+                                                      Identifier → م
+                                                      AccessTail
+                                                        LeftBracket → [
+                                                        Expression
+                                                          SimpleExpression
+                                                            SignOpt
+                                                            Term
+                                                              Factor
+                                                                Access
+                                                                  Identifier → ف
+                                                                  AccessTail
+                                                              MultiplicationTail
+                                                            AdditionTail
+                                                          RelationTail
+                                                        RightBracket → ]
+                                                        AccessTail
+                                                  MultiplicationTail
+                                                AdditionTail
+                                              RelationTail
+                                            PrintItemsTail
+                                          RightParen → )
+                                          Semicolon → ;
+                                      StatementList
+                                        Statement
+                                          IdentifierStatement
+                                            Identifier → ف
+                                            IdentifierStatementTail
+                                              AccessTail
+                                              Assign → =
+                                              Expression
+                                                SimpleExpression
+                                                  SignOpt
+                                                  Term
+                                                    Factor
+                                                      Access
+                                                        Identifier → ف
+                                                        AccessTail
+                                                    MultiplicationTail
+                                                  AdditionTail
+                                                    AdditionOperator
+                                                      Plus → +
+                                                    Term
+                                                      Factor
+                                                        Integer → 1
+                                                      MultiplicationTail
+                                                    AdditionTail
+                                                RelationTail
+                                              Semicolon → ;
+                                        StatementList
+                                    RightBrace → }
+                            StatementList
+                        RightBrace → }
+                      Semicolon → ;
+                  DefinitionList
+    Block
+      LeftBrace → {
+      StatementList
+        Statement
+          IdentifierStatement
+            Identifier → ن
+            IdentifierStatementTail
+              AccessTail
+              Assign → =
+              Expression
+                SimpleExpression
+                  SignOpt
+                  Term
+                    Factor
+                      Integer → 3
+                    MultiplicationTail
+                  AdditionTail
+                RelationTail
+              Semicolon → ;
+        StatementList
+          Statement
+            IdentifierStatement
+              Identifier → أ
+              IdentifierStatementTail
+                AccessTail
+                  LeftBracket → [
+                  Expression
+                    SimpleExpression
+                      SignOpt
+                      Term
+                        Factor
+                          Integer → 0
+                        MultiplicationTail
+                      AdditionTail
+                    RelationTail
+                  RightBracket → ]
+                  AccessTail
+                Assign → =
+                Expression
+                  SimpleExpression
+                    SignOpt
+                    Term
+                      Factor
+                        Integer → 50
+                      MultiplicationTail
+                    AdditionTail
+                  RelationTail
+                Semicolon → ;
+          StatementList
+            Statement
+              IdentifierStatement
+                Identifier → أ
+                IdentifierStatementTail
+                  AccessTail
+                    LeftBracket → [
+                    Expression
+                      SimpleExpression
+                        SignOpt
+                        Term
+                          Factor
+                            Integer → 1
+                          MultiplicationTail
+                        AdditionTail
+                      RelationTail
+                    RightBracket → ]
+                    AccessTail
+                  Assign → =
+                  Expression
+                    SimpleExpression
+                      SignOpt
+                      Term
+                        Factor
+                          Integer → 10
+                        MultiplicationTail
+                      AdditionTail
+                    RelationTail
+                  Semicolon → ;
+            StatementList
+              Statement
+                IdentifierStatement
+                  Identifier → أ
+                  IdentifierStatementTail
+                    AccessTail
+                      LeftBracket → [
+                      Expression
+                        SimpleExpression
+                          SignOpt
+                          Term
+                            Factor
+                              Integer → 2
+                            MultiplicationTail
+                          AdditionTail
+                        RelationTail
+                      RightBracket → ]
+                      AccessTail
+                    Assign → =
+                    Expression
+                      SimpleExpression
+                        SignOpt
+                        Term
+                          Factor
+                            Integer → 30
+                          MultiplicationTail
+                        AdditionTail
+                      RelationTail
+                    Semicolon → ;
+              StatementList
+                Statement
+                  IdentifierStatement
+                    Identifier → نسخ
+                    IdentifierStatementTail
+                      LeftParen → (
+                      ActualArgumentsOpt
+                        ActualArguments
+                          Expression
+                            SimpleExpression
+                              SignOpt
+                              Term
+                                Factor
+                                  Access
+                                    Identifier → ن
+                                    AccessTail
+                                MultiplicationTail
+                              AdditionTail
+                            RelationTail
+                          ActualArgumentsTail
+                            Comma → ,
+                            Expression
+                              SimpleExpression
+                                SignOpt
+                                Term
+                                  Factor
+                                    Access
+                                      Identifier → أ
+                                      AccessTail
+                                  MultiplicationTail
+                                AdditionTail
+                              RelationTail
+                            ActualArgumentsTail
+                              Comma → ,
+                              Expression
+                                SimpleExpression
+                                  SignOpt
+                                  Term
+                                    Factor
+                                      Access
+                                        Identifier → ب
+                                        AccessTail
+                                    MultiplicationTail
+                                  AdditionTail
+                                RelationTail
+                              ActualArgumentsTail
+                      RightParen → )
+                      Semicolon → ;
+                StatementList
+                  Statement
+                    PrintStatement
+                      Print → اطبع
+                      LeftParen → (
+                      PrintItems
+                        Expression
+                          SimpleExpression
+                            SignOpt
+                            Term
+                              Factor
+                                String → قبل الترتيب:
+                              MultiplicationTail
+                            AdditionTail
+                          RelationTail
+                        PrintItemsTail
+                      RightParen → )
+                      Semicolon → ;
+                  StatementList
+                    Statement
+                      IdentifierStatement
+                        Identifier → طباعة
+                        IdentifierStatementTail
+                          LeftParen → (
+                          ActualArgumentsOpt
+                            ActualArguments
+                              Expression
+                                SimpleExpression
+                                  SignOpt
+                                  Term
+                                    Factor
+                                      Access
+                                        Identifier → ب
+                                        AccessTail
+                                    MultiplicationTail
+                                  AdditionTail
+                                RelationTail
+                              ActualArgumentsTail
+                                Comma → ,
+                                Expression
+                                  SimpleExpression
+                                    SignOpt
+                                    Term
+                                      Factor
+                                        Access
+                                          Identifier → ن
+                                          AccessTail
+                                      MultiplicationTail
+                                    AdditionTail
+                                  RelationTail
+                                ActualArgumentsTail
+                          RightParen → )
+                          Semicolon → ;
+                    StatementList
+                      Statement
+                        IdentifierStatement
+                          Identifier → ترتيب
+                          IdentifierStatementTail
+                            LeftParen → (
+                            ActualArgumentsOpt
+                              ActualArguments
+                                Expression
+                                  SimpleExpression
+                                    SignOpt
+                                    Term
+                                      Factor
+                                        Access
+                                          Identifier → ب
+                                          AccessTail
+                                      MultiplicationTail
+                                    AdditionTail
+                                  RelationTail
+                                ActualArgumentsTail
+                                  Comma → ,
+                                  Expression
+                                    SimpleExpression
+                                      SignOpt
+                                      Term
+                                        Factor
+                                          Access
+                                            Identifier → ن
+                                            AccessTail
+                                        MultiplicationTail
+                                      AdditionTail
+                                    RelationTail
+                                  ActualArgumentsTail
+                            RightParen → )
+                            Semicolon → ;
+                      StatementList
+                        Statement
+                          PrintStatement
+                            Print → اطبع
+                            LeftParen → (
+                            PrintItems
+                              Expression
+                                SimpleExpression
+                                  SignOpt
+                                  Term
+                                    Factor
+                                      String → بعد الترتيب:
+                                    MultiplicationTail
+                                  AdditionTail
+                                RelationTail
+                              PrintItemsTail
+                            RightParen → )
+                            Semicolon → ;
+                        StatementList
+                          Statement
+                            IdentifierStatement
+                              Identifier → طباعة
+                              IdentifierStatementTail
+                                LeftParen → (
+                                ActualArgumentsOpt
+                                  ActualArguments
+                                    Expression
+                                      SimpleExpression
+                                        SignOpt
+                                        Term
+                                          Factor
+                                            Access
+                                              Identifier → ب
+                                              AccessTail
+                                          MultiplicationTail
+                                        AdditionTail
+                                      RelationTail
+                                    ActualArgumentsTail
+                                      Comma → ,
+                                      Expression
+                                        SimpleExpression
+                                          SignOpt
+                                          Term
+                                            Factor
+                                              Access
+                                                Identifier → ن
+                                                AccessTail
+                                            MultiplicationTail
+                                          AdditionTail
+                                        RelationTail
+                                      ActualArgumentsTail
+                                RightParen → )
+                                Semicolon → ;
+                          StatementList
+      RightBrace → }
+    Dot → .
+  Eof → 

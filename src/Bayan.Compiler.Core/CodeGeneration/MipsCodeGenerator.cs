@@ -48,6 +48,7 @@ public sealed class MipsCodeGenerator
             }
 
             int wordCount = program.StorageWordCounts.TryGetValue(item.Key, out int storedWordCount) ? storedWordCount : 1;
+            if (item.Key.StartsWith("param_")) wordCount = 1;
             builder.AppendLine(item.Value == LanguageType.Real ? item.Key + ": .float 0.0" : wordCount == 1 ? item.Key + ": .word 0" : item.Key + ": .space " + (wordCount * 4));
         }
 
@@ -109,9 +110,16 @@ public sealed class MipsCodeGenerator
                 return;
             }
 
-            if (instruction.Left!.Kind == IrValueKind.StringLabel)
+            if (instruction.Left!.Kind == IrValueKind.StringLabel || instruction.Left.Type == LanguageType.List || instruction.Left.Type == LanguageType.Record)
             {
-                builder.AppendLine("    la $t0, " + instruction.Left.Name);
+                if (instruction.Left.Name.StartsWith("param_"))
+                {
+                    builder.AppendLine("    lw $t0, " + instruction.Left.Name);
+                }
+                else
+                {
+                    builder.AppendLine("    la $t0, " + instruction.Left.Name);
+                }
             }
             else
             {
@@ -283,7 +291,14 @@ public sealed class MipsCodeGenerator
 
         if (instruction.Opcode == IrOpcode.LoadIndexed)
         {
-            builder.AppendLine("    la $t0, " + instruction.Left!.Name);
+            if (instruction.Left!.Name.StartsWith("param_"))
+            {
+                builder.AppendLine("    lw $t0, " + instruction.Left!.Name);
+            }
+            else
+            {
+                builder.AppendLine("    la $t0, " + instruction.Left!.Name);
+            }
             LoadValue(builder, instruction.Right!, "$t1");
             builder.AppendLine("    sll $t1, $t1, 2");
             builder.AppendLine("    addu $t0, $t0, $t1");
@@ -303,7 +318,14 @@ public sealed class MipsCodeGenerator
 
         if (instruction.Opcode == IrOpcode.StoreIndexed)
         {
-            builder.AppendLine("    la $t0, " + instruction.Result!.Name);
+            if (instruction.Result!.Name.StartsWith("param_"))
+            {
+                builder.AppendLine("    lw $t0, " + instruction.Result!.Name);
+            }
+            else
+            {
+                builder.AppendLine("    la $t0, " + instruction.Result!.Name);
+            }
             LoadValue(builder, instruction.Left!, "$t1");
             builder.AppendLine("    sll $t1, $t1, 2");
             builder.AppendLine("    addu $t0, $t0, $t1");
